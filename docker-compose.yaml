@@ -1,0 +1,8 @@
+version: '3.3'
+services:
+    flask:
+        container_name: flask
+        ports:
+            - '8001:8001'
+        image: pse-flask
+
