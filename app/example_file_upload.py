@@ -4,7 +4,7 @@ from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 # from celery import Celery
 
-UPLOAD_FOLDER = 'c_files'
+UPLOAD_FOLDER = '/var/www/c_files'
 ALLOWED_EXTENSIONS = {'c', 'txt'} # txt for test 
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
