@@ -15,3 +15,15 @@ services:
         ports:
             - '3306:3306'
         container_name: "mysql"
+    phpmyadmin:
+        image: phpmyadmin
+        container_name: pma
+        links:
+            - db
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1
+        restart: always
+        ports:
+            - 8081:80
