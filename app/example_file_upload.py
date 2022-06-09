@@ -1,5 +1,5 @@
 import os
-from app import app
+from main import app
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 # from celery import Celery
