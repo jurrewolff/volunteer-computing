@@ -5,6 +5,7 @@ services:
         ports:
             - '8001:80'
         image: pse-flask
+        # command: python main.py & celery -A app.example_file_upload.celery worker
 
     db:
         image: pse-mysql
@@ -29,3 +30,5 @@ services:
             - 8082:80
     redis:
         image: redis
+        ports:
+            - 6379:6379
