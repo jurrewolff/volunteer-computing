@@ -1,4 +1,5 @@
 import os
+from app import app
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 # from celery import Celery
@@ -6,7 +7,6 @@ from werkzeug.utils import secure_filename
 UPLOAD_FOLDER = 'c_files'
 ALLOWED_EXTENSIONS = {'c', 'txt'} # txt for test 
 
-app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 
