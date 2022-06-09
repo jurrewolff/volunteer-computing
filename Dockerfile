@@ -1,3 +1,3 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.8
-
+RUN mkdir -p /var/www/new_directory
 COPY ./app /app
