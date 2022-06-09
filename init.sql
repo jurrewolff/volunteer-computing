@@ -1,4 +1,6 @@
-CREATE TABLE User (
+
+CREATE DATABASE app;
+CREATE TABLE app.User (
 user_id int,
 username varchar(255),
 email varchar(255),
@@ -10,7 +12,7 @@ PRIMARY KEY(user_id)
 );
 
 
-CREATE TABLE Project (
+CREATE TABLE app.Project (
 project_id int,
 name varchar(255),
 description varchar(255),
@@ -20,7 +22,7 @@ FOREIGN KEY (owner) REFERENCES User(user_id)
 );
 
 
-CREATE TABLE Participant (
+CREATE TABLE app.Participant (
 participant_id int,
 user_id int,
 project_id int,
