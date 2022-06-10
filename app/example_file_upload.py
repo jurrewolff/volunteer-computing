@@ -1,25 +1,13 @@
 import os
-from main import app
-from flask import Flask, flash, request, redirect, url_for
+from app import app
+from flask import Flask, flash, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-# from celery import Celery
-
-UPLOAD_FOLDER = '/var/www/c_files'
-ALLOWED_EXTENSIONS = {'c', 'txt'} # txt for test 
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
-
-# app.config.update(CELERY_CONFIG={
-#     'broker_url': 'redis://localhost:6379',
-#     'result_backend': 'redis://localhost:6379',
-# })
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -35,7 +23,10 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('upload_file', name=filename))
+            task = compile.delay(filename)
+            return redirect(url_for('files', task_id=task.id))
+
+            # return redirect(url_for('progress', name=filename, taskid=task.id))
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -46,19 +37,58 @@ def upload_file():
     </form>
     '''
 
-# def make_celery(app):
-#     celery = Celery(app.import_name)
-#     celery.conf.update(app.config["CELERY_CONFIG"])
+from celery import Celery
 
-#     class ContextTask(celery.Task):
-#         def __call__(self, *args, **kwargs):
-#             with app.app_context():
-#                 return self.run(*args, **kwargs)
+def make_celery(app):
+    celery = Celery(app.import_name, backend=app.config['CELERY_BACKEND'],
+                    broker=app.config['CELERY_BROKER_URL'])
+    celery.conf.update(app.config)
+    TaskBase = celery.Task
+    class ContextTask(TaskBase):
+        abstract = True
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+    celery.Task = ContextTask
+    return celery
 
-#     celery.Task = ContextTask
-#     return celery
-# @app.route('/', methods=['GET'])
-# def file_uploaded():
-#     return 
+celery = make_celery(app)
 
-# celery = make_celery(app)
+@celery.task(name='return_something')
+def return_something():
+    # print ('something')
+    return 'something'
+
+@app.route('/test')
+def home():
+    result = return_something.delay()
+    return result.wait()
+
+# @celery.task()
+# def compile(filename):
+#     return "some result"
+
+# @app.route('/status/<task_id>')
+# def taskstatus(task_id):
+#     task = compile.AsyncResult(task_id)
+#     if task.state == 'PENDING':
+#         # time.sleep(config.SERVER_SLEEP)
+#         response = {
+#             'queue_state': task.state,
+#             'status': 'Process is ongoing...',
+#             'status_update': url_for('taskstatus', task_id=task.id)
+#         }
+#     else:
+#         response = {
+#             'queue_state': task.state,
+#             'result': task.wait()
+#         }
+#     return jsonify(response)
+# # @app.route('/progress/<filename><taskid>' )
+# # def progress(filename, taskid):
+# #     return '''
+# #     <!doctype html>
+# #     <title>Compiled files</title>
+# #     <h1>File</h1>
+ 
+# #     '''
