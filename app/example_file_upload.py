@@ -2,7 +2,7 @@ import os
 from app import app
 from flask import Flask, flash, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-
+import time
 ALLOWED_EXTENSIONS = {'c'}
 def allowed_file(filename):
     return '.' in filename and \
@@ -25,7 +25,7 @@ def upload_file():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             task = compile.delay(filename)
-            return redirect(url_for('files', task_id=task.id))
+            return redirect(url_for('taskstatus', task_id=task.id))
 
             # return redirect(url_for('progress', name=filename, taskid=task.id))
     return '''
@@ -57,17 +57,34 @@ celery = make_celery(app)
 
 @celery.task(name='compile')
 def compile(filename):
-    subprocess.run(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o ")
+    filename_without_extension = filename[:-2]
+    # filename_with_wasm_extension = filename[:-2]
 
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    # subprocess.run(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}")
+    return f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}"
 
-    # print ('something')
-    return 'something'
+@app.route('/taskstatus/<task_id>')
+def taskstatus(task_id):
+    task = compile.AsyncResult(task_id)
+    if task.state == 'PENDING':
+        time.sleep(1)
+        # time.sleep(config.SERVER_SLEEP)
+        response = {
+            'queue_state': task.state,
+            'status': 'Process is ongoing...',
+            'status_update': url_for('taskstatus', task_id=task.id)
+        }
+    else:
+        response = {
+            'queue_state': task.state,
+            'result': task.wait()
+        }
+    return jsonify(response)
 
-@app.route('/test')
-def home():
-    result = return_something.delay()
-    return result.wait()
+# @app.route('/test')
+# def home():
+#     result = return_something.delay()
+#     return result.wait()
 
 # @celery.task()
 # def compile(filename):
