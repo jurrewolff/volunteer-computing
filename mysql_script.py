@@ -40,7 +40,8 @@ def insert_user(val):
         sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s)"
         cur.execute(sql, val)
         cn.commit()
-    print('UserID or UserName not unique')
+    else:
+        print('UserID or UserName not unique')
 
 
 def check_user_exists(id, username, login=False):
@@ -59,5 +60,4 @@ def check_user_exists(id, username, login=False):
 val = (11115, 'aaaa', 'bb', 'cc', 'dd', 22)
 
 insert_user(val)
-print(check_user_exists(1, 'a', True))
-test1()
+print(check_user_exists(11115, 'aaaa', True))
