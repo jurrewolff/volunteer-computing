@@ -59,9 +59,9 @@ celery = make_celery(app)
 def compile(filename):
     filename_without_extension = filename[:-2]
     # filename_with_wasm_extension = filename[:-2]
-
-    # subprocess.run(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}")
-    return f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}"
+    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['UPLOAD_FOLDER'], filename)}.js")
+    # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
+    return "done"
 
 @app.route('/taskstatus/<task_id>')
 def taskstatus(task_id):

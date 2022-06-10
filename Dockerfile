@@ -5,7 +5,8 @@ RUN mkdir app
 
 # install supervisord
 RUN apt-get update && apt-get install -y supervisor && apt-get install -y emscripten
-
+# emcc needs to be called once before it will start compiling files
+RUN emcc
 COPY ./requirements.txt /var/www/requirements.txt
 RUN pip install -r /var/www/requirements.txt
 
