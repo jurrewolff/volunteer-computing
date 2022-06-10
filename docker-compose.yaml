@@ -5,4 +5,5 @@ services:
         ports:
             - '8001:80'
         image: pse-flask
-
+        volumes:
+            - "./app:/app:z"
