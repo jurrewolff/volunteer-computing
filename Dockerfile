@@ -13,6 +13,7 @@ RUN pip install -r /var/www/requirements.txt
 COPY ./app /app
 COPY ./main.py main.py
 COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./template.html template.html
 # needs to be set else Celery gives an error (because docker runs commands inside container as root)
 ENV C_FORCE_ROOT=1
 

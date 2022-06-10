@@ -1,8 +1,9 @@
 import os
 from app import app
-from flask import Flask, flash, request, redirect, url_for, jsonify
+from flask import Flask, flash, request, redirect, url_for, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 import time
+
 ALLOWED_EXTENSIONS = {'c'}
 def allowed_file(filename):
     return '.' in filename and \
@@ -59,7 +60,7 @@ celery = make_celery(app)
 def compile(filename):
     filename_without_extension = filename[:-2]
     # filename_with_wasm_extension = filename[:-2]
-    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['UPLOAD_FOLDER'], filename)}.js")
+    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -s EXIT_RUNTIME -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.html --shell-file template.html")
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
 
@@ -81,10 +82,10 @@ def taskstatus(task_id):
         }
     return jsonify(response)
 
-# @app.route('/test')
-# def home():
-#     result = return_something.delay()
-#     return result.wait()
+
+@app.route('/test')
+def home():
+    return send_from_directory(app.config['COMPILED_FILES_FOLDER'], 'poc.html')
 
 # @celery.task()
 # def compile(filename):

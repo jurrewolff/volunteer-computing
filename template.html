@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>proof of concept - quite good considering</title>
+  </head>
+  <body>    
+    <textarea disabled id="output" rows="20"></textarea>
+
+    <script type='text/javascript'>
+      var Module = {
+        arguments: window.location.href.split("?")[1].split("&"),
+        print: (function() {
+          var element = document.getElementById('output');
+          if (element) element.value = ''; // clear browser cache
+          
+            return function(text) {
+            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+            
+            if (element) {
+              element.value += text + "\n";
+              element.scrollTop = element.scrollHeight; // focus on bottom
+            }
+          };
+        })()
+      };
+    </script>
+
+    {{{ SCRIPT }}}
+
+  </body>
+</html>
+
+
