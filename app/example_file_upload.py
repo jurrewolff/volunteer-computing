@@ -3,6 +3,7 @@ from app import app
 from flask import Flask, flash, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 
+ALLOWED_EXTENSIONS = {'c'}
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -38,7 +39,7 @@ def upload_file():
     '''
 
 from celery import Celery
-
+import subprocess
 def make_celery(app):
     celery = Celery(app.import_name, backend=app.config['CELERY_BACKEND'],
                     broker=app.config['CELERY_BROKER_URL'])
@@ -54,8 +55,12 @@ def make_celery(app):
 
 celery = make_celery(app)
 
-@celery.task(name='return_something')
-def return_something():
+@celery.task(name='compile')
+def compile(filename):
+    subprocess.run(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o ")
+
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
     # print ('something')
     return 'something'
 
