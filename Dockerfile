@@ -1,5 +1,20 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.8
+FROM python
 RUN mkdir -p /var/www/c_files
 RUN mkdir app
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install --default-timeout=1000 -r /app/requirements.txt
+
+# install supervisord
+RUN apt-get update && apt-get install -y supervisor && apt-get install -y emscripten
+
+COPY ./requirements.txt /var/www/requirements.txt
+RUN pip install -r /var/www/requirements.txt
+
+COPY ./app /app
+COPY ./main.py main.py
+COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# needs to be set else Celery gives an error (because docker runs commands inside container as root)
+ENV C_FORCE_ROOT=1
+
+# install the emcc compiler
+#RUN git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest && . ./emsdk_env.sh
+# run supervisord
+CMD ["/usr/bin/supervisord"]
