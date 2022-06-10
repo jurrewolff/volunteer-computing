@@ -1,6 +1,6 @@
 FROM python
 RUN mkdir -p /var/www/c_files
-
+RUN mkdir app
 # install supervisord
 RUN apt-get update && apt-get install -y supervisor && apt-get install -y emscripten
 
