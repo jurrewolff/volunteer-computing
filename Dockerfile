@@ -14,7 +14,7 @@ COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ENV C_FORCE_ROOT=1
 
 # install the emcc compiler
-RUN git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest
+RUN git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest && source ./emsdk_env.sh
 # run supervisord
 CMD ["/usr/bin/supervisord"]
 
