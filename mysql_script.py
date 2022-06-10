@@ -57,5 +57,7 @@ def check_user_exists(id, username, login=False):
 
 
 val = (11115, 'aaaa', 'bb', 'cc', 'dd', 22)
+
+insert_user(val)
 print(check_user_exists(1, 'a', True))
 test1()
