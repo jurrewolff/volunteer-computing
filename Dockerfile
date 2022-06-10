@@ -1,6 +1,7 @@
 FROM python
 RUN mkdir -p /var/www/c_files
 RUN mkdir app
+
 # install supervisord
 RUN apt-get update && apt-get install -y supervisor && apt-get install -y emscripten
 
@@ -17,5 +18,3 @@ ENV C_FORCE_ROOT=1
 #RUN git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest && . ./emsdk_env.sh
 # run supervisord
 CMD ["/usr/bin/supervisord"]
-
-
