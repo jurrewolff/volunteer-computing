@@ -1,4 +1,5 @@
 import mysql.connector as connector
+from itertools import count, filterfalse
 
 def connection():
 
@@ -33,31 +34,42 @@ def test1(): #no error method
 
 
 def insert_user(val):
-    if check_user_exists(val[0], val[1]) == None:
-        print('Added new user')
+    if check_user_exists(val[1]) == None:
         cn = connection()
         cur = cn.cursor()
         sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s)"
         cur.execute(sql, val)
         cn.commit()
-    else:
-        print('UserID or UserName not unique')
+        return True
+    return False
 
 
-def check_user_exists(id, username, login=False):
+def check_user_exists(username, login=False):
     cn = connection()
     cur = cn.cursor()
-    sql = f"SELECT 1 FROM User WHERE user_id = {id} OR username = '{username}'"
+    sql = f"SELECT 1 FROM User WHERE username = '{username}'"
     cur.execute(sql)
     res = cur.fetchone()
     if login:
-        sql = f"SELECT * FROM User WHERE user_id = {id} OR username = '{username}'"
+        sql = f"SELECT * FROM User WHERE username = '{username}'"
         cur.execute(sql)
         res = cur.fetchone()
     return res
 
+def get_new_id():
+    cn = connection()
+    cur = cn.cursor()
+    sql = f"SELECT user_id FROM User"
+    cur.execute(sql)
+    ids_taken = [x[0] for x in cur.fetchall()]
+    return next(filterfalse(set(ids_taken).__contains__, count(1)))
 
-val = (11115, 'aaaa', 'bb', 'cc', 'dd', 22)
+
+val = (1, 'hoi2', 'bb', 'cc', 'dd', 22)
 
 insert_user(val)
-print(check_user_exists(11115, 'aaaa', True))
+# res = check_user_exists('aaaa', True)
+# if res:
+#   print(res)
+
+print(get_new_id())

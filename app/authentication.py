@@ -4,17 +4,26 @@ from main import app
 from flask import session, request, flash, redirect, url_for, abort, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from urllib.parse import urlparse, urljoin
+import mysql_script as ms
 
 
 # TODO - TESTING
-# Mockup function simulating database search. Only username "jantje" is present.
-def get_user_from_db(user_id: str) -> dict:
-    if user_id == "jantje":
-        return {"username": "jantje", "password": "geheim"}
-    elif user_id == "dirk":
-        return {"username": "dirk", "password": "geheim"}
+# Function that returns username, firstname, lastname and score from username input.
+def get_user_from_db(username: str) -> dict:
+    res = ms.check_user_exists(username, True)
+    if res:
+        return {"username": res[1], "firstname": res[3], "lastname": res[4], "score": res[5]}
 
     return {}
+
+def insert_user_into_db(username: str, email: str, firstname: str, lastname: str) -> int:
+    res = ms.insert_user((ms.get_new_id(), username, email, firstname, lastname, 0))
+    if res:
+        print('Succes')
+        return 0
+
+    print('Failure')
+    return 1
 
 
 # TODO - ENDTESTING
