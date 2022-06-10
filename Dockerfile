@@ -2,7 +2,7 @@ FROM python
 RUN mkdir -p /var/www/c_files
 
 # install supervisord
-RUN apt-get update && apt-get install -y supervisor
+RUN apt-get update && apt-get install -y supervisor && apt-get install -y emscripten
 
 COPY ./requirements.txt /var/www/requirements.txt
 RUN pip install -r /var/www/requirements.txt
@@ -14,7 +14,7 @@ COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ENV C_FORCE_ROOT=1
 
 # install the emcc compiler
-RUN git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest && source ./emsdk_env.sh
+#RUN git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest && . ./emsdk_env.sh
 # run supervisord
 CMD ["/usr/bin/supervisord"]
 
