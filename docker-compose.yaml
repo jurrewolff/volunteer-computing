@@ -5,8 +5,8 @@ services:
         ports:
             - '8001:80'
         image: pse-flask
-        # command: python main.py & celery -A app.example_file_upload.celery worker
-
+        volumes:
+            - "./app:/app:z"
     db:
         image: pse-mysql
         command: --default-authentication-plugin=mysql_native_password --init-file /init.sql
