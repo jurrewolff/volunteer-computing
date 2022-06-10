@@ -23,3 +23,4 @@ app.config['CELERYBEAT_SCHEDULE'] = {
 app.config['CELERY_TIMEZONE'] = 'UTC'
 
 from app import example_file_upload
+from app import authentication
