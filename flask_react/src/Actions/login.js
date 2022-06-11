@@ -1,6 +1,11 @@
+/*
+ * Maakt het mogelijk om in te loggen. GET request, gecommende code is
+ * POST request, moet wss geplaats worden in sign up afhankelijk van wat Jurre doet
+ */
+
 import { useState, useEffect } from 'react'
 
-export const Login = () => {
+export const LogginIn = () => {
 
     const [data, setData] = useState([{}])
     const [pressed, setPressed] = useState(false)
@@ -21,7 +26,7 @@ export const Login = () => {
         <div className="App">
             <button onClick={() => setPressed(true)}> login </button>
             <p>{data.code}</p>
-            <p>bh</p>
+            <p>Druk de knop voor GET request</p>
         </div>
     );
 }

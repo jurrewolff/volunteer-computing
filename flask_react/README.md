@@ -2,6 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Packages
+
+Overzicht van alle packages staat ook in package.json
+
+npm install i react-router-dom
+
+## Backend
+
+zsh start.sh
+
 ## Available Scripts
 
 In the project directory, you can run:

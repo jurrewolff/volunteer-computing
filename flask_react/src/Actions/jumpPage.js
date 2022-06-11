@@ -1,24 +1,27 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+/*
+ * Maakt het mogelijk om tussen webpagina's te switchen.
+ * Is sneller dat http request, webpagina wordt nml niet telkens herladen
+ */
 
-// import Layout from "./pages/Layout";
-import Home from "../Pages/Home";
-import Dashboard from "../Pages/Dashboard";
-import Login from "../Pages/Login";
-import SignUp from "../Pages/SignUp";
-import NoPage from "../Pages/SignUp";
+import { Routes, Route } from "react-router-dom"
+
+import Home from "../Pages/Home"
+import Login from "../Pages/Login"
+import NoPage from "../Pages/NoPage"
+import SignUp from "../Pages/SignUp"
+import DashBoard from "../Pages/Dashboard"
 
 
-export default function jumpPage() {
+export default function JumpPage() {
     return (
-        <Router>
+        <div>
             <Routes>
-                <Route index element={<Home />} />
-                <Route path="blogs" element={<Blogs />} />
-                <Route path="contact" element={<Contact />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/dashBoard" element={<DashBoard />} />
                 <Route path="*" element={<NoPage />} />
-            </Route>
-        </Routes>
-        </Router >
+            </Routes>
+        </div>
     );
 }

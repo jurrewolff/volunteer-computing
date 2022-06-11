@@ -1,36 +1,19 @@
 import React from 'react'
-import Navbar from './Navbar'
+import './App.css';
 
-// import './App.css';
-// import { Login } from './Actions/login.js'
+import Navbar from './Components/Navbar'
+import Footer from './Components/Footer'
 
-// import Layout from "./Pages/Layout";
-// import Home from "./Pages/Home";
-// import Dashboard from "./Pages/Dashboard";
-// import Login from "./Pages/Login";
-// import SignUp from "./Pages/SignUp";
-// import NoPage from "./Pages/NoPage";
-
-import { Routes, Route } from "react-router-dom"
-
-import Home from "./Pages/Home"
-import Login from "./Pages/Login"
-import NoPage from "./Pages/NoPage"
-
-
-
+import JumpPage from './Actions/jumpPage'
 
 function App() {
   return (
     <>
       <Navbar />
-      <div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/NoPage" element={<NoPage />} />
-        </Routes>
-      </div>
+
+      <body> <JumpPage /> </body>
+
+      <Footer />
     </>
   )
 }
@@ -38,6 +21,5 @@ function App() {
 
 export default App;
 
-  // {/* <p>{data.code}</p> */ }
-
-  // <Link to="/Test">Test</Link>
+// aanroepen van components reminder
+// {/* <p>{data.code}</p> */ }
