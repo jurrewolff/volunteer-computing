@@ -71,13 +71,35 @@ def authenticate_user(username, password) -> bool:
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
-    return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
+    return test_url.scheme in ("http",
+                               "https") and ref_url.netloc == test_url.netloc
 
 
 # Login functions
 @login_manager.user_loader
 def load_user(user_id: str) -> User:
     return User.get(user_id)
+
+
+# DELETE
+from flask import Flask
+
+api = Flask(__name__)
+
+
+@app.route('/profile')
+def my_profile():
+    response_body = {
+        "name":
+        "Nagato",
+        "about":
+        "Hello! I'm a full stack developer that loves python and javascript"
+    }
+
+    return response_body
+
+
+# /////////////
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -115,6 +137,7 @@ def logout():
 @app.route("/dashboard", methods=["GET"])
 @login_required
 def dashboard():
-    return jsonify(
-        {"code": 200, "msg": "dashboard of user {}".format(session["_user_id"])}
-    )
+    return jsonify({
+        "code": 200,
+        "msg": "dashboard of user {}".format(session["_user_id"])
+    })
