@@ -10,7 +10,7 @@ RUN emcc
 RUN mkdir /emcc_cache && export EM_CACHE=/emcc_cache
 COPY ./emcc_cache /emcc_cache
 
-RUN python /usr/share/emscripten/embuilder.py build ALL
+
 COPY ./requirements.txt /var/www/requirements.txt
 RUN pip install -r /var/www/requirements.txt
 
