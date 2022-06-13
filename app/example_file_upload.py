@@ -82,10 +82,9 @@ def taskstatus(task_id):
         }
     return jsonify(response)
 
-
-@app.route('/test')
-def home():
-    return send_from_directory(app.config['COMPILED_FILES_FOLDER'], 'poc.html')
+@app.route('/uploads/<name>')
+def download_file(name):
+    return send_from_directory(app.config['COMPILED_FILES_FOLDER'], name)
 
 # @celery.task()
 # def compile(filename):
