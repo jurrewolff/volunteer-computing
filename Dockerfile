@@ -7,6 +7,10 @@ RUN mkdir app
 RUN apt-get update && apt-get install -y supervisor && apt-get install -y emscripten
 # emcc needs to be called once before it will start compiling files
 RUN emcc
+RUN mkdir /emcc_cache && export EM_CACHE=/emcc_cache
+COPY ./emcc_cache /emcc_cache
+
+
 COPY ./requirements.txt /var/www/requirements.txt
 RUN pip install -r /var/www/requirements.txt
 
