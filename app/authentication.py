@@ -4,7 +4,7 @@ from main import app
 from flask import session, request, flash, redirect, url_for, abort, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from urllib.parse import urlparse, urljoin
-import mysql_script as ms
+import app.mysql_script as ms
 
 
 # TODO - TESTING
