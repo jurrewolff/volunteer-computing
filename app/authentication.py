@@ -155,6 +155,6 @@ def logout():
         data = build_response(HTTPStatus.OK, "user logged out")
     else:
         data = build_response(
-            HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging in user"
+            HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging out user"
         )
     return jsonify(data)
