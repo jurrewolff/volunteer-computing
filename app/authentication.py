@@ -5,6 +5,7 @@ from flask import request, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from urllib.parse import urlparse, urljoin
 import app.mysql_script as ms
+import app.models.user as user
 
 from app.util import build_response
 from main import app
@@ -18,8 +19,8 @@ def get_user_from_db(username: str) -> dict:
 
     return {}
 
-def insert_user_into_db(username: str, email: str, firstname: str, lastname: str) -> int:
-    res = ms.insert_user((ms.get_new_user_id(), username, email, firstname, lastname, 0))
+def insert_user_into_db(username: str, password: str, email: str, firstname: str, lastname: str) -> int:
+    res = ms.insert_user((ms.get_new_user_id(), username, password, email, firstname, lastname, 0))
     if res:
         return 0
 
@@ -100,10 +101,20 @@ def signup():
 
     username = request.headers.get("username")
     password = request.headers.get("password")
+    email = request.headers.get("email")
+    firstname = request.headers.get("firstname")
+    lastname = request.headers.get("lastname")
+
     if not username:
-        return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a username")
     if not password:
-        return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a password")
+    if not email:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide an email")
+    if not firstname:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a firstname")
+    if not lastname:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a lastname")
 
     user_db = get_user_from_db(username)
     if user_db:
@@ -111,7 +122,7 @@ def signup():
             HTTPStatus.CONFLICT, "user with username {} already exists".format(username)
         )
 
-    if not insert_user_into_db(username, password):
+    if not insert_user_into_db(username, password, email, firstname, lastname):
         return build_response(
             HTTPStatus.INTERNAL_SERVER_ERROR, "failed to insert user into db"
         )
