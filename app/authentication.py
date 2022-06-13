@@ -8,21 +8,19 @@ import app.mysql_script as ms
 
 
 # TODO - TESTING
-# Function that returns username, firstname, lastname and score from username input.
+# Function that returns username, password, firstname, lastname and score from username input.
 def get_user_from_db(username: str) -> dict:
     res = ms.check_user_exists(username, True)
     if res:
-        return {"username": res[1], "firstname": res[3], "lastname": res[4], "score": res[5]}
+        return {"username": res[1], "password": res[2], "firstname": res[4], "lastname": res[5], "score": res[6]}
 
     return {}
 
 def insert_user_into_db(username: str, email: str, firstname: str, lastname: str) -> int:
-    res = ms.insert_user((ms.get_new_id(), username, email, firstname, lastname, 0))
+    res = ms.insert_user((ms.get_new_user_id(), username, email, firstname, lastname, 0))
     if res:
-        print('Succes')
         return 0
 
-    print('Failure')
     return 1
 
 
@@ -34,12 +32,9 @@ class User(UserMixin):
         self.username = username
         self._password = password
 
-        # TODO - Add user to DB.
 
     @staticmethod
     def get(user_id: str):
-        # TODO - Search DB for user_id/name and populate object values.
-
         user_db = get_user_from_db(user_id)
 
         if user_db:
@@ -67,11 +62,8 @@ login_manager.init_app(app)
 
 # Helper functions
 def authenticate_user(username, password) -> bool:
-    # TODO - Replace mockup with actual DB call and proper password comparison.
-
-    if username == "jantje" and password == "geheim":
-        return True
-    elif username == "dirk" and password == "geheim":
+    user_db = get_user_from_db(username)
+    if password == user_db.get("password"):
         return True
 
     return False
