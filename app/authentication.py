@@ -1,11 +1,13 @@
-import json
+from http import HTTPStatus
+from urllib.parse import urlparse, urljoin
 
-from main import app
-from flask import session, request, flash, redirect, url_for, abort, jsonify
+from flask import request, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from urllib.parse import urlparse, urljoin
 import app.mysql_script as ms
 
+from app.util import build_response
+from main import app
 
 # TODO - TESTING
 # Function that returns username, password, firstname, lastname and score from username input.
@@ -22,6 +24,14 @@ def insert_user_into_db(username: str, email: str, firstname: str, lastname: str
         return 0
 
     return 1
+
+
+# # Mockup function simulating adding user to DB.
+# def insert_user(user_id: str, password: str) -> dict:
+#     mock_db_new_row = {"username": user_id, "password": password}
+#     mock_db.append(mock_db_new_row)
+
+#     return mock_db_new_row
 
 
 # TODO - ENDTESTING
@@ -75,30 +85,65 @@ def is_safe_url(target):
     return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
 
 
-# Login functions
+# Authentication functions
 @login_manager.user_loader
 def load_user(user_id: str) -> User:
     return User.get(user_id)
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
+@app.route("/signup", methods=["POST"])
+def signup():
     if not request.headers:
-        app.logger.debug("login request without headers")
-        return abort(400)
+        return build_response(
+            HTTPStatus.BAD_REQUEST, "request is missing request headers"
+        )
 
     username = request.headers.get("username")
     password = request.headers.get("password")
+    if not username:
+        return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
+    if not password:
+        return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
+
+    user_db = get_user_from_db(username)
+    if user_db:
+        return build_response(
+            HTTPStatus.CONFLICT, "user with username {} already exists".format(username)
+        )
+
+    if not insert_user_into_db(username, password):
+        return build_response(
+            HTTPStatus.INTERNAL_SERVER_ERROR, "failed to insert user into db"
+        )
+
+    return build_response(HTTPStatus.CREATED, "new user is inserted into db")
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    if not request.headers:
+        return build_response(
+            HTTPStatus.BAD_REQUEST, "request is missing request headers"
+        )
+
+    username = request.headers.get("username")
+    password = request.headers.get("password")
+    if not username:
+        return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
+    if not password:
+        return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
 
     user = load_user(username)
 
     if authenticate_user(username, password):
         if not login_user(user):
-            response = {"code": 500, "msg": "failed logging in user"}
+            response = build_response(
+                HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging in user"
+            )
         else:
-            response = {"code": 200, "msg": "user logged in successfully"}
+            response = build_response(HTTPStatus.OK, "user logged in successfully")
     else:
-        response = {"code": 200, "msg": "incorrect password"}
+        response = build_response(HTTPStatus.OK, "incorrect password")
 
     return jsonify(response)
 
@@ -107,9 +152,11 @@ def login():
 @login_required
 def logout():
     if logout_user():
-        data = {"code": 200, "msg": "user logged out"}
+        data = build_response(HTTPStatus.OK, "user logged out")
     else:
-        data = {"code": 500, "msg": "failed logging out user"}
+        data = build_response(
+            HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging out user"
+        )
     return jsonify(data)
 
 
