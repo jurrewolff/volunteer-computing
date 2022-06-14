@@ -6,6 +6,9 @@ app = Flask(__name__)
 
 app.secret_key = token_hex()
 
+UPLOAD_FOLDER = '/var/www/c_files'
+COMPILED_FILES_FOLDER = '/var/www/compiled_files'
+
 app.config['COMPILED_FILES_FOLDER'] = COMPILED_FILES_FOLDER
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
