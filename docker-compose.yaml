@@ -7,6 +7,7 @@ services:
         image: pse-flask
         volumes:
             - "./app:/app:z"
+            - "./emcc_cache:/emcc_cache:z"
         environment:
             - EM_CACHE=/emcc_cache
     db:
