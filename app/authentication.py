@@ -144,7 +144,9 @@ def login():
     if not password:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
 
-    user = load_user(username)
+    user = load_user(username) # username not found erbij doen?
+    if not user:
+        return jsonify(build_response(HTTPStatus.OK, "username not found"))
 
     if authenticate_user(username, password):
         if not login_user(user):
