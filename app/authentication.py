@@ -20,11 +20,11 @@ def get_user_from_db(username: str) -> dict:
     return {}
 
 def insert_user_into_db(username: str, password: str, email: str, firstname: str, lastname: str) -> int:
-    res = ms.insert_user((ms.get_new_user_id(), username, password, email, firstname, lastname, 0))
+    res = user.insert_user((ms.get_new_user_id(), username, password, email, firstname, lastname, 0))
     if res:
-        return 0
+        return True
 
-    return 1
+    return False
 
 
 # # Mockup function simulating adding user to DB.
