@@ -8,3 +8,4 @@ celery
 Redis
 mysql-connector==2.2.9
 Flask-Session
+flask_mysqldb
