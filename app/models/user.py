@@ -1,7 +1,7 @@
 import mysql.connector as connector
 from itertools import count, filterfalse
 
-from app.models.database import *
+from models.database import *
 
 def print_users(): # For testing purpuses.
     db.cur.execute("SELECT * FROM User")
