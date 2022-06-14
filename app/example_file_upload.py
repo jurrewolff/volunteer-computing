@@ -60,7 +60,8 @@ celery = make_celery(app)
 def compile(filename):
     filename_without_extension = filename[:-2]
     # filename_with_wasm_extension = filename[:-2]
-    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o -s EXIT_RUNTIME {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
+    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -s EXIT_RUNTIME -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
+    os.remove(f"{os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
 
