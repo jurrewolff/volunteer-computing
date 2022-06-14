@@ -1,6 +1,6 @@
 import os
 from app import app
-from flask import Flask, flash, request, redirect, url_for, jsonify, send_from_directory
+from flask import Flask, flash, request, redirect, url_for, jsonify, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 import time
 
@@ -60,7 +60,7 @@ celery = make_celery(app)
 def compile(filename):
     filename_without_extension = filename[:-2]
     # filename_with_wasm_extension = filename[:-2]
-    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -s EXIT_RUNTIME -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.html --shell-file template.html")
+    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o -s EXIT_RUNTIME {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
 
@@ -85,6 +85,15 @@ def taskstatus(task_id):
 @app.route('/uploads/<name>')
 def download_file(name):
     return send_from_directory(app.config['COMPILED_FILES_FOLDER'], name)
+
+@app.route('/uploads/<name>.html')
+def datatest(name):
+    data =  {'arguments': ["1 20 3", "5 6 7"], "size": 2, "line" : ["1", "5"]}
+    return render_template('template.html', data=data, name=name)
+
+@app.route('/<name>.js')
+def jstemplate(name):
+    return render_template('template.js', name=name)
 
 # @celery.task()
 # def compile(filename):
@@ -112,5 +121,5 @@ def download_file(name):
 # #     <!doctype html>
 # #     <title>Compiled files</title>
 # #     <h1>File</h1>
- 
+
 # #     '''
