@@ -5,6 +5,7 @@ from secrets import token_hex
 app = Flask(__name__)
 
 app.secret_key = token_hex()
+
 UPLOAD_FOLDER = '/var/www/c_files'
 COMPILED_FILES_FOLDER = '/var/www/compiled_files'
 
