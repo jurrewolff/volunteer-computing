@@ -1,8 +1,10 @@
 from flask import Flask
 from datetime import timedelta
+from secrets import token_hex
 
 app = Flask(__name__)
 
+app.secret_key = token_hex()
 UPLOAD_FOLDER = '/var/www/c_files'
 COMPILED_FILES_FOLDER = '/var/www/compiled_files'
 
@@ -25,3 +27,4 @@ app.config['CELERY_BROKER_URL'] = "redis://redis:6379/0"
 app.config['CELERY_TIMEZONE'] = 'UTC'
 
 from app import example_file_upload
+from app import authentication
