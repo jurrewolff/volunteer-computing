@@ -10,28 +10,24 @@
     {{data}}
     <script type="text/javascript" src="/{{name}}.js"></script>
 
-    <script defer type='text/javascript'>
+    <script type='text/javascript'>
       var data = {{ data | tojson }};
-      // var Module = {
-      //   print: (function() {
-      //     var element = document.getElementById('output');
-      //     if (element) element.value = ''; // clear browser cache
-
-      //       return function(text) {
-      //       if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-
-      //       if (element) {
-      //         element.value += text + "\n";
-      //         element.scrollTop = element.scrollHeight; // focus on bottom
-      //       }
-      //     };
-      //   })()}
+      var Module = {
+        final: '',
+        reads: 0,
+        print: (function() {
+            return function(text) {
+            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+            Module.final += text + "\n";
+            Module.reads += 1;
+            if (Module.reads == data.size) console.log(Module.final)
+          };
+        })()};
       for (let step = 0; step < data.size; step++) {
           // Runs 5 times, with values of step 0 through 4.
           var to_execute = data.arguments[step].split(" ");
-          execute_C_file(to_execute);
-      }
-
+          execute_C_file(to_execute, Module.print);
+      };
     </script>
   </body>
 </html>
