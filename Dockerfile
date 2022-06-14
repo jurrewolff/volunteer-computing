@@ -1,14 +1,15 @@
 FROM python
 RUN mkdir -p /var/www/c_files
 RUN mkdir -p /var/www/compiled_files
-RUN mkdir app
+#RUN mkdir app
 
 # install supervisord
 RUN apt-get update && apt-get install -y supervisor && apt-get install -y emscripten
 # emcc needs to be called once before it will start compiling files
 RUN emcc
-RUN mkdir /emcc_cache
-COPY ./emcc_cache /emcc_cache
+#RUN mkdir /emcc_cache
+RUN python /usr/share/emscripten/embuilder.py build MINIMAL
+#COPY ./emcc_cache /emcc_cache
 
 
 COPY ./requirements.txt /var/www/requirements.txt
