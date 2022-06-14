@@ -73,7 +73,8 @@ def authenticate_user(username, password) -> bool:
     # TODO - Replace mockup with actual DB call and proper password comparison.
 
     for item in mock_db:
-        if item.get("username") == username and item.get("password") == password:
+        if item.get("username") == username and item.get(
+                "password") == password:
             return True
 
     return False
@@ -82,7 +83,8 @@ def authenticate_user(username, password) -> bool:
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
-    return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
+    return test_url.scheme in ("http",
+                               "https") and ref_url.netloc == test_url.netloc
 
 
 # Authentication functions
@@ -94,9 +96,8 @@ def load_user(user_id: str) -> User:
 @app.route("/signup", methods=["POST"])
 def signup():
     if not request.headers:
-        return build_response(
-            HTTPStatus.BAD_REQUEST, "request is missing request headers"
-        )
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "request is missing request headers")
 
     username = request.headers.get("username")
     password = request.headers.get("password")
@@ -108,13 +109,12 @@ def signup():
     user_db = get_user_from_db(username)
     if user_db:
         return build_response(
-            HTTPStatus.CONFLICT, "user with username {} already exists".format(username)
-        )
+            HTTPStatus.CONFLICT,
+            "user with username {} already exists".format(username))
 
     if not insert_user(username, password):
-        return build_response(
-            HTTPStatus.INTERNAL_SERVER_ERROR, "failed to insert user into db"
-        )
+        return build_response(HTTPStatus.INTERNAL_SERVER_ERROR,
+                              "failed to insert user into db")
 
     return build_response(HTTPStatus.CREATED, "new user is inserted into db")
 
@@ -122,9 +122,8 @@ def signup():
 @app.route("/login", methods=["POST"])
 def login():
     if not request.headers:
-        return build_response(
-            HTTPStatus.BAD_REQUEST, "request is missing request headers"
-        )
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "request is missing request headers")
 
     username = request.headers.get("username")
     password = request.headers.get("password")
@@ -137,11 +136,11 @@ def login():
 
     if authenticate_user(username, password):
         if not login_user(user):
-            response = build_response(
-                HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging in user"
-            )
+            response = build_response(HTTPStatus.INTERNAL_SERVER_ERROR,
+                                      "failed logging in user")
         else:
-            response = build_response(HTTPStatus.OK, "user logged in successfully")
+            response = build_response(HTTPStatus.OK,
+                                      "user logged in successfully")
     else:
         response = build_response(HTTPStatus.OK, "incorrect password")
 
@@ -154,13 +153,11 @@ def logout():
     if logout_user():
         data = build_response(HTTPStatus.OK, "user logged out")
     else:
-        data = build_response(
-<<<<<<< HEAD
-            HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging in user"
-        )
+        data = build_response(HTTPStatus.INTERNAL_SERVER_ERROR,
+                              "failed logging out user")
     return jsonify(data)
-=======
-            HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging out user"
-        )
-    return jsonify(data)
->>>>>>> main
+
+
+@app.route("/", methods=["GET", "POST"])
+def home():
+    return jsonify("test")
