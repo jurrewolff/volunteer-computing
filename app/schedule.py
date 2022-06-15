@@ -2,6 +2,7 @@ from turtle import done
 from app import app
 import random 
 import math
+import os
 ###################################
 # DUMMY CODE
 # import mysql.connector as connector
@@ -52,8 +53,15 @@ def increment_quorum_size(project_id, job_id):
     """
     db.cur.execute(query)
     # check if succes 
-def save_result(result):
-    pass
+def save_result(project_id, job_id, volunteer_id, result):
+    # Write to filesystem, maybe async
+    # save to db 
+    with open( os.path.join(app.config['RESULT_FOLDER'], f"{project_id}_job_id"), "a") as file:
+        file.write(result)
+    query = f"""
+    INSERT INTO Results (job_id, project_id, volunteer) VALUES ('{job_id}','{project_id}','{volunteer_id}')
+    """
+    db.cur.execute(query)
 
 def get_volunteer(job_id, project_id): 
     query = f"SELECT volunteer FROM result WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
@@ -62,7 +70,7 @@ def get_volunteer(job_id, project_id):
     return res
 
 def get_trustlevels(job_id, project_id):
-    user = get_volunteer(job_id, project_id)
+    user_id = get_volunteer(job_id, project_id)
 
     query = f""""
     SELECT (SELECT trustlevel
@@ -117,13 +125,14 @@ def get_repl_type_and_quorum_size(project_id, job_id):
     """
     res = db.cur.fetchall()
     return res
-def receive_work(project_id, job_id):
-    save_result()
+def receive_work(project_id, job_id, volunteer_id, result):
+    save_result(project_id, job_id, volunteer_id, result)
     n_results = get_number_of_results(job_id, project_id)
     replication_type, quorum_size = get_repl_type_and_quorum_size(project_id, job_id)
-    # if all results agree
     if n_results == quorum_size:
+        # if a majority agrees
         job_done()
+        # else  increment_quorum_size(project_id, job_id) return
     if replication_type == "trust":
         trust = decide_if_work_is_trusted()
         if not trust:
