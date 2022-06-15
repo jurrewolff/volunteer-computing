@@ -87,11 +87,18 @@ def taskstatus(task_id):
 def download_file(name):
     return send_from_directory(app.config['COMPILED_FILES_FOLDER'], name)
 
-@app.route('/uploads/<name>.html')
+@app.route('/uploads/<name>.html', methods=('GET', 'POST'))
 def datatest(name):
+    if request.method == 'POST':
+        data = request.form.get('data')
+        with open("dummy.output", "a") as f:
+            f.write(data)
+    # arguments from scetuler
     lines = [str(r) for r in range(0,10)]
     data =  {'arguments': ["1 20 3", "5 6 7"], "size": 2, "line" : lines}
     return render_template('template.html', data=data, name=name)
+
+
 
 @app.route('/<name>.js')
 def jstemplate(name):
