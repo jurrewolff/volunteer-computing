@@ -62,6 +62,8 @@ def compile(filename):
     # filename_with_wasm_extension = filename[:-2]
     os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
     os.remove(f"{os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
+    # we don't need to store .c files
+    os.remove(f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}")
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
 
@@ -85,7 +87,7 @@ def taskstatus(task_id):
 
 @app.route('/uploads/<name>')
 def download_file(name):
-    return send_from_directory(app.config['COMPILED_FILES_FOLDER'], name)
+    return send_from_directory(app.config['COMPILED_FILES_FOLDER'], name, cache_timeout=604800) # cached for a week
 
 @app.route('/uploads/<name>.html', methods=('GET', 'POST'))
 def datatest(name):
