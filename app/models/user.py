@@ -1,16 +1,14 @@
-# import mysql.connector as connector
+import mysql.connector as connector
 from itertools import count, filterfalse
 
-from app import mysql
+from app.models.database import *
 
-cur = mysql.connection.cursor()
 def print_users(): # For testing purpuses.
-    cur.execute("SELECT * FROM User")
-    res = cur.fetchall()
+    db.cur.execute("SELECT * FROM User")
+    res = db.cur.fetchall()
     for x in res:
         print(x)
-print_users()
-db = None
+
 # Adds a user to the User table.
 # val should be of format: (id, username, password, email, first_name, last_name, score).
 # Returns false if username is not unique, returns true otherwise.

@@ -37,3 +37,21 @@ PRIMARY KEY (user_id, project_id),
 FOREIGN KEY (user_id) REFERENCES User(user_id),
 FOREIGN KEY (project_id) REFERENCES Project(project_id)
 );
+
+CREATE TABLE app.Jobs (
+job_id int,
+project_id int,
+qorum_size int,
+PRIMARY KEY (user_id, project_id),
+FOREIGN KEY (project_id) REFERENCES Project(project_id)
+);
+
+CREATE TABLE app.Result (
+job_id int,
+project_id int,
+volunteer int,
+PRIMARY KEY (job, project_id),
+FOREIGN KEY (job_id) REFERENCES Jobs(job_id),
+FOREIGN KEY (project_id) REFERENCES Project(project_id),
+FOREIGN KEY (volunteer) REFERENCES Volunteer(user_id)
+);
