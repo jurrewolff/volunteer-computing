@@ -3,7 +3,7 @@ from urllib.parse import urlparse, urljoin
 
 from flask import Flask, request, jsonify, session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
-# from flask_session.__init__ import Session
+from flask_session.__init__ import Session
 from urllib.parse import urlparse, urljoin
 import app.mysql_script as ms
 import app.models.user as user
@@ -11,9 +11,9 @@ import app.models.user as user
 from app.util import build_response
 from main import app
 
-# app.config["SESSION_PERMANENT"] = False
-# app.config["SESSION_TYPE"] = "filesystem"
-# Session(app)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 
 # TODO - TESTING
