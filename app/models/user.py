@@ -3,11 +3,13 @@ from itertools import count, filterfalse
 
 from app.models.database import *
 
-def print_users(): # For testing purpuses.
+
+def print_users():  # For testing purpuses.
     db.cur.execute("SELECT * FROM User")
     res = db.cur.fetchall()
     for x in res:
         print(x)
+
 
 # Adds a user to the User table.
 # dictionary should have values: id, username, password, email,
@@ -16,11 +18,23 @@ def print_users(): # For testing purpuses.
 def insert_user(dic):
     if not account_id_exists(dic["user_id"]) and not username_exists(dic["username"]):
         sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        val = (dic["user_id"], dic["username"], dic["password"],dic["email"], dic["firstname"], dic["lastname"], dic["score"], dic["institution"], dic["is_researcher"], dic["background"])
+        val = (
+            dic["user_id"],
+            dic["username"],
+            dic["password"],
+            dic["email"],
+            dic["firstname"],
+            dic["lastname"],
+            dic["score"],
+            dic["institution"],
+            dic["is_researcher"],
+            dic["background"],
+        )
         db.cur.execute(sql, val)
         db.con.commit()
         return True
     return False
+
 
 # Returns true if account_id exists, returns false otherwise.
 def account_id_exists(user_id):
@@ -32,6 +46,7 @@ def account_id_exists(user_id):
     else:
         return True
 
+
 # Returns true if account_username exists, returns false otherwise.
 def username_exists(username):
     sql = f"SELECT 1 FROM User WHERE username = '{username}'"
@@ -41,6 +56,7 @@ def username_exists(username):
         return False
     else:
         return True
+
 
 # returns a dictionary container the user info. If the user doesn't exists, False is returned.
 def get_user(username):
@@ -58,9 +74,10 @@ def get_user(username):
             "score": res[6],
             "institution": res[7],
             "upload_rights": res[8],
-            "background": res[9]
+            "background": res[9],
         }
     return False
+
 
 # Returns the lowest id that has not yet been taken.
 def get_new_user_id():
