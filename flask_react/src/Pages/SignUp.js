@@ -12,9 +12,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
-
-
-
+import Typography from '@mui/material/Typography';
 
 export default function Signup() {
     const paperStyle = { padding: 20, height: "100vh", width: "110vh", margin: "20px auto" }
@@ -84,11 +82,17 @@ export default function Signup() {
                         divider={<Divider orientation="horizontal" flexItem />}
                         spacing={1}>
                         <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
+                            <Typography variant="h1" component="h2">
+                                h1. Heading
+                            </Typography>;
                             <Checkbox {...label} checked={clicked}
                                 onChange={clickButton1}
                                 inputProps={{ 'aria-label': 'controlled' }} />
                         </Box>
                         <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
+                            <Typography variant="h1" component="h2">
+                                h1. Heading
+                            </Typography>;
                             <Checkbox {...label} checked={!clicked}
                                 onChange={clickButton2}
                                 inputProps={{ 'aria-label': 'controlled' }} />
