@@ -1,19 +1,23 @@
-import React from 'react'; // niet per se nodig nu, toekomst wss wel
-import './Login.css';
+import React from 'react';
+import TextField from '@mui/material/TextField';
+// import { Mf } from '../Actions/signupRequest'
+import { SignupRequest } from '../Actions/signupRequest'
 
-import { LogginIn } from '../Actions/login';
+
 
 export default function Login() {
     return (
-        <>
+        <div>
             <h1>Login</h1>
-            <LogginIn />
-        </>
+            <form noValidate autoComplete="off">
+                <TextField> test</TextField>
+            </form>
+            < SignupRequest />
+        </div>
     );
 }
 
-// const Login = () => {
-//     return <h1>Login</h1>;
-// };
-
-// export default Login;
+{/* <div>
+<Button>Test</Button> */}
+{/* <TextField id="outlined-basic" label="Outlined" variant="outlined" /> */ }
+{/* </div> */ }

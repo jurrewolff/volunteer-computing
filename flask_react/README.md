@@ -4,9 +4,18 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Packages
 
-Overzicht van alle packages staat ook in package.json
+### Overzicht van alle packages staat ook in package.json
 
+(page navigation)
 npm install i react-router-dom
+
+(Mui core packages)
+npm install @mui/material @emotion/react @emotion/styled
+npm install @mui/material @mui/styled-engine-sc styled-components
+npm install @mui/icons-material
+
+(react-bootstrap)
+npm install react-bootstrap
 
 ## Backend
 

@@ -127,6 +127,7 @@ def login():
 
     username = request.headers.get("username")
     password = request.headers.get("password")
+
     if not username:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
     if not password:
