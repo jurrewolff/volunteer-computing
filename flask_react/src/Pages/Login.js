@@ -1,7 +1,9 @@
+/* Login page, waar nu alleen een textfield en een knop in staat */
+
 import React from 'react';
 import TextField from '@mui/material/TextField';
 // import { Mf } from '../Actions/signupRequest'
-import { SignupRequest } from '../Actions/signupRequest'
+import { LoginRequest } from '../Actions/loginRequest'
 
 
 
@@ -12,7 +14,7 @@ export default function Login() {
             <form noValidate autoComplete="off">
                 <TextField> test</TextField>
             </form>
-            < SignupRequest />
+            < LoginRequest />
         </div>
     );
 }

@@ -1,3 +1,8 @@
+/*
+ * Hierin wordt alles samengenomen voor rendering.
+ */
+
+
 import React from 'react'
 import './App.css';
 

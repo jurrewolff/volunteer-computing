@@ -20,8 +20,9 @@ export default function Signup() {
     const paperStyle = { padding: 20, height: "100vh", width: "110vh", margin: "20px auto" }
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-    const [option1, setOption1] = React.useState(true);
-    const [option2, setOption2] = React.useState(false);
+    // const [option1, setOption1] = React.useState(true);
+    // const [option2, setOption2] = React.useState(false);
+    const [clicked, setClicked] = useState(true)
 
     // UPGRADE in een statement
     const fNameRef = useRef()
@@ -36,15 +37,21 @@ export default function Signup() {
 
     // console.log({ experiment })
 
-    const handleChange1 = (event) => {
-        if (option1) {
-            setOption1(event.target.checked);
-            setOption2(event.target.checked);
-        }
-        else {
-            setOption1(event.target.checked);
-        }
-    };
+    function clickButton1() {
+        setClicked(true)
+    }
+
+    function clickButton2() {
+        setClicked(false)
+    }
+    // const handleChange1 = (event) => {
+    //     setOption1(event.target.checked);
+    // };
+
+    // const handleChange2 = (event) => {
+    //     setOption1(event.target.checked);
+    // };
+
 
     return (
         <>
@@ -77,13 +84,13 @@ export default function Signup() {
                         divider={<Divider orientation="horizontal" flexItem />}
                         spacing={1}>
                         <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
-                            <Checkbox {...label} checked={option1}
-                                onChange={handleChange1}
+                            <Checkbox {...label} checked={clicked}
+                                onChange={clickButton1}
                                 inputProps={{ 'aria-label': 'controlled' }} />
                         </Box>
                         <Box component="span" sx={{ p: 2, border: '1px dashed grey' }}>
-                            <Checkbox {...label} checked={option2}
-                                onChange={handleChange1}
+                            <Checkbox {...label} checked={!clicked}
+                                onChange={clickButton2}
                                 inputProps={{ 'aria-label': 'controlled' }} />
                         </Box>
                     </Stack>

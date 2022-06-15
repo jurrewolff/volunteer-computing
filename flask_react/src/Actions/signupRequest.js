@@ -1,3 +1,9 @@
+/*
+ * Voor het registreren van een gebruiker. Werkt nu alleen met mockup database,
+ * waarbij alleen username en ww vereist zijn.
+ * code 200: is goed, alle andere zijn erros.
+ */
+
 import { useState, useEffect } from 'react'
 
 export const SignupRequest = (props) => {
@@ -11,11 +17,11 @@ export const SignupRequest = (props) => {
             const requestOptions = {
                 method: 'POST',
                 headers: {
-                    'username': 'user1',
-                    "password": "password1"
+                    'username': 'jan',
+                    "password": "geheimlijk"
                 }
             };
-            fetch("/login", requestOptions)
+            fetch("/signup", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                     setData(result)
@@ -37,6 +43,11 @@ export const SignupRequest = (props) => {
         </div>
     );
 }
+
+
+// TEST BENDE WAAR IK MISSCHIEN NOG IETS UIT KAN HALEN!!! //
+
+
 
 // export default SignupRequest;
 

@@ -19,7 +19,17 @@ npm install react-bootstrap
 
 ## Backend
 
-zsh start.sh
+In package.json staat een proxy statement wat de front end connect met de backend.
+Mocht het errors opleveren en backend niet nodig is kan dit uitgezet worden.
+
+### Oplossingen
+
+(opt1) Voornamelijke vermoede is de UVA wifi (eduroam) -> switch van wifi
+(opt2) Node_modules -> verwijder node_modules in de app folder en vervolgens npm install
+(opt3) Docker fout -> vraag Jurre
+(opt4) ...
+
+runnen van docker/back-end: zsh start.sh
 
 ## Available Scripts
 

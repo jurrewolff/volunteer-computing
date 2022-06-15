@@ -1,7 +1,9 @@
 /*
  * Maakt het mogelijk om in te loggen.
  * POST request voor login.
- * in var worden ed variabelen meegegeven voor de username en ww
+ * in var worden ed variabelen meegegeven voor de username en ww, is voor nu
+ * nog gehardcoded voor testen.
+ *
  */
 
 import { useState, useEffect } from 'react'
@@ -15,8 +17,8 @@ export const LoginRequest = () => {
             const requestOptions = {
                 method: 'POST',
                 headers: {
-                    'username': 'user1',
-                    "password": "password1"
+                    'username': 'jan',
+                    "password": "geheimlijk"
                 }
             };
             fetch("/login", requestOptions)
@@ -31,7 +33,7 @@ export const LoginRequest = () => {
 
     return (
         <div>
-            <button onClick={() => setClicked(true)}>Fetch data</button>
+            <button onClick={() => setClicked(true)}>Log in</button>
             <div>
                 <h2>{data.code}</h2>
                 <h2>{data.description}</h2>
