@@ -1,4 +1,4 @@
-function execute_C_file(input, c_out) {
+function execute_C_file(input, c_out, line) {
 
 // The Module object: Our interface to the outside world. We import
 // and export values on it. There are various ways Module can be used:
@@ -32,6 +32,7 @@ var thisProgram = './this.program';
 var quit_ = (status, toThrow) => {
   throw toThrow;
 };
+
 
 // Determine the runtime environment we are in. You can customize this by
 // setting the ENVIRONMENT setting at compile time (see settings.js).
@@ -813,7 +814,7 @@ function UTF8ArrayToString(heapOrArray, idx, maxBytesToRead) {
       }
     }
   }
-  return str;
+  return line + " " + str;
 }
 
 // Given a pointer 'ptr' to a null-terminated UTF8-encoded string in the emscripten HEAP, returns a
@@ -884,7 +885,7 @@ function stringToUTF8Array(str, heap, outIdx, maxBytesToWrite) {
       heap[outIdx++] = 0x80 | (u & 63);
     }
   }
-  // Null-terminate the pointer to the buffer.
+  // Null-terminate the pointer to the fvarf.
   heap[outIdx] = 0;
   return outIdx - startIdx;
 }

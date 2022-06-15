@@ -20,13 +20,13 @@
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
             Module.final += text + "\n";
             Module.reads += 1;
-            if (Module.reads == data.size) console.log(Module.final)
+            if (Module.reads == data.size) console.log(Module.final);
           };
         })()};
       for (let step = 0; step < data.size; step++) {
           // Runs 5 times, with values of step 0 through 4.
           var to_execute = data.arguments[step].split(" ");
-          execute_C_file(to_execute, Module.print);
+          execute_C_file(to_execute, Module.print, data.line[step]);
       };
     </script>
   </body>

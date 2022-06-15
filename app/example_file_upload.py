@@ -60,7 +60,7 @@ celery = make_celery(app)
 def compile(filename):
     filename_without_extension = filename[:-2]
     # filename_with_wasm_extension = filename[:-2]
-    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -s EXIT_RUNTIME -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
+    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
     os.remove(f"{os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
@@ -89,7 +89,8 @@ def download_file(name):
 
 @app.route('/uploads/<name>.html')
 def datatest(name):
-    data =  {'arguments': ["1 20 3", "5 6 7"], "size": 2, "line" : ["1", "5"]}
+    lines = [str(r) for r in range(0,10)]
+    data =  {'arguments': ["1 20 3", "5 6 7"], "size": 2, "line" : lines}
     return render_template('template.html', data=data, name=name)
 
 @app.route('/<name>.js')
