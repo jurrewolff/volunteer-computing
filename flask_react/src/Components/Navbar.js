@@ -11,6 +11,7 @@ export default function Navbar() {
                     <li><Link to="/login">login</Link></li>
                     <li><Link to="/dashboard">Dashboard</Link></li>
                     <li><Link to="/signup">Sign up</Link></li>
+                    <li><Link to="/projects">Projects</Link></li>
                 </ul>
             </nav>
             <JumpPage />

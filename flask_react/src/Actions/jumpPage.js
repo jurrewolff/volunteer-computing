@@ -10,6 +10,8 @@ import Login from "../Pages/Login"
 import NoPage from "../Pages/NoPage"
 import SignUp from "../Pages/SignUp"
 import DashBoard from "../Pages/Dashboard"
+import Projects from "../Pages/Projects"
+import MoreInfo from "../Pages/MoreInfo"
 
 
 export default function JumpPage() {
@@ -20,6 +22,8 @@ export default function JumpPage() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/dashBoard" element={<DashBoard />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
                 <Route path="*" element={<NoPage />} />
             </Routes>
         </div>
