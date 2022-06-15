@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from flask_session.__init__ import Session
 from urllib.parse import urlparse, urljoin
-import app.mysql_script as ms
+#import app.mysql_script as ms
 import logging
 
 
