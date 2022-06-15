@@ -2,6 +2,7 @@ from models.volunteer import get_projects_of_user
 import models.user as user
 import models.project as project
 import models.volunteer as volunteer
+import os
 
 print("user tests")
 user.print_users()
