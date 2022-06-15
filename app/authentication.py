@@ -143,7 +143,7 @@ def login():
         else:
             response = build_response(HTTPStatus.OK, "user logged in successfully")
     else:
-        response = build_response(HTTPStatus.OK, "incorrect password")
+        response = build_response(HTTPStatus.UNAUTHORIZED, "incorrect password")
 
     return response
 
