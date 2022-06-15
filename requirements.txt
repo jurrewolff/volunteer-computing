@@ -7,3 +7,6 @@ Flask>=2.0.2
 celery
 Redis
 mysql-connector==2.2.9
+Flask-Session
+flask-mysqldb
+
