@@ -5,20 +5,24 @@
  */
 
 import { useState, useEffect } from 'react'
+import Button from '@mui/material/Button';
 
+// In props zitten de meegegeven variabelen van SignUp.js,
+// wordt verzameld in <SignupRequest .... />
 export const SignupRequest = (props) => {
+
+    // In data wordt de responde verzameld
     const [data, setData] = useState([{}])
     const [clicked, setClicked] = useState(false)
 
-    const experiment = props.exp
 
     useEffect(() => {
         if (clicked) {
             const requestOptions = {
                 method: 'POST',
                 headers: {
-                    'username': 'jan',
-                    "password": "geheimlijk"
+                    'username': props.fName,
+                    "password": props.pass
                 }
             };
             fetch("/signup", requestOptions)
@@ -29,21 +33,30 @@ export const SignupRequest = (props) => {
                 })
             setClicked(false)
         }
-    }, [clicked]);
+    }, [clicked, props.fName, props.pass]);
 
     return (
         <div>
-            <p>{experiment}</p>
-            <button onClick={() => setClicked(true)}>Fetch data</button>
+            <Button
+                variant="contained"
+                onClick={() => setClicked(true)}
+                sx={{ mt: 3, ml: 1 }}>
+                Sign up
+            </Button>
             <div>
                 <h2>{data.code}</h2>
                 <h2>{data.description}</h2>
                 <br />
             </div>
         </div>
+
+
+
     );
 }
 
+// checken of alles is ingevuld
+// {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
 
 // TEST BENDE WAAR IK MISSCHIEN NOG IETS UIT KAN HALEN!!! //
 
