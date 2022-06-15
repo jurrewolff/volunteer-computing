@@ -43,7 +43,7 @@ FOREIGN KEY (project_id) REFERENCES Project(project_id)
 CREATE TABLE app.Jobs (
 job_id int,
 project_id int,
-qorum_size int,
+quorum_size int,
 PRIMARY KEY (job_id, project_id),
 FOREIGN KEY (project_id) REFERENCES Project(project_id)
 );
