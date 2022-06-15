@@ -37,3 +37,20 @@ def get_all_projects():
     for x in res:
         projects.append(x)
     return projects
+
+def get_project(project_id):
+    if project_exists(project_id):
+        sql = f"SELECT * FROM Project WHERE project_id = '{project_id}'"
+        db.cur.execute(sql)
+        res = db.cur.fetchone()
+        return {
+            "project_id" : res[0],
+            "name" : res[1],
+            "description" : res[2],
+            "owner" : res[3],
+            "block_size" : res[4],
+            "random_validation" : res[5],
+            "max_runtime" : res[6]
+        }
+    else:
+        return False
