@@ -1,4 +1,4 @@
-FROM python
+FROM python:3.9
 RUN mkdir -p /var/www/c_files
 RUN mkdir -p /var/www/compiled_files
 RUN mkdir app

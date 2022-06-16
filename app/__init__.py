@@ -6,25 +6,24 @@ app = Flask(__name__)
 
 app.secret_key = token_hex()
 
-UPLOAD_FOLDER = '/var/www/c_files'
-COMPILED_FILES_FOLDER = '/var/www/compiled_files'
-app.config['RESULT_FOLDER'] = '/var/www/results'
-app.config['COMPILED_FILES_FOLDER'] = COMPILED_FILES_FOLDER
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
+UPLOAD_FOLDER = "/var/www/c_files"
+COMPILED_FILES_FOLDER = "/var/www/compiled_files"
+app.config["RESULT_FOLDER"] = "/var/www/results"
+app.config["COMPILED_FILES_FOLDER"] = COMPILED_FILES_FOLDER
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
 
 
-app.config['CELERY_BACKEND'] = "redis://redis:6379/0"
-app.config['CELERY_BROKER_URL'] = "redis://redis:6379/0"
-app.config['CELERY_TIMEZONE'] = 'UTC'
+app.config["CELERY_BACKEND"] = "redis://redis:6379/0"
+app.config["CELERY_BROKER_URL"] = "redis://redis:6379/0"
+app.config["CELERY_TIMEZONE"] = "UTC"
 
-app.config['MYSQL_USER'] = "root"
-app.config['MYSQL_PASSWORD'] = "admin"
-app.config['MYSQL_DB'] = 'app'
-mysql = MySQL(app)
+app.config["MYSQL_USER"] = "root"
+app.config["MYSQL_PASSWORD"] = "admin"
+app.config["MYSQL_DB"] = "app"
 
 from app import example_file_upload
 from app import authentication

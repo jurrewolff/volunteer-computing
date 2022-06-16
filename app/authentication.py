@@ -6,7 +6,8 @@ from flask import Flask, request, jsonify, session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from flask_session.__init__ import Session
 from urllib.parse import urlparse, urljoin
-#import app.mysql_script as ms
+
+# import app.mysql_script as ms
 import logging
 
 
@@ -105,17 +106,17 @@ def signup():
 
     # Get info about user from header.
     new_user = {"user_id": user.get_new_user_id()}
-    new_user.update( {'username' : request.headers.get("username")} )
-    new_user.update( {'password' : request.headers.get("password")} )
-    new_user.update( {'email' : request.headers.get("email")} )
-    new_user.update( {'firstname' : request.headers.get("firstname")} )
-    new_user.update( {'lastname' : request.headers.get("lastname")} )
-    new_user.update( {'score' : 0} )
-    new_user.update( {'is_researcher' : request.headers.get("is_researcher")} )
+    new_user.update({"username": request.headers.get("username")})
+    new_user.update({"password": request.headers.get("password")})
+    new_user.update({"email": request.headers.get("email")})
+    new_user.update({"firstname": request.headers.get("firstname")})
+    new_user.update({"lastname": request.headers.get("lastname")})
+    new_user.update({"score": 0})
+    new_user.update({"is_researcher": request.headers.get("is_researcher")})
 
     # Empty string is default. Will be overwritten is user is a researcher.
-    new_user.update( {'institution' : ""} )
-    new_user.update( {'background' : ""} )
+    new_user.update({"institution": ""})
+    new_user.update({"background": ""})
 
     # Check if required information has been retrieved from header.
     if not new_user["username"]:
@@ -137,18 +138,21 @@ def signup():
     if new_user["is_researcher"]:
         # Check if researcher specific information can be retrieved.
         if not request.headers.get("institution"):
-            return build_response(HTTPStatus.BAD_REQUEST, "Please provide an institution")
+            return build_response(
+                HTTPStatus.BAD_REQUEST, "Please provide an institution"
+            )
         if not request.headers.get("background"):
             return build_response(HTTPStatus.BAD_REQUEST, "Please provide a background")
 
-        #Retrieve additional researcher specific variables.
+        # Retrieve additional researcher specific variables.
         new_user["institution"] = request.headers.get("institution")
         new_user["background"] = request.headers.get("background")
 
     # Check if username is unique.
     if user.username_exists(new_user["username"]):
         return build_response(
-            HTTPStatus.CONFLICT, "user with username {} already exists".format(new_user["username"])
+            HTTPStatus.CONFLICT,
+            "user with username {} already exists".format(new_user["username"]),
         )
 
     # Insert user into database.
@@ -174,10 +178,10 @@ def login():
         return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
     if not password:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
-    
-    user = load_user(username) # username not found erbij doen?
+
+    user = load_user(username)  # username not found erbij doen?
     if not user:
-        return jsonify(build_response(HTTPStatus.OK, "username or password is incorrect"))
+        return build_response(HTTPStatus.OK, "username or password is incorrect")
 
     if authenticate_user(username, password):
         if not login_user(user):
@@ -189,8 +193,13 @@ def login():
     else:
         response = build_response(HTTPStatus.OK, "username or password is incorrect")
     session["name"] = username
+    user_db = get_user(username)
+    session["user_id"] = user_db["user_id"]
 
-    return jsonify(response)
+    response.set_cookie("name", username, max_age=3600)
+    response.set_cookie("user_id", str(user_db["user_id"]), max_age=3600)
+
+    return response
 
 
 @app.route("/logout", methods=["GET"])
@@ -202,12 +211,16 @@ def logout():
         data = build_response(
             HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging out user"
         )
-    return jsonify(data)
+
+    session["name"] = ""
+    session["user_id"] = ""
+    data.delete_cookie("name")
+    data.delete_cookie("user_id")
+
+    return data
 
 
 @app.route("/dashboard", methods=["GET"])
 @login_required
 def dashboard():
-    return jsonify(
-        {"code": 200, "msg": "dashboard of user {}".format(session["name"])}
-    )
+    return jsonify({"code": 200, "msg": "dashboard of user {}".format(session["name"])})
