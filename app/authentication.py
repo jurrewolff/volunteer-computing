@@ -191,7 +191,9 @@ def login():
         else:
             response = build_response(HTTPStatus.OK, "user logged in successfully")
     else:
-        response = build_response(HTTPStatus.OK, "username or password is incorrect")
+        response = build_response(
+            HTTPStatus.UNAUTHORIZED, "username or password is incorrect"
+        )
     session["name"] = username
     user_db = get_user(username)
     session["user_id"] = user_db["user_id"]
