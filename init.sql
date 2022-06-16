@@ -1,4 +1,4 @@
-
+DROP DATABASE IF EXISTS app;
 CREATE DATABASE app;
 CREATE TABLE app.User (
 user_id int,
@@ -42,7 +42,7 @@ CREATE TABLE app.Jobs (
 job_id int,
 project_id int,
 qorum_size int,
-PRIMARY KEY (user_id, project_id),
+PRIMARY KEY (job_id, project_id),
 FOREIGN KEY (project_id) REFERENCES Project(project_id)
 );
 
@@ -50,7 +50,7 @@ CREATE TABLE app.Result (
 job_id int,
 project_id int,
 volunteer int,
-PRIMARY KEY (job, project_id),
+PRIMARY KEY (job_id, project_id),
 FOREIGN KEY (job_id) REFERENCES Jobs(job_id),
 FOREIGN KEY (project_id) REFERENCES Project(project_id),
 FOREIGN KEY (volunteer) REFERENCES Volunteer(user_id)
