@@ -1,50 +1,9 @@
-from turtle import done
 from app import app
 import random 
 import math
 import os
-###################################
-# DUMMY CODE
-# import mysql.connector as connector
+from app.models.database import db
 
-# def connection():
-#         config = {
-#             "user": "root",
-#             "password": "admin",
-#             "host": "mysql",
-#             "port": 3306,
-#             "database": "app"
-#         }
-#         try:
-#             c = connector.connect(**config)
-#             return c
-#         except:
-#             print("connection error")
-#             exit(1)
-# class database:
-
-#     def __init__(self):
-#         self.con = connection()
-#         self.cur = self.con.cursor(buffered=True)
-# db = database()
-
-# def dummy_create_project():
-    
-#     # Create a table with the possible jobs.
-#     db.cur.execute("""
-#         CREATE TABLE app.jobsForProject1 (
-#         user_id int,
-#         project_id int,
-#         result_path varchar(255),
-#         PRIMARY KEY (user_id, project_id),
-#         FOREIGN KEY (user_id) REFERENCES User(user_id),
-#         FOREIGN KEY (project_id) REFERENCES Project(project_id)
-#         );
-#     """)
-
-########################################
-
-db = None
 def increment_quorum_size(project_id, job_id):
     query = f"""
     UPDATE Jobs
@@ -56,85 +15,69 @@ def increment_quorum_size(project_id, job_id):
 def save_result(project_id, job_id, volunteer_id, result):
     # Write to filesystem, maybe async
     # save to db 
-    with open( os.path.join(app.config['RESULT_FOLDER'], f"{project_id}_job_id"), "a") as file:
+    with open( os.path.join(app.config['RESULT_FOLDER'], f"{project_id}_{job_id}"), "a+") as file:
         file.write(result)
-    query = f"""
-    INSERT INTO Results (job_id, project_id, volunteer) VALUES ('{job_id}','{project_id}','{volunteer_id}')
-    """
+    query = f"INSERT INTO Result (job_id, project_id, volunteer) VALUES ('{job_id}','{project_id}','{volunteer_id}')"
     db.cur.execute(query)
 
 def get_volunteer(job_id, project_id): 
-    query = f"SELECT volunteer FROM result WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
+    query = f"SELECT volunteer FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
     db.cur.execute(query)
     res = db.cur.fetchone()
     return res
 
-def get_trustlevels(job_id, project_id):
-    user_id = get_volunteer(job_id, project_id)
-
-    query = f""""
-    SELECT (SELECT trustlevel
-        FROM   User
-        WHERE  user_id = '{user_id}'),
-       (SELECT trustlevel
-        FROM   Project
-        WHERE  project_id = '{project_id}') 
-    FROM DUAL
-    """
+def get_trust_level(job_id, project_id):
+    user_id = get_volunteer(job_id, project_id)[0]
+    print("user_id", user_id)
+    query = f"SELECT (SELECT trust_level FROM User WHERE  user_id = '{user_id}'),(SELECT trust_level FROM Project WHERE  project_id = '{project_id}') FROM DUAL"
     db.cur.execute(query)
-    res = db.cur.fetchall()
+    res = db.cur.fetchone()
     return res
 
 def decide_if_work_is_trusted(job_id, project_id):
-    user = get_volunteer(job_id, project_id)
-
-    user_trustlevel, project_trustlevel = get_trustlevels(job_id, project_id)
-    if user_trustlevel > project_trustlevel:
+    user_trust_level, project_trust_level = get_trust_level(job_id, project_id)
+    print("project_trust_level", project_trust_level)
+    if user_trust_level > project_trust_level:
          # dont trust host 
         # increment_quorum_size(job)
         return False
     else:
         # host is trused
-        probabilty_of_duplication = math.sqrt( user_trustlevel / project_trustlevel)
-        if random.uniform() <= probabilty_of_duplication:
+        probabilty_of_duplication = math.sqrt( user_trust_level / project_trust_level)
+        if random.uniform(0,1) <= probabilty_of_duplication:
             # Do a check
             # increment_quorum_size(job)
             return False
         return True
 def job_done(project_id, job_id):
     query = f""""
-    UPDATE Jobs
+    UPDATE Job
     SET done = 1
     WHERE job_id = '{job_id}' AND project_id = '{project_id}'"""
     db.cur.execute(query)
 
 def get_number_of_results(job_id, project_id):
 
-    query = f""""
-    SELECT COUNT(*) FROM Results WHERE job_id ='{job_id}' AND project_id = '{project_id}'
-    """
+    query = f"SELECT COUNT(*) FROM Result WHERE job_id ='{job_id}' AND project_id = '{project_id}';"
     db.cur.execute(query)
     res = db.cur.fetchone()
     return res
 
 def get_repl_type_and_quorum_size(project_id, job_id):
-    query = f""""
-    SELECT replication_type, quorum_size
-    FROM   Project
-    WHERE  project_id = '{project_id}'
-    """
-    res = db.cur.fetchall()
+    query = f"SELECT random_validation, quorum_size FROM Project WHERE  project_id = '{project_id}'"
+    db.cur.execute(query)
+    res = db.cur.fetchone()
     return res
 def receive_work(project_id, job_id, volunteer_id, result):
     save_result(project_id, job_id, volunteer_id, result)
     n_results = get_number_of_results(job_id, project_id)
-    replication_type, quorum_size = get_repl_type_and_quorum_size(project_id, job_id)
+    random_replication, quorum_size = get_repl_type_and_quorum_size(project_id, job_id)
     if n_results == quorum_size:
         # if a majority agrees
         job_done()
         # else  increment_quorum_size(project_id, job_id) return
-    if replication_type == "trust":
-        trust = decide_if_work_is_trusted()
+    if random_replication == 0:
+        trust = decide_if_work_is_trusted(job_id, project_id)
         if not trust:
             increment_quorum_size(project_id, job_id)
             # the quorum size has been increased by one, so we wait for someone to replicate it.
@@ -151,7 +94,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
         
 
         # decide_if_work_is_trusted()
-        # if user.trustlevel > project.trustlevel:
+        # if user.trust_level > project.trust_level:
         #     # dont trust host 
         #     job.querum_size =+ 1
 
@@ -164,18 +107,45 @@ def possible_jobs(project_id, user_id):
     query = f"""
     SELECT job_id, project_id
     FROM Jobs
-    WHERE  project_id = '{project_id} AND done = 0 AND '{user_id}' NOT IN (
+    WHERE  project_id = '{project_id}' AND Jobs.done = 0 AND '{user_id}' NOT IN (
         SELECT volunteer
-        FROM Results
-        WHERE Results.job_id = Jobs.job_id AND project_id = '{project_id}
+        FROM Result
+        WHERE Result.job_id = Jobs.job_id AND project_id = '{project_id}'
     )
     """
+    db.cur.execute(query)
     res = db.cur.fetchall()
+    return res
     # all jobs where done == false if replication == true not result from this user yet.user
 
 def give_work(project_id, user_id):
     job_id, project_id = random.choice(possible_jobs(project_id, user_id))
     print(f"do job {job_id} for project {project_id}")
+
+def fill_db():
+    def execute(s):
+        db.cur.execute(s)
+        db.con.commit()
+    execute ("INSERT INTO User (user_id, trust_level) VALUES (1, 1);")
+    execute ("INSERT INTO Project (project_id, owner, random_validation, quorum_size, trust_level) VALUES (1,1, 0, 1, 1);")
+    execute ("INSERT INTO Jobs (job_id, project_id, quorum_size, done) VALUES (1,1,1, 0);")
+    execute ("INSERT INTO Volunteer (user_id, project_id, contribution) VALUES (1,1,1);")
+    # db.cur.execute(query, multi=True)
+    # db.con.commit()
+    print("database filled")
+
+def test():
+    try:
+        fill_db()
+    except Exception as e:
+        pass
+    # try:
+    give_work(1, 1)
+    # except Exception as e:
+        # print(e)
+    receive_work(1, 1, 1, "1")
+# test()
+
     # random from possible_work
 # BOINC maintains an estimate E(H) of host H's recent error rate.
 # This is maintained as follows:
