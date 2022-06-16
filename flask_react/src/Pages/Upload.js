@@ -158,4 +158,68 @@ export const Test = (props) => {
 
 
 
-    
+//// Tessa's part:
+// import React, { useRef } from "react";
+// import "../App.css";
+// import "../eventHandlers";
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+// function Upload() {
+// 	const fileUpload = useRef(null);
+// 	const chooseFile = (e) => {
+// 		console.log(e);
+// 	};
+
+// 	const handleUpload = () => {
+// 		console.log(fileUpload.current.click(), "fileUpload");
+// 	};
+
+// 	return (
+// 		<div className="m-3">
+// 			<label className="mx-3">Choose file: </label>
+// 			<input className="d-none" type="file" multiple id="input" ref={fileUpload}
+// 				onChange={chooseFile} />
+// 			<button className="btn btn-outline-primary">Upload</button>
+// 		</div>
+// 	);
+// }
+
+// export default Upload;
+
+// import React, { useState, useRef } from "react";
+
+// function Upload() {
+//   const [uploadedFileName, setUploadedFileName] = useState<String | null>(null);
+//   const inputRef = useRef<HTMLInputElement>(null);
+
+//   const handleUpload = () => {
+//     inputRef.current?.click();
+//   };
+//   const handleDisplayFileDetails = () => {
+//     inputRef.current?.files &&
+//       setUploadedFileName(inputRef.current.files[0].name);
+//   };
+
+//   return (
+//     <div className="m-3">
+//       <label className="mx-3">Choose file:</label>
+//       <input
+//         ref={inputRef}
+//         onChange={handleDisplayFileDetails}
+//         className="d-none"
+//         type="file"
+//       />
+//       <button
+//         onClick={handleUpload}
+//         className={`btn btn-outline-${
+//           uploadedFileName ? "success" : "primary"
+//         }`}
+//       >
+//         {uploadedFileName ? uploadedFileName : "Upload"}
+//       </button>
+//     </div>
+//   );
+// }
+
+// export default Upload;

@@ -4,7 +4,6 @@
  */
 
 import { Routes, Route } from "react-router-dom"
-
 import Home from "../Pages/Home"
 import Login from "../Pages/Login"
 import NoPage from "../Pages/NoPage"
@@ -14,6 +13,20 @@ import Projects from "../Pages/Projects"
 import MoreInfo from "../Pages/MoreInfo"
 import PastProjects from "../Pages/PastProjects"
 import { Test } from "../Pages/Upload"
+// import Upload from '../Pages/Upload';
+
+
+// import React from 'react';
+// import '../App.css';
+// import { BrowserRouter as Router, Routes, Route}
+//     from 'react-router-dom';
+// import Dashboard from '../Pages/Dashboard';
+// import Projects from '../Pages/Projects';
+// import History from '../Pages/PastProjects';
+// import Results from '../Pages/Results';
+  
+
+
 
 export default function JumpPage() {
     return (
@@ -24,6 +37,7 @@ export default function JumpPage() {
                 <Route path="/signup/*" element={<SignUp />} />
                 <Route path="/dashBoard" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />
+                {/* <Route path="/upload" element={<Upload />} /> */}
                 <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/upload" element={<Test />} />
@@ -32,3 +46,23 @@ export default function JumpPage() {
         </div>
     );
 }
+
+
+
+// function JumpPage() {
+// return (
+//     <Router>
+//     <Navbar />
+//     <Routes>
+//         <Route exact path='/' element={<Dashboard />} />
+//         <Route path='/Dashboard' element={<Dashboard/>} />
+//         <Route path='/Projects' element={<Projects/>} />
+//         <Route path='/PastProjects' element={<History/>} />
+//         <Route path='/Upload' element={<Upload/>} />
+//         <Route path='/Results' element={<Results/>} />
+//     </Routes>
+//     </Router>
+// );
+// }
+  
+// export default JumpPage;

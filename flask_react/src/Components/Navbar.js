@@ -12,6 +12,7 @@ export default function Navbar() {
                     <li><Link to="/dashboard">Dashboard</Link></li>
                     <li><Link to="/signup">Sign up</Link></li>
                     <li><Link to="/projects">Projects</Link></li>
+                    {/* <li><Link to="/upload">Upload</Link></li> */}
                     <li><Link to="/pastProjects">Past projects</Link></li>
                     <li><Link to="/upload">Upload</Link></li>
                 </ul>
@@ -20,3 +21,36 @@ export default function Navbar() {
         </>
     )
 }
+
+// import React from "react";
+// import { Nav, NavLink, NavMenu } 
+//     from "./NavbarElements";
+  
+// const Navbar = () => {
+//   return (
+//     <>
+//       <Nav>
+//         <NavMenu>
+//         <NavLink to="/Dashboard" activeStyle>
+//             Dashboard
+//           </NavLink>
+//           <NavLink to="/Projects" activeStyle>
+//             Browse projects
+//           </NavLink>
+//           <NavLink to="/PastProjects" activeStyle>
+//             History
+//           </NavLink>
+//           <NavLink to="/Upload" activeStyle>
+//             New project
+//           </NavLink>
+//           <NavLink to="/Results" activeStyle>
+//             Results
+//           </NavLink>
+//         </NavMenu>
+//       </Nav>
+//     </>
+//   );
+// };
+  
+// export default Navbar;
+

@@ -28,10 +28,5 @@ function App() {
 
 export default App;
 
-// return (
-//   <>
-//     <Navbar />
-//     {/* Andere features */}
-//     <Footer />
-//   </>
-// )
+
+
