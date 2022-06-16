@@ -33,13 +33,14 @@ def upload_file():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            _, proj_id = add_project_db()
-
-            os.mkdir(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"))
-            file.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/main.c"))
-            input.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/input"))
-            task = compile.delay(proj_id)
-            return redirect(url_for('taskstatus', task_id=task.id))
+            response, proj_id = add_project_db()
+            if proj_id != 0:
+                os.mkdir(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"))
+                file.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/main.c"))
+                input.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/input"))
+                task = compile.delay(proj_id)
+                return redirect(url_for('taskstatus', task_id=task.id))
+            return response
 
             # return redirect(url_for('progress', name=filename, taskid=task.id))
     return '''
@@ -52,10 +53,10 @@ def upload_file():
       <input type=submit value=Upload>
       <input type="text" name="name" value="name">
       <input type="text" name="description" value="desc">
-      <input type="text" name="block_size" value="block">
-      <input type="text" name="owner" value="owner">
-      <input type="text" name="random_validation" value="validation">
-      <input type="text" name="max_runtime" value="runtime">
+      <input type="text" name="block_size" value="1">
+      <input type="text" name="owner" value="1">
+      <input type="text" name="random_validation" value="1">
+      <input type="text" name="max_runtime" value="1">
     </form>
     '''
 
@@ -100,8 +101,8 @@ def add_project_db():
 
     if not account_id_exists(new_project["owner"]) or not pj.insert_project(new_project):
         return build_response(
-            HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database", 0
-        )
+            HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database"
+        ), 0
 
     return build_response(HTTPStatus.CREATED, "Project added to database"), new_project["project_id"]
 
