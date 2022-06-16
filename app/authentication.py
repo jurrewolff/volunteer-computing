@@ -161,7 +161,7 @@ def login():
         response = build_response(HTTPStatus.OK, "username or password is incorrect")
     session["name"] = username
 
-    return jsonify(response)
+    return response
 
 
 @app.route("/logout", methods=["GET"])
@@ -173,4 +173,40 @@ def logout():
         data = build_response(
             HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging out user"
         )
-    return jsonify(data)
+    return data
+
+
+@app.route("/userdata", methods=["GET"])
+@login_required
+def userdata():
+
+    if not request.headers:
+        return build_response(
+            HTTPStatus.BAD_REQUEST, "request is missing request headers"
+        )
+
+    username = request.headers.get("username")
+    if not username:
+        return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
+
+    user_db = get_user_from_db(username)
+
+    if not user_db:
+        return build_response(
+            HTTPStatus.NOT_FOUND,
+            "user with username {} does not exist".format(username),
+        )
+
+    data = {
+        "username": user_db.get("username"),
+        "password": user_db.get("password"),
+        # TODO - Add all user attributes returned by actual db call.
+        # "email": user_db.get("email"),
+        # "etcetera": user_db.get("etcetera"),
+    }
+
+    response = build_response(
+        HTTPStatus.OK, "fetched data for user {}".format(username), data=data
+    )
+
+    return response

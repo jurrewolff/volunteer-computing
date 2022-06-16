@@ -17,12 +17,15 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 
 app.config['CELERY_BACKEND'] = "redis://redis:6379/0"
 app.config['CELERY_BROKER_URL'] = "redis://redis:6379/0"
-app.config['CELERY_TIMEZONE'] = 'UTC'
 
-app.config['MYSQL_USER'] = "root"
-app.config['MYSQL_PASSWORD'] = "admin"
-app.config['MYSQL_DB'] = 'app'
-mysql = MySQL(app)
+# app.config['CELERYBEAT_SCHEDULE'] = {
+#     'say-every-5-seconds': {
+#         'task': 'compile',
+#         'schedule': timedelta(seconds=5),
+#         'args' :  ([1],),
+#     },
+# }
+app.config['CELERY_TIMEZONE'] = 'UTC'
 
 from app import example_file_upload
 from app import authentication
