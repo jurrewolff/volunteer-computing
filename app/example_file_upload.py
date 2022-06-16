@@ -20,6 +20,8 @@ def allowed_file(filename):
 
 @app.route('/output/<proj_id>')
 def send_output(proj_id):
+    with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output") as f:
+        return render_template('content.html', text=f.read())
     return send_from_directory(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"), 'output') # cached for a week
 1
 @app.route('/upload', methods=['GET', 'POST'])
@@ -160,6 +162,7 @@ def datatest(proj_id):
         data = request.form.get('data')
         with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output", "a") as f:
             f.write(data)
+        return redirect(f'/output/{proj_id}')
     # arguments from scheduler
     lines = [str(r) for r in range(0,10)]
     data = file_to_arguments(f"{app.config['PROJECTS_DIR']}/{proj_id}/input")

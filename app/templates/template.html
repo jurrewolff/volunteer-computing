@@ -7,8 +7,16 @@
   </head>
   <body>
     Running project #{{name}}!
+    <script type="text/javascript">
+      var url = "/output/{{name}}";
+      </script>
+      ......
+      <script>
+      document.write('<a href="' + url + '">Check Results!</a>');
+      </script>
 
-     <script type="text/javascript" src="/{{name}}.js"></script>
+
+    <script type="text/javascript" src="/{{name}}.js"></script>
 
     <script type='text/javascript'>
       var request = new XMLHttpRequest();
