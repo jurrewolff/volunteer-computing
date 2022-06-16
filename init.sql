@@ -26,6 +26,7 @@ block_size int,
 trust_level float(24),
 random_validation BOOL,
 max_runtime int,
+quorum_size int,
 PRIMARY KEY (project_id),
 FOREIGN KEY (owner) REFERENCES User(user_id)
 );
@@ -44,6 +45,7 @@ CREATE TABLE app.Jobs (
 job_id int,
 project_id int,
 quorum_size int,
+done BOOL,
 PRIMARY KEY (job_id, project_id),
 FOREIGN KEY (project_id) REFERENCES Project(project_id)
 );
