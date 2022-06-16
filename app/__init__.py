@@ -26,3 +26,4 @@ mysql = MySQL(app)
 
 from app import example_file_upload
 from app import authentication
+from app import schedule
