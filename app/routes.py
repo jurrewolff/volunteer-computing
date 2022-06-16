@@ -1,15 +1,19 @@
 from main import app
 from http import HTTPStatus
-from util import build_response
+from app.util import build_response
 from flask import jsonify, request
 from flask_login import login_required
-from authentication import userdata
+from app.authentication import userdata
+
+import logging
+import json
+import app.models.project as project
 
 # TODO - Move existing routes to routes.py
 
 
 @app.route("/projects", methods=["POST", "GET", "PATCH", "DELETE"])
-@login_required
+#@login_required
 def projects():
     response = {}
 
@@ -18,9 +22,16 @@ def projects():
         response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
         pass
     elif request.method == "GET":
-        # TODO - Get project from DB
-        response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
+        # Returns a list with a dictionary per project.
+        projects = project.get_all_projects()
+        response = json.dumps(projects)
+        #response = build_response(HTTPStatus.OK, data=projects)
         pass
+
+        for x in projects:
+            app.logger.warning(x)
+
+
     elif request.method == "PATCH":
         # TODO - Update project in DB
         response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
