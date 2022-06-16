@@ -3,6 +3,7 @@ from app import app
 from flask import Flask, flash, request, redirect, url_for, jsonify, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 import time
+from .read_datafile import file_to_arguments
 
 def get_project_id(name):
     return 7
@@ -66,7 +67,7 @@ celery = make_celery(app)
 
 @celery.task(name='compile')
 def compile(proj_id):
-    os.system(f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js")
+    os.system(f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -s EXIT_RUNTIME -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js")
     os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.js')}")
     # we don't need to store .c files
     os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
@@ -98,9 +99,9 @@ def datatest(proj_id):
         data = request.form.get('data')
         with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output", "a") as f:
             f.write(data)
-    # arguments from scetuler
+    # arguments from scheduler
     lines = [str(r) for r in range(0,10)]
-    data =  {'arguments': ["1 20 3", "5 6 7"], "size": 2, "line" : lines}
+    data = file_to_arguments(f"{app.config['PROJECTS_DIR']}/{proj_id}/input")
     return render_template('template.html', data=data, name=proj_id)
 
 @app.route('/<proj_id>.js')
