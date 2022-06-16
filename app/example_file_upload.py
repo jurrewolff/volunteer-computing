@@ -3,6 +3,11 @@ from app import app
 from flask import Flask, flash, request, redirect, url_for, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 import time
+import app.models.project as pj
+from app.models.user import account_id_exists
+from app.util import build_response
+from http import HTTPStatus
+
 
 ALLOWED_EXTENSIONS = {'c'}
 def allowed_file(filename):
@@ -23,6 +28,7 @@ def upload_file():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
+            _, proj_id = add_project_db()
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             task = compile.delay(filename)
@@ -38,6 +44,44 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
+
+def add_project_db():
+    if not request.headers:
+        return build_response(
+            HTTPStatus.BAD_REQUEST, "request is missing request headers"
+        )
+
+    # Get info about user from header.
+    new_project = {"project_id": pj.get_new_project_id()}
+    new_project.update({"name": request.headers.get("name")})
+    new_project.update({"description": request.headers.get("description")})
+    new_project.update({"block_size": request.headers.get("block_size")})
+    new_project.update({"owner": request.headers.get("owner")})
+    new_project.update({"random_validation": request.headers.get("random_validation")})
+    new_project.update({"max_runtime": request.headers.get("max_runtime")})
+
+    # Check if required information has been retrieved from header.
+    if not new_project["name"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name")
+    if not new_project["description"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project description")
+    if not new_project["block_size"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a block size")
+    if not new_project["owner"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner")
+    if not new_project["random_validation"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a validation method")
+    if not new_project["max_runtime"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a max runtime")
+
+    # Insert project into database.
+
+    if not account_id_exists(new_project["owner"]) or not pj.insert_project(new_project):
+        return build_response(
+            HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database"
+        )
+
+    return build_response(HTTPStatus.CREATED, "Project added to database"), new_project["project_id"]
 
 from celery import Celery
 import subprocess
@@ -112,5 +156,5 @@ def download_file(name):
 # #     <!doctype html>
 # #     <title>Compiled files</title>
 # #     <h1>File</h1>
- 
+
 # #     '''
