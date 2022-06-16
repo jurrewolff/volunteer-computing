@@ -13,8 +13,6 @@ import DashBoard from "../Pages/Dashboard"
 import Projects from "../Pages/Projects"
 import MoreInfo from "../Pages/MoreInfo"
 import PastProjects from "../Pages/PastProjects"
-import SignInSide from "../Pages/example"
-
 
 
 export default function JumpPage() {
@@ -28,7 +26,6 @@ export default function JumpPage() {
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
-                <Route path="/example" element={<SignInSide />} />
                 <Route path="*" element={<NoPage />} />
             </Routes>
         </div>
