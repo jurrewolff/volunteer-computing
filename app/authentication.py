@@ -1,8 +1,17 @@
+from distutils.command.upload import upload
 from http import HTTPStatus
 from urllib.parse import urlparse, urljoin
 
-from flask import request
+from flask import Flask, request, jsonify, session
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask_session.__init__ import Session
+from urllib.parse import urlparse, urljoin
+#import app.mysql_script as ms
+import logging
+
+
+import app.models.user as user
+from app.models.user import get_user
 
 from app.util import build_response
 from main import app
@@ -40,13 +49,11 @@ class User(UserMixin):
         # TODO - Add user to DB.
 
     @staticmethod
-    def get(user_id: str):
-        # TODO - Search DB for user_id/name and populate object values.
-
-        user_db = get_user_from_db(user_id)
+    def get(username: str):
+        user_db = get_user(username)
 
         if user_db:
-            user = User(user_db.get("username"), user_db.get("password"))
+            user = User(username, user_db.get("password"))
             return user
         else:
             return None
@@ -70,11 +77,9 @@ login_manager.init_app(app)
 
 # Helper functions
 def authenticate_user(username, password) -> bool:
-    # TODO - Replace mockup with actual DB call and proper password comparison.
-
-    for item in mock_db:
-        if item.get("username") == username and item.get("password") == password:
-            return True
+    user_db = user.get_user(username)
+    if password == user_db.get("password"):
+        return True
 
     return False
 
@@ -87,8 +92,8 @@ def is_safe_url(target):
 
 # Authentication functions
 @login_manager.user_loader
-def load_user(user_id: str) -> User:
-    return User.get(user_id)
+def load_user(username: str) -> User:
+    return User.get(username)
 
 
 @app.route("/signup", methods=["POST"])
@@ -98,20 +103,56 @@ def signup():
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
         )
 
-    username = request.headers.get("username")
-    password = request.headers.get("password")
-    if not username:
-        return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
-    if not password:
-        return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
+    # Get info about user from header.
+    new_user = {"user_id": user.get_new_user_id()}
+    new_user.update( {'username' : request.headers.get("username")} )
+    new_user.update( {'password' : request.headers.get("password")} )
+    new_user.update( {'email' : request.headers.get("email")} )
+    new_user.update( {'firstname' : request.headers.get("firstname")} )
+    new_user.update( {'lastname' : request.headers.get("lastname")} )
+    new_user.update( {'score' : 0} )
+    new_user.update( {'is_researcher' : request.headers.get("is_researcher")} )
 
-    user_db = get_user_from_db(username)
-    if user_db:
+    # Empty string is default. Will be overwritten is user is a researcher.
+    new_user.update( {'institution' : ""} )
+    new_user.update( {'background' : ""} )
+
+    # Check if required information has been retrieved from header.
+    if not new_user["username"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a username")
+    if not new_user["password"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a password")
+    if not new_user["email"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide an email")
+    if not new_user["firstname"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a firstname")
+    if not new_user["lastname"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a lastname")
+    if not new_user["is_researcher"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "unknown if user is a researcher")
+
+    # Transform upload_rights integer to boolean.
+    new_user["is_researcher"] = True if new_user["is_researcher"] == "1" else False
+
+    if new_user["is_researcher"]:
+        # Check if researcher specific information can be retrieved.
+        if not request.headers.get("institution"):
+            return build_response(HTTPStatus.BAD_REQUEST, "Please provide an institution")
+        if not request.headers.get("background"):
+            return build_response(HTTPStatus.BAD_REQUEST, "Please provide a background")
+
+        #Retrieve additional researcher specific variables.
+        new_user["institution"] = request.headers.get("institution")
+        new_user["background"] = request.headers.get("background")
+
+    # Check if username is unique.
+    if user.username_exists(new_user["username"]):
         return build_response(
-            HTTPStatus.CONFLICT, "user with username {} already exists".format(username)
+            HTTPStatus.CONFLICT, "user with username {} already exists".format(new_user["username"])
         )
 
-    if not insert_user(username, password):
+    # Insert user into database.
+    if not user.insert_user(new_user):
         return build_response(
             HTTPStatus.INTERNAL_SERVER_ERROR, "failed to insert user into db"
         )
@@ -126,14 +167,17 @@ def login():
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
         )
 
+    # get and check required info from headers.
     username = request.headers.get("username")
     password = request.headers.get("password")
     if not username:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
     if not password:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
-
-    user = load_user(username)
+    
+    user = load_user(username) # username not found erbij doen?
+    if not user:
+        return jsonify(build_response(HTTPStatus.OK, "username or password is incorrect"))
 
     if authenticate_user(username, password):
         if not login_user(user):
@@ -143,9 +187,10 @@ def login():
         else:
             response = build_response(HTTPStatus.OK, "user logged in successfully")
     else:
-        response = build_response(HTTPStatus.UNAUTHORIZED, "incorrect password")
+        response = build_response(HTTPStatus.OK, "username or password is incorrect")
+    session["name"] = username
 
-    return response
+    return jsonify(response)
 
 
 @app.route("/logout", methods=["GET"])
@@ -157,40 +202,12 @@ def logout():
         data = build_response(
             HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging out user"
         )
-    return data
+    return jsonify(data)
 
 
-@app.route("/userdata", methods=["GET"])
+@app.route("/dashboard", methods=["GET"])
 @login_required
-def userdata():
-
-    if not request.headers:
-        return build_response(
-            HTTPStatus.BAD_REQUEST, "request is missing request headers"
-        )
-
-    username = request.headers.get("username")
-    if not username:
-        return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
-
-    user_db = get_user_from_db(username)
-
-    if not user_db:
-        return build_response(
-            HTTPStatus.NOT_FOUND,
-            "user with username {} does not exist".format(username),
-        )
-
-    data = {
-        "username": user_db.get("username"),
-        "password": user_db.get("password"),
-        # TODO - Add all user attributes returned by actual db call.
-        # "email": user_db.get("email"),
-        # "etcetera": user_db.get("etcetera"),
-    }
-
-    response = build_response(
-        HTTPStatus.OK, "fetched data for user {}".format(username), data=data
+def dashboard():
+    return jsonify(
+        {"code": 200, "msg": "dashboard of user {}".format(session["name"])}
     )
-
-    return response
