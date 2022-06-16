@@ -5,10 +5,11 @@ from werkzeug.utils import secure_filename
 import time
 from .read_datafile import file_to_arguments
 
+ALLOWED_EXTENSIONS = {'c'}
+
 def get_project_id(name):
     return 7
 
-ALLOWED_EXTENSIONS = {'c'}
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -28,7 +29,6 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-
             # TODO: put in database and get id to use as dir name
             proj_id = get_project_id(filename)
 
@@ -91,7 +91,6 @@ def taskstatus(task_id):
             'result': task.wait()
         }
     return jsonify(response)
-
 
 @app.route('/runproject/<proj_id>', methods=('GET', 'POST'))
 def datatest(proj_id):
