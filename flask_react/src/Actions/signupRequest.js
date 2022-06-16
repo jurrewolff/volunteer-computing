@@ -6,6 +6,10 @@
 
 import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
+import { Routes, Route, useNavigate } from "react-router-dom"
+import DashBoard from "../Pages/Dashboard"
+
+
 
 // In props zitten de meegegeven variabelen van SignUp.js,
 // wordt verzameld in <SignupRequest .... />
@@ -15,6 +19,7 @@ export const SignupRequest = (props) => {
     const [data, setData] = useState([{}])
     const [clicked, setClicked] = useState(false)
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (clicked) {
@@ -22,7 +27,7 @@ export const SignupRequest = (props) => {
                 method: 'POST',
                 headers: {
                     'username': props.fName,
-                    "password": props.pass
+                    'password': props.pass
                 }
             };
             fetch("/signup", requestOptions)
@@ -30,9 +35,14 @@ export const SignupRequest = (props) => {
                 .then((result) => {
                     setData(result)
                     console.log({ result }) //DELETE
-                })
+                });
+
+            navigate('/dashboard');
             setClicked(false)
         }
+
+        // const username = result.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clicked, props.fName, props.pass]);
 
     return (
@@ -43,15 +53,10 @@ export const SignupRequest = (props) => {
                 sx={{ mt: 3, ml: 1 }}>
                 Sign up
             </Button>
-            <div>
-                <h2>{data.code}</h2>
-                <h2>{data.description}</h2>
-                <br />
-            </div>
+            <Routes>
+                <Route path="/login" element={<DashBoard />} />
+            </Routes>
         </div>
-
-
-
     );
 }
 
