@@ -8,17 +8,25 @@
 
 import { useState, useEffect } from 'react'
 
-export const LoginRequest = () => {
+import { Routes, Route, useNavigate } from "react-router-dom"
+import DashBoard from "../Pages/Dashboard"
+
+import Button from '@mui/material/Button';
+
+export const LoginRequest = (props) => {
     const [data, setData] = useState([{}])
     const [clicked, setClicked] = useState(false)
+
+    // const navigate = useNavigate();
+
 
     useEffect(() => {
         if (clicked) {
             const requestOptions = {
                 method: 'POST',
                 headers: {
-                    'username': 'jan',
-                    "password": "geheimlijk"
+                    'username': props.fName,
+                    'password': props.pass
                 }
             };
             fetch("/login", requestOptions)
@@ -27,18 +35,24 @@ export const LoginRequest = () => {
                     setData(result)
                     console.log({ result }) //DELETE
                 })
+
+            // navigate('/dashboard');
             setClicked(false)
         }
-    }, [clicked]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clicked, props.fName, props.pass]);
 
     return (
         <div>
-            <button onClick={() => setClicked(true)}>Log in</button>
-            <div>
-                <h2>{data.code}</h2>
-                <h2>{data.description}</h2>
-                <br />
-            </div>
+            <Button
+                variant="contained"
+                onClick={() => setClicked(true)}
+                sx={{ mt: 3, ml: 1 }}>
+                Log in
+            </Button>
+            {/* <Routes>
+                <Route path="/login" element={<DashBoard />} />
+            </Routes> */}
         </div>
     );
 }

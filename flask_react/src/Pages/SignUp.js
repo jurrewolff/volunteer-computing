@@ -136,7 +136,7 @@ export default function Signup() {
                                     onChange={(e) => setPass(e.target.value)}
                                 />
                             </Grid>
-                            < Grid>
+                            <Grid alignitems="center">
                                 < SignupRequest
                                     fName={fname} lName={lname} uName={uname}
                                     inst={inst} eMail={email} pass={pass}
@@ -150,7 +150,7 @@ export default function Signup() {
                         <Grid container direction={'column'} item xs={6}
                             justifyContent="center"
                             maxWidth="sm">
-                            <Grid >
+                            <Grid>
                                 <Paper style={paperStyle}>
                                     <Box><Typography variant="h4">Scientist </Typography></Box>
                                     <Typography>
