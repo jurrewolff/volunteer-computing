@@ -1,26 +1,39 @@
 import mysql.connector as connector
 from itertools import count, filterfalse
 
-from models.database import *
+from app.models.database import *
 
-def print_users(): # For testing purpuses.
+
+def print_users():  # For testing purpuses.
     db.cur.execute("SELECT * FROM User")
     res = db.cur.fetchall()
     for x in res:
         print(x)
 
+
 # Adds a user to the User table.
-# val should be of format: (id, username, password, email, first_name, last_name, score).
-# Returns false if username is not unique, returns true otherwise.
-def insert_user(val):
-    if not account_id_exists(val[0]) and not username_exists(val[1]):
-        sql = "INSERT INTO User (user_id, username, password, email, first_name, last_name, score, upload_rights) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+# dictionary should have values: id, username, password, email,
+# first_name, last_name, score, institution, is_researcher, background.
+# Returns false if user_id or username allready exists.
+def insert_user(dic):
+    if not account_id_exists(dic["user_id"]) and not username_exists(dic["username"]):
+        sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        val = (
+            dic["user_id"],
+            dic["username"],
+            dic["password"],
+            dic["email"],
+            dic["firstname"],
+            dic["lastname"],
+            dic["score"],
+            dic["institution"],
+            dic["is_researcher"],
+            dic["background"],
+        )
         db.cur.execute(sql, val)
         db.con.commit()
         return True
     return False
-
-#def insert_researcher():
 
 
 # Returns true if account_id exists, returns false otherwise.
@@ -33,6 +46,7 @@ def account_id_exists(user_id):
     else:
         return True
 
+
 # Returns true if account_username exists, returns false otherwise.
 def username_exists(username):
     sql = f"SELECT 1 FROM User WHERE username = '{username}'"
@@ -43,14 +57,27 @@ def username_exists(username):
     else:
         return True
 
-# returns a tuple containing all column of the given user. If the user doesn't exists, False is returned.
+
+# returns a dictionary container the user info. If the user doesn't exists, False is returned.
 def get_user(username):
-    if username_exists():
+    if username_exists(username):
         sql = f"SELECT * FROM User WHERE username = '{username}'"
         db.cur.execute(sql)
         res = db.cur.fetchone()
-        return res
+        return {
+            "user_id": res[0],
+            "username": res[1],
+            "password": res[2],
+            "email": res[3],
+            "first_name": res[4],
+            "last_name": res[5],
+            "score": res[6],
+            "institution": res[7],
+            "upload_rights": res[8],
+            "background": res[9],
+        }
     return False
+
 
 # Returns the lowest id that has not yet been taken.
 def get_new_user_id():

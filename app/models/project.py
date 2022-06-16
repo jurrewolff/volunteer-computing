@@ -1,10 +1,10 @@
 import mysql.connector as connector
 from itertools import count, filterfalse
 
-from models.database import *
+from app.models.database import *
 
 # Returns True if project exists, returns False otherwise.
-def check_project_exists(project_id):
+def project_exists(project_id):
     sql = f"SELECT 1 FROM Project WHERE project_id = '{project_id}'"
     db.cur.execute(sql)
     if db.cur.fetchone() == None:
@@ -12,10 +12,19 @@ def check_project_exists(project_id):
     return True
 
 # Inserts a project into the 'project' table.
-# val should be of format: (id, name, description, owner, block_size).
-def insert_project(val):
-    if not check_project_exists(val[0]):
+# val should be of format: (id, name, description, block_size, owner, random_validation, max_runtime).
+def insert_project(dic):
+    if not project_exists(dic["project_id"]):
         sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        val = (
+            dic["project_id"],
+            dic["name"],
+            dic["description"],
+            dic["block_size"],
+            dic["owner"],
+            dic["random_validation"],
+            dic["max_runtime"],
+        )
         db.cur.execute(sql, val)
         db.con.commit()
         return True

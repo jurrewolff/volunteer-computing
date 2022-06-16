@@ -1,47 +1,16 @@
 from http import HTTPStatus
+
+from flask import jsonify, session, request
+import bcrypt
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from urllib.parse import urlparse, urljoin
 
-from flask import Flask, request, jsonify, session
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
-from flask_session.__init__ import Session
-from urllib.parse import urlparse, urljoin
-import app.mysql_script as ms
+
 import app.models.user as user
+from app.models.user import get_user
 
 from app.util import build_response
 from main import app
-
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
-
-
-# TODO - TESTING
-# Function that returns username, password, firstname, lastname and score from username input.
-def get_user_from_db(username: str) -> dict:
-    res = ms.check_user_exists(username, True)
-    if res:
-        return {"username": res[1], "password": res[2], "firstname": res[4], "lastname": res[5], "score": res[6]}
-
-    return {}
-
-def insert_user_into_db(username: str, password: str, email: str, firstname: str, lastname: str) -> int:
-    res = user.insert_user((ms.get_new_user_id(), username, password, email, firstname, lastname, 0))
-    if res:
-        return True
-
-    return False
-
-
-# # Mockup function simulating adding user to DB.
-# def insert_user(user_id: str, password: str) -> dict:
-#     mock_db_new_row = {"username": user_id, "password": password}
-#     mock_db.append(mock_db_new_row)
-
-#     return mock_db_new_row
-
-
-# TODO - ENDTESTING
 
 
 class User(UserMixin):
@@ -49,28 +18,18 @@ class User(UserMixin):
         self.username = username
         self._password = password
 
-
     @staticmethod
-    def get(user_id: str):
-        user_db = get_user_from_db(user_id)
+    def get(username: str):
+        user_db = get_user(username)
 
         if user_db:
-            user = User(user_db.get("username"), user_db.get("password"))
+            user = User(username, user_db.get("password"))
             return user
         else:
             return None
 
     def get_id(self):
         return self.username
-
-    def get_password(self):
-        return self._password
-
-    def set_password(self, new_password: str):
-        # TODO - Update password in DB; Maybe some error handling.
-        self._password = new_password
-
-    pass
 
 
 login_manager = LoginManager()
@@ -79,11 +38,11 @@ login_manager.init_app(app)
 
 # Helper functions
 def authenticate_user(username, password) -> bool:
-    user_db = get_user_from_db(username)
-    if password == user_db.get("password"):
-        return True
+    pw_bytes = password.encode("utf-8")
 
-    return False
+    user_db = user.get_user(username)
+
+    return bcrypt.checkpw(pw_bytes, bytes(user_db["password"], "utf-8"))
 
 
 def is_safe_url(target):
@@ -94,8 +53,8 @@ def is_safe_url(target):
 
 # Authentication functions
 @login_manager.user_loader
-def load_user(user_id: str) -> User:
-    return User.get(user_id)
+def load_user(username: str) -> User:
+    return User.get(username)
 
 
 @app.route("/signup", methods=["POST"])
@@ -105,30 +64,63 @@ def signup():
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
         )
 
-    username = request.headers.get("username")
-    password = request.headers.get("password")
-    email = request.headers.get("email")
-    firstname = request.headers.get("firstname")
-    lastname = request.headers.get("lastname")
+    # Get info about user from header.
+    new_user = {"user_id": user.get_new_user_id()}
+    new_user.update({"username": request.headers.get("username")})
+    new_user.update({"password": request.headers.get("password")})
+    new_user.update({"email": request.headers.get("email")})
+    new_user.update({"firstname": request.headers.get("firstname")})
+    new_user.update({"lastname": request.headers.get("lastname")})
+    new_user.update({"score": 0})
+    new_user.update({"is_researcher": request.headers.get("is_researcher")})
 
-    if not username:
+    # Empty string is default. Will be overwritten is user is a researcher.
+    new_user.update({"institution": ""})
+    new_user.update({"background": ""})
+
+    # Check if required information has been retrieved from header.
+    if not new_user["username"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a username")
-    if not password:
+    if not new_user["password"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a password")
-    if not email:
+    if not new_user["email"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide an email")
-    if not firstname:
+    if not new_user["firstname"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a firstname")
-    if not lastname:
+    if not new_user["lastname"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a lastname")
+    if not new_user["is_researcher"]:
+        return build_response(HTTPStatus.BAD_REQUEST, "unknown if user is a researcher")
 
-    user_db = get_user_from_db(username)
-    if user_db:
+    # Transform upload_rights integer to boolean.
+    new_user["is_researcher"] = True if new_user["is_researcher"] == "1" else False
+
+    if new_user["is_researcher"]:
+        # Check if researcher specific information can be retrieved.
+        if not request.headers.get("institution"):
+            return build_response(
+                HTTPStatus.BAD_REQUEST, "Please provide an institution"
+            )
+        if not request.headers.get("background"):
+            return build_response(HTTPStatus.BAD_REQUEST, "Please provide a background")
+
+        # Retrieve additional researcher specific variables.
+        new_user["institution"] = request.headers.get("institution")
+        new_user["background"] = request.headers.get("background")
+
+    # Check if username is unique.
+    if user.username_exists(new_user["username"]):
         return build_response(
-            HTTPStatus.CONFLICT, "user with username {} already exists".format(username)
+            HTTPStatus.CONFLICT,
+            "user with username {} already exists".format(new_user["username"]),
         )
 
-    if not insert_user_into_db(username, password, email, firstname, lastname):
+    # Hash password
+    pw_bytes = new_user["password"].encode("utf-8")
+    new_user["password"] = bcrypt.hashpw(pw_bytes, bcrypt.gensalt())
+
+    # Insert user into database.
+    if not user.insert_user(new_user):
         return build_response(
             HTTPStatus.INTERNAL_SERVER_ERROR, "failed to insert user into db"
         )
@@ -143,6 +135,7 @@ def login():
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
         )
 
+    # get and check required info from headers.
     username = request.headers.get("username")
     password = request.headers.get("password")
     if not username:
@@ -150,9 +143,12 @@ def login():
     if not password:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
 
-    user = load_user(username) # username not found erbij doen?
+    user = load_user(username)  # username not found erbij doen?
+
     if not user:
-        return jsonify(build_response(HTTPStatus.OK, "username not found"))
+        return jsonify(
+            build_response(HTTPStatus.OK, "username or password is incorrect")
+        )
 
     if authenticate_user(username, password):
         if not login_user(user):
@@ -162,7 +158,7 @@ def login():
         else:
             response = build_response(HTTPStatus.OK, "user logged in successfully")
     else:
-        response = build_response(HTTPStatus.OK, "incorrect password")
+        response = build_response(HTTPStatus.OK, "username or password is incorrect")
     session["name"] = username
 
     return jsonify(response)
@@ -178,11 +174,3 @@ def logout():
             HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging out user"
         )
     return jsonify(data)
-
-
-@app.route("/dashboard", methods=["GET"])
-@login_required
-def dashboard():
-    return jsonify(
-        {"code": 200, "msg": "dashboard of user {}".format(session["name"])}
-    )

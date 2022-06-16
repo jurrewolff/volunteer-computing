@@ -10,6 +10,11 @@ services:
             - "./emcc_cache:/emcc_cache:z"
         environment:
             - EM_CACHE=/emcc_cache
+            - MYSQL_USERNAME=root
+            - MYSQL_ROOT_PASSWORD=admin
+            - MYSQL_HOST=mysql
+            - MYSQL_PORT=3306
+            - MYSQL_DB_NAME=app
     db:
         image: pse-mysql
         command: --default-authentication-plugin=mysql_native_password --init-file /init.sql

@@ -1,7 +1,7 @@
 import mysql.connector as connector
 from itertools import count, filterfalse
 import models.user as user
-import models.project as project
+import app.models.project as project
 
 from models.database import *
 
