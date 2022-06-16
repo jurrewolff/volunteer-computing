@@ -13,6 +13,7 @@ def project_exists(project_id):
 
 # Inserts a project into the 'project' table.
 # val should be of format: (id, name, description, block_size, owner, random_validation, max_runtime).
+
 def insert_project(dic):
     if not project_exists(dic["project_id"]):
         sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s)"
@@ -44,5 +45,27 @@ def get_all_projects():
     db.cur.execute(sql)
     res = db.cur.fetchall()
     for x in res:
-        projects.append(x)
+        project = {
+            "project_id" : x[0],
+            "name" : x[1],
+            "description" : x[2],
+        }
+        projects.append(project)
     return projects
+
+def get_project(project_id):
+    if project_exists(project_id):
+        sql = f"SELECT * FROM Project WHERE project_id = '{project_id}'"
+        db.cur.execute(sql)
+        res = db.cur.fetchone()
+        return {
+            "project_id" : res[0],
+            "name" : res[1],
+            "description" : res[2],
+            "owner" : res[3],
+            "block_size" : res[4],
+            "random_validation" : res[5],
+            "max_runtime" : res[6]
+        }
+    else:
+        return False
