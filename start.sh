@@ -1,6 +1,4 @@
 #!/bin/bash
-bash precompile_libs.sh
-app="pse-flask"
-docker build -t ${app} .
+docker build -t pse-flask .
 docker build -f Dockerfile.db -t pse-mysql .
 docker-compose up
