@@ -19,8 +19,9 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/output/<proj_id>')
+def send_output(proj_id):
     return send_from_directory(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"), 'output') # cached for a week
-
+1
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
