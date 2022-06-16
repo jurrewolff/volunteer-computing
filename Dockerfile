@@ -1,6 +1,5 @@
 FROM python
-RUN mkdir -p /var/www/c_files
-RUN mkdir -p /var/www/compiled_files
+RUN mkdir -p /var/www/projects
 #RUN mkdir app
 
 # install supervisord

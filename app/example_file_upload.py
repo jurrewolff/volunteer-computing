@@ -4,6 +4,9 @@ from flask import Flask, flash, request, redirect, url_for, jsonify, send_from_d
 from werkzeug.utils import secure_filename
 import time
 
+def get_project_id(name):
+    return 7
+
 ALLOWED_EXTENSIONS = {'c'}
 def allowed_file(filename):
     return '.' in filename and \
@@ -24,8 +27,13 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            task = compile.delay(filename)
+
+            # TODO: put in database and get id to use as dir name
+            proj_id = get_project_id(filename)
+
+            os.mkdir(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"))
+            file.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/main.c"))
+            task = compile.delay(proj_id)
             return redirect(url_for('taskstatus', task_id=task.id))
 
             # return redirect(url_for('progress', name=filename, taskid=task.id))
@@ -57,13 +65,11 @@ def make_celery(app):
 celery = make_celery(app)
 
 @celery.task(name='compile')
-def compile(filename):
-    filename_without_extension = filename[:-2]
-    # filename_with_wasm_extension = filename[:-2]
-    os.system(f"emcc {os.path.join(app.config['UPLOAD_FOLDER'], filename)} -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
-    os.remove(f"{os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js")
+def compile(proj_id):
+    os.system(f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js")
+    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.js')}")
     # we don't need to store .c files
-    os.remove(f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}")
+    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
 
@@ -85,26 +91,25 @@ def taskstatus(task_id):
         }
     return jsonify(response)
 
-@app.route('/uploads/<name>')
-def download_file(name):
-    return send_from_directory(app.config['COMPILED_FILES_FOLDER'], name, cache_timeout=604800) # cached for a week
 
-@app.route('/uploads/<name>.html', methods=('GET', 'POST'))
-def datatest(name):
+@app.route('/runproject/<proj_id>', methods=('GET', 'POST'))
+def datatest(proj_id):
     if request.method == 'POST':
         data = request.form.get('data')
-        with open("dummy.output", "a") as f:
+        with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output", "a") as f:
             f.write(data)
     # arguments from scetuler
     lines = [str(r) for r in range(0,10)]
     data =  {'arguments': ["1 20 3", "5 6 7"], "size": 2, "line" : lines}
-    return render_template('template.html', data=data, name=name)
+    return render_template('template.html', data=data, name=proj_id)
 
+@app.route('/<proj_id>.js')
+def jstemplate(proj_id):
+    return render_template('template.js', name=proj_id)
 
-
-@app.route('/<name>.js')
-def jstemplate(name):
-    return render_template('template.js', name=name)
+@app.route('/<proj_id>.wasm')
+def serve_wasm(proj_id):
+    return send_from_directory(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"), 'main.wasm', cache_timeout=604800) # cached for a week
 
 # @celery.task()
 # def compile(filename):
