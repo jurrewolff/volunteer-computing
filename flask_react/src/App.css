@@ -1,0 +1,13 @@
+.table-bordered {
+  border: 5px double orange !important;
+}
+
+.table-hover tbody tr:hover {
+  color: yellow !important;
+  background-color: brown;
+}
+
+.custom-btn {
+  background-color: rgb(226, 43, 43) !important;
+  border: #fff !important;
+}
