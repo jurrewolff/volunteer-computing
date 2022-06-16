@@ -26,6 +26,7 @@ def upload_file():
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
+        input = request.files['input']
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
@@ -36,6 +37,7 @@ def upload_file():
 
             os.mkdir(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"))
             file.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/main.c"))
+            input.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/input"))
             task = compile.delay(proj_id)
             return redirect(url_for('taskstatus', task_id=task.id))
 
@@ -46,7 +48,14 @@ def upload_file():
     <h1>Upload new File</h1>
     <form method=post enctype=multipart/form-data>
       <input type=file name=file>
+      <input type=file name=input>
       <input type=submit value=Upload>
+      <input type="text" name="name" value="name">
+      <input type="text" name="description" value="desc">
+      <input type="text" name="block_size" value="block">
+      <input type="text" name="owner" value="owner">
+      <input type="text" name="random_validation" value="validation">
+      <input type="text" name="max_runtime" value="runtime">
     </form>
     '''
 
@@ -58,32 +67,40 @@ def add_project_db():
 
     # Get info about user from header.
     new_project = {"project_id": pj.get_new_project_id()}
-    new_project.update({"name": request.headers.get("name")})
-    new_project.update({"description": request.headers.get("description")})
-    new_project.update({"block_size": request.headers.get("block_size")})
-    new_project.update({"owner": request.headers.get("owner")})
-    new_project.update({"random_validation": request.headers.get("random_validation")})
-    new_project.update({"max_runtime": request.headers.get("max_runtime")})
+    # new_project.update({"name": request.form.get("name")})
+    # new_project.update({"description": request.headers.get("description")})
+    # new_project.update({"block_size": request.headers.get("block_size")})
+    # new_project.update({"owner": request.headers.get("owner")})
+    # new_project.update({"random_validation": request.headers.get("random_validation")})
+    # new_project.update({"max_runtime": request.headers.get("max_runtime")})
+
+    new_project.update({"name": request.form.get("name")})
+    new_project.update({"description": request.form.get("description")})
+    new_project.update({"block_size": int(request.form.get("block_size"))})
+    new_project.update({"owner": request.form.get("owner")})
+    new_project.update({"random_validation": int(request.form.get("random_validation"))})
+    new_project.update({"max_runtime": int(request.form.get("max_runtime"))})
+
 
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name")
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name"), 0
     if not new_project["description"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project description")
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project description"), 0
     if not new_project["block_size"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a block size")
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a block size"), 0
     if not new_project["owner"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner")
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner"), 0
     if not new_project["random_validation"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a validation method")
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a validation method"), 0
     if not new_project["max_runtime"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a max runtime")
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a max runtime"), 0
 
     # Insert project into database.
 
     if not account_id_exists(new_project["owner"]) or not pj.insert_project(new_project):
         return build_response(
-            HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database"
+            HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database", 0
         )
 
     return build_response(HTTPStatus.CREATED, "Project added to database"), new_project["project_id"]
