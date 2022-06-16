@@ -2,7 +2,7 @@ FROM python
 RUN mkdir -p /var/www/c_files
 RUN mkdir -p /var/www/compiled_files
 RUN mkdir app
-
+RUN mkdir -p /var/www/results/
 # install supervisord
 RUN apt-get update && apt-get install -y supervisor && apt-get install -y emscripten
 # emcc needs to be called once before it will start compiling files
