@@ -6,6 +6,7 @@
 import { Routes, Route } from "react-router-dom"
 import Home from "../Pages/Home"
 import Login from "../Pages/Login"
+import Logout from "../Pages/Logout"
 import NoPage from "../Pages/NoPage"
 import SignUp from "../Pages/SignUp"
 import DashBoard from "../Pages/Dashboard"
@@ -34,6 +35,7 @@ export default function JumpPage() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login/*" element={<Login />} />
+                <Route path="/logout/*" element={<Logout />} />
                 <Route path="/signup/*" element={<SignUp />} />
                 <Route path="/dashBoard" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />

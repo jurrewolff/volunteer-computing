@@ -3,9 +3,9 @@ from app import app
 from flask import Flask, flash, request, redirect, url_for, jsonify, send_from_directory, render_template
 from werkzeug.utils import secure_filename
 import time
-from .read_datafile import file_to_arguments
-import app.models.project as pj
-from app.models.user import account_id_exists
+# from .read_datafile import file_to_arguments
+# import app.models.project as pj
+# from app.models.user import account_id_exists
 from app.util import build_response
 from http import HTTPStatus
 
@@ -54,11 +54,11 @@ def upload_file():
     </form>
     '''
 
-
 def add_project_db():
     if not request.headers:
-        return build_response(HTTPStatus.BAD_REQUEST,
-                              "request is missing request headers")
+        return build_response(
+            HTTPStatus.BAD_REQUEST, "request is missing request headers"
+        )
 
     # Get info about user from header.
     new_project = {"project_id": pj.get_new_project_id()}
