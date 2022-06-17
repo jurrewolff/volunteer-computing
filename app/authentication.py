@@ -1,14 +1,9 @@
-from distutils.command.upload import upload
 from http import HTTPStatus
-from urllib.parse import urlparse, urljoin
 
-from flask import Flask, request, jsonify, session
+from flask import jsonify, session, request
+import bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
-from flask_session.__init__ import Session
 from urllib.parse import urlparse, urljoin
-
-# import app.mysql_script as ms
-import logging
 
 
 import app.models.user as user
@@ -17,37 +12,11 @@ from app.models.user import get_user
 from app.util import build_response
 from main import app
 
-# TODO - TESTING
-
-mock_db = []
-
-
-# Mockup function simulating database search. Only username "jantje" is present.
-def get_user_from_db(user_id: str) -> dict:
-    for item in mock_db:
-        if item.get("username") == user_id:
-            return item
-
-    return {}
-
-
-# Mockup function simulating adding user to DB.
-def insert_user(user_id: str, password: str) -> dict:
-    mock_db_new_row = {"username": user_id, "password": password}
-    mock_db.append(mock_db_new_row)
-
-    return mock_db_new_row
-
-
-# TODO - ENDTESTING
-
 
 class User(UserMixin):
     def __init__(self, username: str, password: str):
         self.username = username
         self._password = password
-
-        # TODO - Add user to DB.
 
     @staticmethod
     def get(username: str):
@@ -62,15 +31,6 @@ class User(UserMixin):
     def get_id(self):
         return self.username
 
-    def get_password(self):
-        return self._password
-
-    def set_password(self, new_password: str):
-        # TODO - Update password in DB; Maybe some error handling.
-        self._password = new_password
-
-    pass
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -78,11 +38,11 @@ login_manager.init_app(app)
 
 # Helper functions
 def authenticate_user(username, password) -> bool:
-    user_db = user.get_user(username)
-    if password == user_db.get("password"):
-        return True
+    pw_bytes = password.encode("utf-8")
 
-    return False
+    user_db = user.get_user(username)
+
+    return bcrypt.checkpw(pw_bytes, bytes(user_db["password"], "utf-8"))
 
 
 def is_safe_url(target):
@@ -154,6 +114,10 @@ def signup():
             HTTPStatus.CONFLICT,
             "user with username {} already exists".format(new_user["username"]),
         )
+
+    # Hash password
+    pw_bytes = new_user["password"].encode("utf-8")
+    new_user["password"] = bcrypt.hashpw(pw_bytes, bcrypt.gensalt())
 
     # Insert user into database.
     if not user.insert_user(new_user):
