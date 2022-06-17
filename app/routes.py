@@ -31,7 +31,7 @@ def projects():
         for x in projects:
             app.logger.warning(x)
 
-
+        return response
     elif request.method == "PATCH":
         # TODO - Update project in DB
         response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
