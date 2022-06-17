@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
+import { GridWrapper } from '../Components/NavbarElements';
 // import Divider from '@mui/material/Divider';
 // import Box from '@mui/material/Box';
 
