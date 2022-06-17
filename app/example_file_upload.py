@@ -45,7 +45,6 @@ def upload_file():
                 file.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/main.c"))
                 input.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/input"))
                 task = compile.delay(proj_id)
-                return redirect(f'/runproject/{proj_id}') ### Remove this line to go back to previous version.
                 return redirect(url_for('taskstatus', task_id=task.id))
             return response
 
