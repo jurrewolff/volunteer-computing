@@ -15,15 +15,17 @@ def project_exists(project_id):
 # val should be of format: (id, name, description, block_size, owner, random_validation, max_runtime).
 def insert_project(dic):
     if not project_exists(dic["project_id"]):
-        sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         val = (
             dic["project_id"],
             dic["name"],
             dic["description"],
             dic["block_size"],
+            dic["trust_level"],
             dic["owner"],
             dic["random_validation"],
             dic["max_runtime"],
+            dic["qorum"]
         )
         db.cur.execute(sql, val)
         db.con.commit()

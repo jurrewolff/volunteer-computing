@@ -27,7 +27,7 @@ def send_output(proj_id):
 @app.route('/download/<proj_id>')
 def dl_output(proj_id):
     return send_from_directory(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"), 'output') # cached for a week
-    
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -68,6 +68,7 @@ def upload_file():
       <input type="text" name="owner" value="1">
       <input type="text" name="random_validation" value="1">
       <input type="text" name="max_runtime" value="1">
+      <input type="text" name="qorum" value="1">
     </form>
     '''
 
@@ -89,9 +90,11 @@ def add_project_db():
     new_project.update({"name": request.form.get("name")})
     new_project.update({"description": request.form.get("description")})
     new_project.update({"block_size": int(request.form.get("block_size"))})
+    new_project.update({"trust_level": 1})
     new_project.update({"owner": request.form.get("owner")})
     new_project.update({"random_validation": int(request.form.get("random_validation"))})
     new_project.update({"max_runtime": int(request.form.get("max_runtime"))})
+    new_project.update({"qorum": request.form.get("qorum")})
 
 
     # Check if required information has been retrieved from header.
