@@ -68,14 +68,34 @@ def get_repl_type_and_quorum_size(project_id, job_id):
     db.cur.execute(query)
     res = db.cur.fetchone()
     return res
+
+def update_trust_level(correct, user_id):
+    if correct:
+        query = f""""
+        UPDATE User
+        SET trust_level = trust_level * 0.95
+        WHERE user_id = '{user_id}'"""
+        db.cur.execute(query)
+    else:
+        query = f""""
+        UPDATE User
+        SET trust_level = trust_level += 0.1
+        WHERE user_id = '{user_id}'"""
+        db.cur.execute(query)
+
+def majority_agrees(project_id, job_id):
+    return True
+    
 def receive_work(project_id, job_id, volunteer_id, result):
     save_result(project_id, job_id, volunteer_id, result)
     n_results = get_number_of_results(job_id, project_id)
     random_replication, quorum_size = get_repl_type_and_quorum_size(project_id, job_id)
     if n_results == quorum_size:
-        # if a majority agrees
-        job_done()
-        # else  increment_quorum_size(project_id, job_id) return
+        if majority_agrees():
+            job_done(project_id, job_id)
+        else:
+            increment_quorum_size(project_id, job_id) 
+            return
     if random_replication == 0:
         trust = decide_if_work_is_trusted(job_id, project_id)
         if not trust:
