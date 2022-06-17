@@ -15,9 +15,9 @@ def increment_quorum_size(project_id, job_id):
 def save_result(project_id, job_id, volunteer_id, result):
     # Write to filesystem, maybe async
     # save to db 
-    with open( os.path.join(app.config['RESULT_FOLDER'], f"{project_id}_{job_id}"), "a+") as file:
-        file.write(result)
-    query = f"INSERT INTO Result (job_id, project_id, volunteer) VALUES ('{job_id}','{project_id}','{volunteer_id}')"
+    # with open( os.path.join(app.config['RESULT_FOLDER'], f"{project_id}_{job_id}"), "a+") as file:
+    #     file.write(result)
+    query = f"INSERT INTO Result (job_id, project_id, volunteer, result) VALUES ('{job_id}','{project_id}','{volunteer_id}', '{result}')"
     db.cur.execute(query)
 
 def get_volunteer(job_id, project_id): 
@@ -55,6 +55,8 @@ def job_done(project_id, job_id):
     SET done = 1
     WHERE job_id = '{job_id}' AND project_id = '{project_id}'"""
     db.cur.execute(query)
+    # TODO remove cached results form db
+    # TODO write majority agreed result to fs
 
 def get_number_of_results(job_id, project_id):
 
