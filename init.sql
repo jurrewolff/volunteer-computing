@@ -46,6 +46,7 @@ CREATE TABLE app.Result (
 job_id int,
 project_id int,
 volunteer int,
+result varchar(1024),
 PRIMARY KEY (job_id, project_id),
 FOREIGN KEY (job_id) REFERENCES Jobs(job_id),
 FOREIGN KEY (project_id) REFERENCES Project(project_id),
