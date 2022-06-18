@@ -1,3 +1,5 @@
+"""General utility functions relevant across modules."""
+
 from http import HTTPStatus
 from flask import jsonify, Response
 
