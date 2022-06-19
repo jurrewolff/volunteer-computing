@@ -13,7 +13,7 @@ import app.models.project as project
 
 
 @app.route("/projects", methods=["POST", "GET", "PATCH", "DELETE"])
-#@login_required
+@login_required
 def projects():
     response = {}
 
@@ -24,14 +24,8 @@ def projects():
     elif request.method == "GET":
         # Returns a list with a dictionary per project.
         projects = project.get_all_projects()
-        response = json.dumps(projects)
-        #response = build_response(HTTPStatus.OK, data=projects)
-        pass
+        return json.dumps(projects)
 
-        for x in projects:
-            app.logger.warning(x)
-
-        return response
     elif request.method == "PATCH":
         # TODO - Update project in DB
         response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")

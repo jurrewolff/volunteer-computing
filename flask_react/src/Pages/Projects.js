@@ -6,11 +6,7 @@ import { ProjectsRequest } from '../Actions/projectsRequest'
 import { LoginRequest } from '../Actions/loginRequest'
 
 export default function Projects() {
-
-
-    
-
-
+  
   return (
 
     <Container className="text-center" style={{marginLeft:"5%", marginRight:"5%"}}>
