@@ -11,12 +11,15 @@ from http import HTTPStatus
 
 ALLOWED_EXTENSIONS = {'c'}
 
+
 def get_project_id(name):
     return 7
+
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -35,7 +38,8 @@ def upload_file():
             _, proj_id = add_project_db()
 
             os.mkdir(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"))
-            file.save(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/main.c"))
+            file.save(
+                os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}/main.c"))
             task = compile.delay(proj_id)
             return redirect(url_for('taskstatus', task_id=task.id))
 
@@ -50,11 +54,11 @@ def upload_file():
     </form>
     '''
 
+
 def add_project_db():
     if not request.headers:
-        return build_response(
-            HTTPStatus.BAD_REQUEST, "request is missing request headers"
-        )
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "request is missing request headers")
 
     # Get info about user from header.
     new_project = {"project_id": pj.get_new_project_id()}
@@ -62,57 +66,80 @@ def add_project_db():
     new_project.update({"description": request.headers.get("description")})
     new_project.update({"block_size": request.headers.get("block_size")})
     new_project.update({"owner": request.headers.get("owner")})
-    new_project.update({"random_validation": request.headers.get("random_validation")})
+    new_project.update(
+        {"random_validation": request.headers.get("random_validation")})
     new_project.update({"max_runtime": request.headers.get("max_runtime")})
 
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name")
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "Please provide a project name")
     if not new_project["description"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project description")
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "Please provide a project description")
     if not new_project["block_size"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a block size")
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "Please provide a block size")
     if not new_project["owner"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner")
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "Please provide a project owner")
     if not new_project["random_validation"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a validation method")
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "Please provide a validation method")
     if not new_project["max_runtime"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a max runtime")
+        return build_response(HTTPStatus.BAD_REQUEST,
+                              "Please provide a max runtime")
 
     # Insert project into database.
 
-    if not account_id_exists(new_project["owner"]) or not pj.insert_project(new_project):
-        return build_response(
-            HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database"
-        )
+    if not account_id_exists(
+            new_project["owner"]) or not pj.insert_project(new_project):
+        return build_response(HTTPStatus.INTERNAL_SERVER_ERROR,
+                              "Failed to add project to database")
 
-    return build_response(HTTPStatus.CREATED, "Project added to database"), new_project["project_id"]
+    return build_response(
+        HTTPStatus.CREATED,
+        "Project added to database"), new_project["project_id"]
+
 
 from celery import Celery
 import subprocess
+
+
 def make_celery(app):
-    celery = Celery(app.import_name, backend=app.config['CELERY_BACKEND'],
+    celery = Celery(app.import_name,
+                    backend=app.config['CELERY_BACKEND'],
                     broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
     TaskBase = celery.Task
+
     class ContextTask(TaskBase):
         abstract = True
+
         def __call__(self, *args, **kwargs):
             with app.app_context():
                 return TaskBase.__call__(self, *args, **kwargs)
+
     celery.Task = ContextTask
     return celery
 
+
 celery = make_celery(app)
+
 
 @celery.task(name='compile')
 def compile(proj_id):
-    os.system(f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -s EXIT_RUNTIME -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js")
-    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.js')}")
+    os.system(
+        f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -s EXIT_RUNTIME -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js"
+    )
+    os.remove(
+        f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.js')}")
     # we don't need to store .c files
-    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
+    os.remove(
+        f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
+
 
 @app.route('/taskstatus/<task_id>')
 def taskstatus(task_id):
@@ -126,10 +153,7 @@ def taskstatus(task_id):
             'status_update': url_for('taskstatus', task_id=task.id)
         }
     else:
-        response = {
-            'queue_state': task.state,
-            'result': task.wait()
-        }
+        response = {'queue_state': task.state, 'result': task.wait()}
     return jsonify(response)
 
 @app.route('/runproject/<proj_id>', methods=('GET', 'POST'))
@@ -139,17 +163,23 @@ def datatest(proj_id):
         with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output", "a") as f:
             f.write(data)
     # arguments from scheduler
-    lines = [str(r) for r in range(0,10)]
+    lines = [str(r) for r in range(0, 10)]
     data = file_to_arguments(f"{app.config['PROJECTS_DIR']}/{proj_id}/input")
     return render_template('template.html', data=data, name=proj_id)
+
 
 @app.route('/<proj_id>.js')
 def jstemplate(proj_id):
     return render_template('template.js', name=proj_id)
 
+
 @app.route('/<proj_id>.wasm')
 def serve_wasm(proj_id):
-    return send_from_directory(os.path.join(app.config['PROJECTS_DIR'], f"{proj_id}"), 'main.wasm', cache_timeout=604800) # cached for a week
+    return send_from_directory(os.path.join(app.config['PROJECTS_DIR'],
+                                            f"{proj_id}"),
+                               'main.wasm',
+                               cache_timeout=604800)  # cached for a week
+
 
 # @celery.task()
 # def compile(filename):

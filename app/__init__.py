@@ -1,8 +1,16 @@
-from flask import Flask
+from flask import Flask,render_template
 from datetime import timedelta
 from secrets import token_hex
+
 from flask_mysqldb import MySQL
-app = Flask(__name__)
+
+import os
+app = Flask(__name__, static_url_path='',static_folder='static', template_folder='static')
+# Serve React App
+@app.route("/")
+def serve():
+    return render_template("index.html")
+
 
 app.secret_key = token_hex()
 
@@ -13,7 +21,6 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 
 app.config['CELERY_BACKEND'] = "redis://redis:6379/0"
 app.config['CELERY_BROKER_URL'] = "redis://redis:6379/0"
-
 # app.config['CELERYBEAT_SCHEDULE'] = {
 #     'say-every-5-seconds': {
 #         'task': 'compile',
