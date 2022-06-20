@@ -86,11 +86,9 @@ class SideNav extends React.Component {
         return (
             <>
             <nav>
-            <StyledSideNav>
                 <Link to="/" >Home</Link>
                 <ul>
                     <li><Link to="/login">login</Link></li>
-                    <li><Link to="/logout">logout</Link></li>
                     <li><Link to="/dashboard">Dashboard</Link></li>
                     <li><Link to="/signup">Sign up</Link></li>
                     <li><Link to="/projects">Projects</Link></li>
@@ -98,13 +96,11 @@ class SideNav extends React.Component {
                     <li><Link to="/pastProjects">Past projects</Link></li>
                     <li><Link to="/upload">Upload</Link></li>
                 </ul>
-                </StyledSideNav>
             </nav>
             <JumpPage />
         </>
         )
     }
-
 }
 
 export default class Navbar extends React.Component {

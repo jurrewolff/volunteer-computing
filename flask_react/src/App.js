@@ -1,17 +1,13 @@
-/*
- * Hierin wordt alles samengenomen voor rendering.
- */
-
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Routes, Outlet, Route }
-  from 'react-router-dom';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-import Navbar from './Components/Navbar';
-// import Sidebar from './Components/Navbar';
+
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { createTheme } from '@mui/material/styles';
+import ResponsiveAppBar from './Components/Navbar2';
 import Footer from './Components/Footer';
-import { Header } from './Components/Header';
+import PermanentDrawerLeft from './Components/SideMenu';
+// import Login from './Pages/Login';
 // import { Topbar } from './Components/Topbar';
 // import Home from './Pages/Home';
 // import Login from './Pages/Login';
@@ -19,14 +15,28 @@ import { Header } from './Components/Header';
 // import Dashboard from './Pages/Dashboard';
 // import { BrowserRouter } from 'react-router-dom';
 
+// import JumpPage from '../Actions/jumpPage';
+// import SideNav from './Navbar';
+import Home from "./Pages/Home"
+import Login from "./Pages/Login"
+import NoPage from "./Pages/NoPage"
+import SignUp from "./Pages/SignUp"
+import DashBoard from "./Pages/Dashboard"
+import Projects from "./Pages/Projects"
+import MoreInfo from "./Pages/MoreInfo"
+import PastProjects from "./Pages/PastProjects"
+import { Test } from "./Pages/Upload"
+
+
+
 
 function App() {
   return (
     <>
     <React.Fragment>
-      <Header />
-      <Navbar />
-      {/* <Sidebar /> */}
+      {/* <Header /> */}
+      <ResponsiveAppBar />
+      <PermanentDrawerLeft />
       {/* Andere features */}
       <Footer />
       </React.Fragment>

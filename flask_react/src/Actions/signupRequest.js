@@ -60,7 +60,7 @@ export const SignupRequest = (props) => {
                 Sign up
             </Button>
             <Routes>
-                <Route path="/login" element={<DashBoard />} />
+                <Route key="/login" element={<DashBoard />} />
             </Routes>
         </div>
     );
