@@ -2,7 +2,7 @@ import React from 'react'; // niet per se nodig nu, toekomst wss wel
 import './Dashboard.css';
 
 
-  
+
 const Dashboard = () => {
   return (
     <div>
@@ -10,5 +10,5 @@ const Dashboard = () => {
     </div>
   );
 };
-  
+
 export default Dashboard;

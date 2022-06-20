@@ -27,7 +27,7 @@ export default function MoreInfo() {
     return (
 
         <Container key={"more" + linkVars[0]} className="text-center" style={{marginLeft:"5%", marginRight:"5%", marginTop:"5%"}}>
-              	
+
               	<Card style={{margin:"5%"}} >
 				  	<h1 style={{margin:"2%"}}>Watermeloen</h1>
 					<div>
@@ -37,7 +37,7 @@ export default function MoreInfo() {
 						<p>{project.description}</p>
 
 					</div>
-                	
+
                 </Card>
 
                 <Link to="/Projects">

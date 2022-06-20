@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 export const ProjectsRequest = () => {
 
     const [data, setData] = useState([{}]);
-    
+
     useEffect(() => {
             fetch("/projects")
                 .then(res => res.json())
@@ -24,7 +24,7 @@ export const ProjectsRequest = () => {
     }, []);
 
 
-    // Returns a card with the given project 
+    // Returns a card with the given project
     const getCard = ((project) => {
         return (
             <Card className="mb-3" style={{width:"100%", height:"90%", marginTop:"5%", marginLeft:"15%"}}>
@@ -54,7 +54,7 @@ export const ProjectsRequest = () => {
             return index + Math.ceil(data.length / 2)
         });
 
-        return data.map((project, index) => 
+        return data.map((project, index) =>
             <div>
                 {index < Math.ceil(data.length / 2)?
                     <Row key={project.project_id}>
@@ -62,7 +62,7 @@ export const ProjectsRequest = () => {
                         <Col>
                             {getCard(project)}
                         </Col>
-                        
+
                         {/* The last row should only have 1 card if there is an uneven number of projects */}
                         {index < Math.floor(data.length / 2) ?
                             <Col>
@@ -75,7 +75,7 @@ export const ProjectsRequest = () => {
             </div>
         );
     }
-    
+
     return (
         <div>
             {readProjects({data})}

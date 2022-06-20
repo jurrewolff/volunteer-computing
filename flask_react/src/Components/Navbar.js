@@ -42,7 +42,7 @@ const StyledNavItem = styled.div`
     :hover {
       opacity: 0.7;
       text-decoration: none; /* Gets rid of underlining of icons */
-    }  
+    }
   }
 `;
 
@@ -50,18 +50,18 @@ class NavItem extends React.Component {
     handleClick = () => {
         const { path, onItemClick } = this.props;
         onItemClick(path);
-      }
+    }
 
 
     render() {
         const { active } = this.props;
         return (
-        <StyledNavItem active={active}>
-            <Link to={this.props.path} className={this.props.css} onClick={this.handleClick}>
-                <NavIcon></NavIcon>
-            </Link>
-        </StyledNavItem>
-      );
+            <StyledNavItem active={active}>
+                <Link to={this.props.path} className={this.props.css} onClick={this.handleClick}>
+                    <NavIcon></NavIcon>
+                </Link>
+            </StyledNavItem>
+        );
     }
 }
 
@@ -85,23 +85,23 @@ class SideNav extends React.Component {
     render() {
         return (
             <>
-            <nav>
-            <StyledSideNav>
-                <Link to="/" >Home</Link>
-                <ul>
-                    <li><Link to="/login">login</Link></li>
-                    <li><Link to="/logout">logout</Link></li>
-                    <li><Link to="/dashboard">Dashboard</Link></li>
-                    <li><Link to="/signup">Sign up</Link></li>
-                    <li><Link to="/projects">Projects</Link></li>
-                    {/* <li><Link to="/upload">Upload</Link></li> */}
-                    <li><Link to="/pastProjects">Past projects</Link></li>
-                    <li><Link to="/upload">Upload</Link></li>
-                </ul>
-                </StyledSideNav>
-            </nav>
-            <JumpPage />
-        </>
+                <nav>
+                    <StyledSideNav>
+                        <Link to="/" >Home</Link>
+                        <ul>
+                            <li><Link to="/login">login</Link></li>
+                            <li><Link to="/logout">logout</Link></li>
+                            <li><Link to="/dashboard">Dashboard</Link></li>
+                            <li><Link to="/signup">Sign up</Link></li>
+                            <li><Link to="/projects">Projects</Link></li>
+                            {/* <li><Link to="/upload">Upload</Link></li> */}
+                            <li><Link to="/pastProjects">Past projects</Link></li>
+                            <li><Link to="/upload">Upload</Link></li>
+                        </ul>
+                    </StyledSideNav>
+                </nav>
+                <JumpPage />
+            </>
         )
     }
 
@@ -127,9 +127,9 @@ export default class Navbar extends React.Component {
 //// Oud van Tessa:
 
 // import React from "react";
-// import { Nav, NavLink, NavMenu } 
+// import { Nav, NavLink, NavMenu }
 //     from "./NavbarElements";
-  
+
 // const Navbar = () => {
 //   return (
 //     <>
@@ -155,6 +155,5 @@ export default class Navbar extends React.Component {
 //     </>
 //   );
 // };
-  
-// export default Navbar;
 
+// export default Navbar;
