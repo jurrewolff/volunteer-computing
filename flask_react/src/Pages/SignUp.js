@@ -36,6 +36,8 @@ export default function Signup() {
     const [inst, setInst] = useState();
     const [email, setEmail] = useState();
     const [pass, setPass] = useState();
+    const [isScientist, setIsScientist] = useState(0);
+    const [background, setBackground] = useState();
     const [choice, setChoice] = useState(1);
 
     // UPGRADE in een statement
@@ -54,12 +56,16 @@ export default function Signup() {
     //     }
     // }, [clicked])
 
-    function clickButton1() {
+    function clickIsScientist() {
         setClicked(true)
+
+        setIsScientist(1)
     }
 
-    function clickButton2() {
+    function clickIsVolunteer() {
         setClicked(false)
+
+        setIsScientist(0)
     }
 
     return (
@@ -118,6 +124,15 @@ export default function Signup() {
                             <Grid >
                                 <TextField
                                     margin="normal"
+                                    id="background"
+                                    label="Background"
+                                    variant="outlined"
+                                    onChange={(e) => setBackground(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid >
+                                <TextField
+                                    margin="normal"
                                     required
                                     id="email"
                                     label="E-mail"
@@ -140,6 +155,7 @@ export default function Signup() {
                                 < SignupRequest
                                     fName={fname} lName={lname} uName={uname}
                                     inst={inst} eMail={email} pass={pass}
+                                    isScientist={isScientist} background={background}
                                 />
                                 <Link href="/login" variant="body2">
                                     {"Already have an account? Login"}
@@ -163,7 +179,10 @@ export default function Signup() {
                                             flexDirection: 'row-reverse',
                                         }}>
                                         <Checkbox {...label} checked={clicked}
-                                            onChange={clickButton1}
+                                            onChange={
+                                                (e) => setIsScientist(e.target.value),
+                                                clickIsScientist
+                                            }
                                             inputProps={{ 'aria-label': 'controlled' }} />
                                     </Box>
                                 </Paper>
@@ -184,7 +203,10 @@ export default function Signup() {
                                         flexDirection: 'row-reverse',
                                     }}>
                                         <Checkbox {...label} checked={!clicked}
-                                            onChange={clickButton2}
+                                            onChange={
+                                                (e) => setIsScientist(e.target.value),
+                                                clickIsVolunteer
+                                            }
                                             inputProps={{ 'aria-label': 'controlled' }} />
                                     </Box>
                                 </Paper>

@@ -9,4 +9,3 @@ fi
 
 mkdir app/static
 mv -v flask_react/build/* app/static/
-

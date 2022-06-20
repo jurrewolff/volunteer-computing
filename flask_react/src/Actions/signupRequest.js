@@ -26,8 +26,14 @@ export const SignupRequest = (props) => {
             const requestOptions = {
                 method: 'POST',
                 headers: {
-                    'username': props.fName,
-                    'password': props.pass
+                    'username': props.uName,
+                    'password': props.pass,
+                    'email': props.eMail,
+                    'firstname': props.fName,
+                    'lastname': props.lName,
+                    'institution': props.inst,
+                    'is_researcher': props.isResearcher,
+                    'background': props.background,
                 }
             };
             fetch("/signup", requestOptions)
