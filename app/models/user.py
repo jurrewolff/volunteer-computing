@@ -1,4 +1,3 @@
-import mysql.connector as connector
 from itertools import count, filterfalse
 
 from app.models.database import *
@@ -31,6 +30,7 @@ def insert_user(dic):
             dic["is_researcher"],
             dic["background"],
         )
+
         db.cur.execute(sql, val)
         db.con.commit()
         return True

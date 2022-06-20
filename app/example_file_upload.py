@@ -1,7 +1,6 @@
 import os
 from app import app
-from flask import Flask, flash, request, redirect, url_for, jsonify, send_from_directory, render_template
-from werkzeug.utils import secure_filename
+from flask import flash, request, redirect, url_for, jsonify, send_from_directory, render_template
 import time
 from .read_datafile import file_to_arguments
 import app.models.project as pj

@@ -1,12 +1,20 @@
+"""
+Module providing API with authentication; Signup, login and logout
+functionalities.
+
+The module interacts with database to store and retrieve user accounts. The
+login status is session based using cookies for tracking keeping track of
+running sessions.
+"""
+
 from http import HTTPStatus
 
-from flask import jsonify, session, request
 import bcrypt
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from urllib.parse import urlparse, urljoin
+from flask import request, jsonify, session
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 
-
-import app.models.user as user
+from app.models import user
 from app.models.user import get_user
 
 from app.util import build_response
@@ -14,21 +22,23 @@ from main import app
 
 
 class User(UserMixin):
+    """User object used to tying sessions to users."""
+
     def __init__(self, username: str, password: str):
         self.username = username
         self._password = password
 
     @staticmethod
     def get(username: str):
+        """Get user with username from db and return it as an object."""
         user_db = get_user(username)
 
         if user_db:
-            user = User(username, user_db.get("password"))
-            return user
-        else:
-            return None
+            return User(username, user_db.get("password"))
+        return None
 
     def get_id(self):
+        """Get username of user object"""
         return self.username
 
 
@@ -38,6 +48,11 @@ login_manager.init_app(app)
 
 # Helper functions
 def authenticate_user(username, password) -> bool:
+    """
+    Check if password matches stored password of user with provided
+    username.
+    """
+
     pw_bytes = password.encode("utf-8")
 
     user_db = user.get_user(username)
@@ -46,6 +61,7 @@ def authenticate_user(username, password) -> bool:
 
 
 def is_safe_url(target):
+    """Check if provided target url is safe to serve."""
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
@@ -54,11 +70,16 @@ def is_safe_url(target):
 # Authentication functions
 @login_manager.user_loader
 def load_user(username: str) -> User:
+    """Get user object for provided username"""
     return User.get(username)
 
 
 @app.route("/signup", methods=["POST"])
 def signup():
+    """
+    Handle signup request; Extract and check presence of request headers,
+    store in db and return appropriate response.
+    """
     if not request.headers:
         return build_response(
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
@@ -82,22 +103,20 @@ def signup():
     new_user.update({"background": ""})
 
     # Check if required information has been retrieved from header.
-    if not new_user["username"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a username")
-    if not new_user["password"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a password")
-    if not new_user["email"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide an email")
-    if not new_user["firstname"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a firstname")
-    if not new_user["lastname"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a lastname")
-    if not new_user["is_researcher"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "unknown if user is a researcher")
+    if (
+        not new_user["username"]
+        or not new_user["password"]
+        or not new_user["email"]
+        or not new_user["firstname"]
+        or not new_user["lastname"]
+        or not new_user["is_researcher"]
+    ):
+        return build_response(
+            HTTPStatus.BAD_REQUEST, "request is missing required headers"
+        )
 
-    # Transform upload_rights integer to boolean.
-    new_user["is_researcher"] = True if new_user["is_researcher"] == "1" else False
-
+    # Transform is_researcher integer to boolean.
+    new_user["is_researcher"] = bool(new_user["is_researcher"] == "1")
     if new_user["is_researcher"]:
         # Check if researcher specific information can be retrieved.
         if not request.headers.get("institution"):
@@ -115,7 +134,7 @@ def signup():
     if user.username_exists(new_user["username"]):
         return build_response(
             HTTPStatus.CONFLICT,
-            "user with username {} already exists".format(new_user["username"]),
+            f"user with username {new_user['username']} already exists",
         )
 
     # Hash password
@@ -133,6 +152,10 @@ def signup():
 
 @app.route("/login", methods=["POST"])
 def login():
+    """
+    Handle login request; Check request headers, get user from db,
+    authenticate user and send appropriate response.
+    """
     if not request.headers:
         return build_response(
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
@@ -146,12 +169,12 @@ def login():
     if not password:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a password")
 
-    user = load_user(username)  # username not found erbij doen?
-    if not user:
+    user_obj = load_user(username)  # username not found erbij doen?
+    if not user_obj:
         return build_response(HTTPStatus.OK, "username or password is incorrect")
 
     if authenticate_user(username, password):
-        if not login_user(user):
+        if not login_user(user_obj):
             response = build_response(
                 HTTPStatus.INTERNAL_SERVER_ERROR, "failed logging in user"
             )
@@ -174,6 +197,7 @@ def login():
 @app.route("/logout", methods=["GET"])
 @login_required
 def logout():
+    """Handle logout request"""
     if logout_user():
         data = build_response(HTTPStatus.OK, "user logged out")
     else:
@@ -187,9 +211,3 @@ def logout():
     data.delete_cookie("user_id")
 
     return data
-
-
-@app.route("/dashboard", methods=["GET"])
-@login_required
-def dashboard():
-    return jsonify({"code": 200, "msg": "dashboard of user {}".format(session["name"])})

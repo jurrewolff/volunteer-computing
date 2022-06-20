@@ -1,9 +1,10 @@
+"""Routes for handling incoming API requests."""
+
 from main import app
 from http import HTTPStatus
 from util import build_response
 from flask import jsonify, request
 from flask_login import login_required
-from authentication import userdata
 
 # TODO - Move existing routes to routes.py
 
