@@ -2,9 +2,12 @@
 
 from main import app
 from http import HTTPStatus
-from util import build_response
+from app.util import build_response
 from flask import jsonify, request
 from flask_login import login_required
+
+import json
+import app.models.project as project
 
 # TODO - Move existing routes to routes.py
 
@@ -19,9 +22,10 @@ def projects():
         response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
         pass
     elif request.method == "GET":
-        # TODO - Get project from DB
-        response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
-        pass
+        # Returns a list with a dictionary per project.
+        projects = project.get_all_projects()
+        return json.dumps(projects)
+
     elif request.method == "PATCH":
         # TODO - Update project in DB
         response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")

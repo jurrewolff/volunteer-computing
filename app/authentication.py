@@ -164,6 +164,7 @@ def login():
     # get and check required info from headers.
     username = request.headers.get("username")
     password = request.headers.get("password")
+
     if not username:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
     if not password:
