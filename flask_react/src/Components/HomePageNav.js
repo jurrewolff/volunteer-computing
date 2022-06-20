@@ -1,44 +1,83 @@
-import React from 'react'
+/*
+ * TODO
+ *
+ *
+ */
 
-import { animateScroll as scroll } from 'react-scroll';
-
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import { useState } from 'react'
 import { Link } from "react-router-dom"
-import JumpPage from '../Actions/jumpPage'
+import { Link as scrollLink, animateScroll as scroll } from 'react-scroll';
 
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import Menu from '@mui/material/Menu';
+import Drawer from '@mui/material/Drawer';
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import Switch from '@mui/material/Switch';
+import Toolbar from '@mui/material/Toolbar';
+import Divider from '@mui/material/Divider';
+import MenuItem from '@mui/material/MenuItem';
+import ListItem from '@mui/material/ListItem';
+import MenuIcon from '@mui/icons-material/Menu';
+import FormGroup from '@mui/material/FormGroup';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemButton from '@mui/material/ListItemButton';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import Switch from '@mui/material/Switch';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 
+//TODO
 const drawerWidth = 240;
 const navItems = ['About', 'Scientist', 'Volunteer', 'Product'];
 
+/*
+ * TODO
+ */
 export default function Nav(props) {
     const { window } = props;
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
-    const [auth, setAuth] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [auth, setAuth] = useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const [logOutStatus, setLogoutStatus] = useState("");
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    const handleChange = (event) => {
+        setAuth(event.target.checked);
+    };
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogOut = () => {
+        const requestOptions = {
+            method: 'GET',
+            headers: {}
+        };
+        fetch("/logout", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                setLogoutStatus(result)
+            })
+    }
+
+    const toggleAbout = (event) => {
+        scroll.scrollToTop()
+    }
+
+    const container = window !== undefined ? () => window().document.body : undefined;
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -58,23 +97,82 @@ export default function Nav(props) {
         </Box>
     );
 
-    const handleChange = (event) => {
-        setAuth(event.target.checked);
-    };
 
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const toggleAbout = (event) => {
-        scroll.scrollToTop()
+    const AccountNotLoggedIn = () => {
+        return (
+            <Box sx={{ p: 0, pl: 2 }}>
+                <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                >
+                    <AccountCircle />
+                </IconButton>
+                <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <Link to="/login">
+                        <MenuItem onClick={handleClose}>Login</MenuItem>
+                    </Link>
+                    <Link to="/signUp">
+                        <MenuItem onClick={handleClose}>Signup</MenuItem>
+                    </Link>
+                </Menu>
+            </Box>
+        )
     }
 
-    const container = window !== undefined ? () => window().document.body : undefined;
+    const AccountLoggedIn = () => {
+        return (
+            <Box sx={{ p: 0, pl: 2 }}>
+                <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                >
+                    <AccountCircle />
+                </IconButton>
+                <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <Link to="/dashBoard">
+                        <MenuItem onClick={handleClose}>Dashboard</MenuItem>
+                    </Link>
+                    <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                </Menu>
+            </Box>
+        )
+    }
 
     return (
         <>
@@ -113,50 +211,19 @@ export default function Nav(props) {
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             {/* {navItems.map((item) => ( */}
-                            <Link to={"/Login"}>
-                                <Button
-                                    key={'About'}
-                                    onClick={toggleAbout}
-                                    sx={{ color: '#fff' }}>
-                                    {'About'}
-                                </Button>
-                            </Link>
+
+                            <Button
+                                key={'About'}
+                                onClick={toggleAbout}
+                                sx={{ color: '#fff' }}>
+                                {'About'}
+                            </Button>
+
 
                             {/* ))} */}
                         </Box>
                         <Box>
-                            {auth && (
-                                <Box sx={{ p: 0, pl: 2 }}>
-                                    <IconButton
-                                        size="large"
-                                        aria-label="account of current user"
-                                        aria-controls="menu-appbar"
-                                        aria-haspopup="true"
-                                        onClick={handleMenu}
-                                        color="inherit"
-                                    >
-                                        <AccountCircle />
-                                    </IconButton>
-                                    <Menu
-                                        id="menu-appbar"
-                                        anchorEl={anchorEl}
-                                        anchorOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'right',
-                                        }}
-                                        keepMounted
-                                        transformOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'right',
-                                        }}
-                                        open={Boolean(anchorEl)}
-                                        onClose={handleClose}
-                                    >
-                                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                        <MenuItem onClick={handleClose}>My account</MenuItem>
-                                    </Menu>
-                                </Box>
-                            )}
+                            {auth ? AccountNotLoggedIn() : AccountLoggedIn()}
                         </Box>
                     </Toolbar >
                 </AppBar >

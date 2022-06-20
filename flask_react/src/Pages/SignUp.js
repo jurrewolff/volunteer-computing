@@ -180,8 +180,10 @@ export default function Signup() {
                                         }}>
                                         <Checkbox {...label} checked={clicked}
                                             onChange={
-                                                (e) => setIsScientist(e.target.value),
-                                                clickIsScientist()
+                                                (e) => {
+                                                    setIsScientist(e.target.value)
+                                                    clickIsScientist()
+                                                }
                                             }
                                             inputProps={{ 'aria-label': 'controlled' }} />
                                     </Box>
@@ -204,8 +206,10 @@ export default function Signup() {
                                     }}>
                                         <Checkbox {...label} checked={!clicked}
                                             onChange={
-                                                (e) => setIsScientist(e.target.value),
-                                                clickIsVolunteer()
+                                                (e) => {
+                                                    setIsScientist(e.target.value)
+                                                    clickIsVolunteer()
+                                                }
                                             }
                                             inputProps={{ 'aria-label': 'controlled' }} />
                                     </Box>
