@@ -50,22 +50,26 @@ def dl_output(proj_id):
 def upload_file():
     if request.method == "POST":
         # check if the post request has the file part
-        if "file" not in request.files:
+        if "file" not in request.files or "input" not in request.files:
             flash("No file part")
             return redirect(request.url)
         file = request.files["file"]
         input = request.files["input"]
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
-        if file.filename == "":
+        if file.filename == "" or input.filename == "":
             flash("No selected file")
             return redirect(request.url)
-        if file and allowed_file(file.filename):
+        if file and input and allowed_file(file.filename):
             response, proj_id = add_project_db()
             if proj_id != 0:
-                os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
-                file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
-                input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
+                proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")
+
+                os.mkdir(proj_dir)
+                file.save(os.path.join(proj_dir, "main.c"))
+                input.save(os.path.join(proj_dir, "input"))
+                open(os.path.join(proj_dir, "output"), "x").close()
+
                 task = compile.delay(proj_id)
                 return redirect(url_for("taskstatus", task_id=task.id))
             return response

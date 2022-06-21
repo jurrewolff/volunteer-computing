@@ -12,6 +12,7 @@ def increment_quorum_size(project_id, job_id):
     """
     db.cur.execute(query)
     # check if succes 
+
 def save_result(project_id, job_id, volunteer_id, result):
     # Write to filesystem, maybe async
     # save to db 
@@ -49,6 +50,7 @@ def decide_if_work_is_trusted(job_id, project_id):
             # increment_quorum_size(job)
             return False
         return True
+
 def job_done(project_id, job_id):
     query = f""""
     UPDATE Job
@@ -57,7 +59,6 @@ def job_done(project_id, job_id):
     db.cur.execute(query)
 
 def get_number_of_results(job_id, project_id):
-
     query = f"SELECT COUNT(*) FROM Result WHERE job_id ='{job_id}' AND project_id = '{project_id}';"
     db.cur.execute(query)
     res = db.cur.fetchone()
@@ -68,6 +69,7 @@ def get_repl_type_and_quorum_size(project_id, job_id):
     db.cur.execute(query)
     res = db.cur.fetchone()
     return res
+
 def receive_work(project_id, job_id, volunteer_id, result):
     save_result(project_id, job_id, volunteer_id, result)
     n_results = get_number_of_results(job_id, project_id)
