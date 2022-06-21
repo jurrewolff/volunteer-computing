@@ -2,7 +2,6 @@
 
 bash npm_build.sh
 
-bash precompile_libs.sh
 app="pse-flask"
 
 docker-compose down
