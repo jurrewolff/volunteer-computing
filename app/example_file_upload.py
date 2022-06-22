@@ -188,7 +188,7 @@ def create_jobs(project_id, quorum):
     with open(os.path.join(app.config['PROJECTS_DIR'], f'{project_id}/input'), encoding="utf-8") as f:
         for i,line in enumerate(f):
             # TODO decide if we want to store the input in the db
-            insert_job((i, project_id, quorum), project_id)
+            insert_job((i, project_id, quorum, False), project_id)
 
 
 @celery.task(name="compile")
