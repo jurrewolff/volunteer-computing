@@ -12,7 +12,7 @@ app = Flask(
 # Serve React App
 @app.route("/")
 def serve():
-    return render_template("index.html")
+    return app.send_static_file("index.html")
 
 
 app.secret_key = token_hex()

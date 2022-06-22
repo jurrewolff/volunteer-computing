@@ -1,9 +1,9 @@
 import mysql.connector as connector
 from itertools import count, filterfalse
-import models.user as user
+import app.models.user as user
 import app.models.project as project
 
-from models.database import *
+from app.models.database import *
 
 # Adds an entry to the Volunteer table.
 # Val should be of format: (user_id, project_id, block_count)
@@ -15,7 +15,7 @@ def insert_volunteer(val):
         db.con.commit()
         return True
     return False
-    
+
 # Returns True if volunteer is in table, returns False otherwise.
 # Val should be of format: (user_id, project_id).
 def volunteer_exists(val):

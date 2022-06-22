@@ -1,8 +1,8 @@
 import mysql.connector as connector
 from itertools import count, filterfalse
 
-from models.database import *
-import models.project as pj
+from app.models.database import *
+import app.models.project as pj
 
 # Inserts a project into the 'project' table.
 # val should be of format: (job_id, project_id, qorum_size).
