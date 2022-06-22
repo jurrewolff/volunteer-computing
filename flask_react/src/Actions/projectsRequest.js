@@ -20,6 +20,7 @@ export const ProjectsRequest = () => {
                 .then(data => {
                     setData(data)
                     console.log(data)
+                    console.log("now useEffect is being executed")
                 })
     }, []);
 
@@ -49,6 +50,11 @@ export const ProjectsRequest = () => {
 
     // Returns two column with all projects displayed in a card per project.
     const readProjects = ({data}) => {
+        
+        // If no projects exists. Nothing is displayed.
+        // if(data[0] = {}) {
+        //     return <h1>no projects available</h1>
+        // }
 
         const getRightIndex = ((index) => {
             return index + Math.ceil(data.length / 2)
@@ -56,6 +62,7 @@ export const ProjectsRequest = () => {
 
         return data.map((project, index) => 
             <div>
+                
                 {index < Math.ceil(data.length / 2)?
                     <Row key={project.project_id}>
 

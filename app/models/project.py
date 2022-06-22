@@ -1,5 +1,6 @@
 import mysql.connector as connector
 from itertools import count, filterfalse
+from main import app
 
 from app.models.database import *
 
@@ -47,6 +48,23 @@ def get_all_projects():
     db.cur.execute(sql)
     res = db.cur.fetchall()
     for x in res:
+        app.logger.warning("x = \n")
+        app.logger.warning(x)
+        project = {
+            "project_id" : x[0],
+            "name" : x[1],
+            "description" : x[2],
+        }
+        projects.append(project)
+    return projects
+
+# Returns a list of all project. 1 tuple per project.
+def get_projects_researchers(user_id):
+    projects = []
+    sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
+    db.cur.execute(sql)
+    res = db.cur.fetchall()
+    for x in res:
         project = {
             "project_id" : x[0],
             "name" : x[1],
@@ -60,6 +78,8 @@ def get_project(project_id):
         sql = f"SELECT * FROM Project WHERE project_id = '{project_id}'"
         db.cur.execute(sql)
         res = db.cur.fetchone()
+        app.logger.warning("this is the results from get_projects in project.py")
+        app.logger.warning(res)
         return {
             "project_id" : res[0],
             "name" : res[1],

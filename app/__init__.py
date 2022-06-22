@@ -7,12 +7,12 @@ from flask import Flask, render_template
 from secrets import token_hex
 
 app = Flask(
-    __name__, static_url_path="", static_folder="static", template_folder="static"
+    __name__, static_url_path="", static_folder="static", template_folder="template"
 )
 # Serve React App
 @app.route("/")
 def serve():
-    return render_template("index.html")
+    return app.send_static_file("index.html")
 
 
 app.secret_key = token_hex()

@@ -6,18 +6,24 @@ import { Link} from "react-router-dom"
 export default function MoreInfo() {
 
     const [clicked, setClicked] = useState(false);
-    const linkVars = window.location.pathname.split("/").slice(2)
-	const [project, setProject] = useState([{}]);
+    const [project, setProject] = useState({});
+    const linkVars = window.location.pathname.split("/").slice(2);
 
 	// Retrieves and updates data.
     useEffect(() => {
-            fetch("/projects")
-                .then(res => res.json())
-                .then(data => {
-					var index = linkVars[0] - 1;
-                    setProject(data[index])
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'project_id': linkVars[0]
+            }
+        };
+            fetch("/project", requestOptions)
+                .then((res) => res.json())
+                .then((data) => {
+                    setProject(data)
                 })
     }, []);
+
 
 	// Function for the responsive button.
     function clickButton() {
@@ -25,14 +31,11 @@ export default function MoreInfo() {
     }
 
     return (
-
         <Container key={"more" + linkVars[0]} className="text-center" style={{marginLeft:"5%", marginRight:"5%", marginTop:"5%"}}>
               	
               	<Card style={{margin:"5%"}} >
-				  	<h1 style={{margin:"2%"}}>Watermeloen</h1>
+				  	<h1 style={{margin:"2%"}}>{project.name}</h1>
 					<div>
-
-						<p>{project.name}</p>
 
 						<p>{project.description}</p>
 
