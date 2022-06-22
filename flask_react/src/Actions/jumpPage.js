@@ -15,7 +15,6 @@ import PastProjects from "../Pages/PastProjects"
 import Logout from "../Pages/Logout"
 import Results from "../Pages/Results"
 import { Test } from "../Pages/Upload" // TODO: Afmaken GOEDE upload-page
-// TODO: User Information page toevoegen + maken
 // TODO: Account page toevoegen + maken 
 
 export default function JumpPage() {
