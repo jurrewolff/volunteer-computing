@@ -35,6 +35,7 @@ export const LoginRequest = (props) => {
                     setData(result)
                     console.log({ result }) //DELETE
                 })
+                
             // navigate('/dashboard');
             setClicked(false)
         }
