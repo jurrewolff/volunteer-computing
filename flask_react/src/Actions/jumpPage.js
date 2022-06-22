@@ -13,6 +13,7 @@ import DashBoard from "../Pages/Dashboard"
 import Projects from "../Pages/Projects"
 import MoreInfo from "../Pages/MoreInfo"
 import PastProjects from "../Pages/PastProjects"
+import Usage from "../Pages/Usage"
 import { Test } from "../Pages/Upload"
 // import Upload from '../Pages/Upload';
 
@@ -43,6 +44,7 @@ export default function JumpPage() {
                 <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/upload" element={<Test />} />
+                <Route path="/usage" element={<Usage />} />
                 <Route path="*" element={<NoPage />} />
             </Routes>
         </div>
