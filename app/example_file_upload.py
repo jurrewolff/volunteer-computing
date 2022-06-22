@@ -66,6 +66,8 @@ def upload_file():
                 os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
                 file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
                 input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
+                # create_jobs.delay(proj_id, request.form.get("qorum"))
+                create_jobs(proj_id, request.form.get("qorum"))
                 task = compile.delay(proj_id)
                 return redirect(url_for("taskstatus", task_id=task.id))
             return response
@@ -179,6 +181,15 @@ def make_celery(app):
 
 
 celery = make_celery(app)
+
+
+# @celery.task(name="create_jobs")
+def create_jobs(project_id, quorum):
+    from app.models.jobs import insert_job
+    with open(os.path.join(app.config['PROJECTS_DIR'], f'{project_id}/input'), encoding="utf-8") as f:
+        for i,line in enumerate(f):
+            # TODO decide if we want to store the input in the db
+            insert_job((i, project_id, quorum), project_id)
 
 
 @celery.task(name="compile")
