@@ -161,7 +161,7 @@ def possible_jobs(project_id, user_id):
 
 def give_work(project_id, user_id):
     job_id, project_id = random.choice(possible_jobs(project_id, user_id))
-    print(f"do job {job_id} for project {project_id}")
+    return job_id, project_id
 
 
 def fill_db():

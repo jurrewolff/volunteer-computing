@@ -8,8 +8,10 @@ from flask import (
     jsonify,
     send_from_directory,
     render_template,
+    session
 )
 import time
+from flask_login import login_required
 from .read_datafile import file_to_arguments
 import app.models.project as pj
 from app.models.user import account_id_exists
@@ -17,14 +19,9 @@ from app.util import build_response
 from http import HTTPStatus
 from celery import Celery
 import subprocess
-
-
+from app.authentication import *
+from app.schedule import give_work, receive_work
 ALLOWED_EXTENSIONS = {"c"}
-
-
-def get_project_id(name):
-    return 7
-
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -210,15 +207,18 @@ def taskstatus(task_id):
 
 
 @app.route("/runproject/<proj_id>", methods=("GET", "POST"))
+@login_required
 def datatest(proj_id):
+    job_id = None
+    user_id = session["user_id"]
     if request.method == "POST":
         data = request.form.get("data")
-        with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output", "a") as f:
-            f.write(data)
-        return redirect(f"/output/{proj_id}")
+        receive_work(proj_id, job_id, user_id, data)
+        # return redirect(f"/output/{proj_id}")
+
     # arguments from scheduler
-    lines = [str(r) for r in range(0, 10)]
-    data = file_to_arguments(f"{app.config['PROJECTS_DIR']}/{proj_id}/input")
+    job_id, project_id = give_work(project_id, user_id)
+    data = file_to_arguments(f"{app.config['PROJECTS_DIR']}/{proj_id}/input", start_line=job_id, end_line=job_id+1)
     return render_template("template.html", data=data, name=proj_id)
 
 
@@ -263,3 +263,4 @@ def serve_wasm(proj_id):
 # #     <title>Compiled files</title>
 # #     <h1>File</h1>
 # #     '''
+
