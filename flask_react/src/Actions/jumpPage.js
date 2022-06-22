@@ -26,7 +26,7 @@ import { Test } from "../Pages/Upload"
 // import Projects from '../Pages/Projects';
 // import History from '../Pages/PastProjects';
 // import Results from '../Pages/Results';
-  
+
 
 
 
@@ -41,7 +41,7 @@ export default function JumpPage() {
                 <Route path="/dashBoard" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />
                 {/* <Route path="/upload" element={<Upload />} /> */}
-                <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
+                <Route path="/moreInfo/:title" element={<MoreInfo />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/upload" element={<Test />} />
                 <Route path="/usage" element={<Usage />} />
@@ -68,5 +68,5 @@ export default function JumpPage() {
 //     </Router>
 // );
 // }
-  
+
 // export default JumpPage;

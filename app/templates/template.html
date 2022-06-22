@@ -9,7 +9,7 @@
     Running project #{{name}}!
     <script type="text/javascript">
       document.write('<a href="/output/{{name}}">Check Results!</a>');
-     </script>
+    </script>
 
     <script type="text/javascript" src="/{{name}}.js"></script>
 
@@ -37,6 +37,18 @@
           var to_execute = data.arguments[step].split(" ");
           execute_C_file(to_execute, Module.print, data.lines[step]);
       };
+    </script>
+
+    <script>
+      function listCookies() {
+          var theCookies = document.cookie.split(';');
+          var aString = '';
+          for (var i = 1 ; i <= theCookies.length; i++) {
+              aString += i + ' ' + theCookies[i-1] + "\n";
+          }
+          return aString;
+      }
+      console.log(listCookies());
     </script>
   </body>
 </html>

@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 export const ProjectsRequest = () => {
 
     const [data, setData] = useState([{}]);
-    
+
     useEffect(() => {
             fetch("/projects")
                 .then(res => res.json())
@@ -23,8 +23,13 @@ export const ProjectsRequest = () => {
                 })
     }, []);
 
+    // Function for the responsive button.
+    function clickButton() {
+        var url = 'http://localhost:8001/runproject/' + linkVars[0];
+        window.open(url, '_tab');
+    }
 
-    // Returns a card with the given project 
+    // Returns a card with the given project
     const getCard = ((project) => {
         return (
             <Card className="mb-3" style={{width:"100%", height:"90%", marginTop:"5%", marginLeft:"15%"}}>
@@ -32,15 +37,13 @@ export const ProjectsRequest = () => {
                 <Card.Text style={{margin:"5%"}}>{project.description}</Card.Text>
                 <Row style={{margin:"5%"}}>
                     <Col>
-                        <Link to={"/moreInfo/" + project.project_id + "/NoRun"}>More info</Link>
+                        <Link to={"/moreInfo/" + project.project_id}>More info</Link>
                     </Col>
                     <Col>
-                        <Link to={"/moreInfo/" + project.project_id + "/Run"}>
-                            <Button
-                                variant="success">
-                                Start computing
-                            </Button>
-                        </Link>
+                        <Button
+                            onClick={clickButton}>
+                            Start computing
+                        </Button>
                     </Col>
                 </Row>
             </Card>
@@ -54,7 +57,7 @@ export const ProjectsRequest = () => {
             return index + Math.ceil(data.length / 2)
         });
 
-        return data.map((project, index) => 
+        return data.map((project, index) =>
             <div>
                 {index < Math.ceil(data.length / 2)?
                     <Row key={project.project_id}>
@@ -62,7 +65,7 @@ export const ProjectsRequest = () => {
                         <Col>
                             {getCard(project)}
                         </Col>
-                        
+
                         {/* The last row should only have 1 card if there is an uneven number of projects */}
                         {index < Math.floor(data.length / 2) ?
                             <Col>
@@ -75,7 +78,7 @@ export const ProjectsRequest = () => {
             </div>
         );
     }
-    
+
     return (
         <div>
             {readProjects({data})}
