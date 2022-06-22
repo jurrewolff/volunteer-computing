@@ -11,6 +11,7 @@ const Usage = () => {
         <li> Your program can receive multiple arguments per run but can only provide a single line of output, terminated by a a newline. </li>
         <li> You must provide input through a text file, each line contains all the arguments given to a single run of the program. </li>
         <li> If you provide multiple arguments, seperate them by spaces. </li>
+        <li> The C standard library is supported, other libraries aren't. </li>
       </ul>
     </div>
   );
