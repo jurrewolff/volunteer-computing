@@ -73,7 +73,7 @@ def job_done(project_id, job_id, correct_result):
 
     # write majority agreed result to fs
     with open(os.path.join(app.config['RESULT_FOLDER'], f"{project_id}_{job_id}"), "a+") as file:
-        file.write(correct_result)
+        file.write(f'{job_id} ' + correct_result)
 
 
 def get_number_of_results(job_id, project_id):
