@@ -39,7 +39,7 @@ export default function Login() {
                             fullWidth
                             label="Username"
                             variant="outlined"
-                        // onChange={(e) => setFname(e.target.value)}
+                            onChange={(e) => setFname(e.target.value)}
                         />
                     </Grid>
                     <Grid >
@@ -51,7 +51,7 @@ export default function Login() {
                             label="Password"
                             type="password"
                             autoComplete="current-password"
-                        // onChange={(e) => setPass(e.target.value)}
+                            onChange={(e) => setPass(e.target.value)}
                         />
                     </Grid>
                     <Grid alignitems="center">

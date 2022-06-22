@@ -28,6 +28,7 @@ export default function JumpPage() {
                 <Route path="/signup/*" element={<SignUp />} />
                 <Route path="/dashBoard" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />
+                {/* <Route path="/upload" element={<Upload />} /> */}
                 <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/upload" element={<Test />} />
@@ -38,3 +39,23 @@ export default function JumpPage() {
         </div>
     );
 }
+
+
+
+// function JumpPage() {
+// return (
+//     <Router>
+//     <Navbar />
+//     <Routes>
+//         <Route exact path='/' element={<Dashboard />} />
+//         <Route path='/Dashboard' element={<Dashboard/>} />
+//         <Route path='/Projects' element={<Projects/>} />
+//         <Route path='/PastProjects' element={<History/>} />
+//         <Route path='/Upload' element={<Upload/>} />
+//         <Route path='/Results' element={<Results/>} />
+//     </Routes>
+//     </Router>
+// );
+// }
+  
+// export default JumpPage;
