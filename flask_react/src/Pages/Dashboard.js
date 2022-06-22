@@ -3,7 +3,7 @@ import './Dashboard.css';
 
 
 
-import ResponsiveAppBar from '../Components/Navbar2';
+import ResponsiveAppBar from '../Components/Navbar';
 import PermanentDrawerLeft from '../Components/SideMenu';
 
 

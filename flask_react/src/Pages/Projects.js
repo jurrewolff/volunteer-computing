@@ -1,9 +1,16 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import ResponsiveAppBar from '../Components/Navbar';
+import PermanentDrawerLeft from '../Components/SideMenu';
+import Box from '@mui/material/Box';
+
 
 import { ListGroup, Container, Row, Col, Button, Card} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ProjectsRequest } from '../Actions/projectsRequest'
 import { LoginRequest } from '../Actions/loginRequest'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 export default function Projects() {
 
@@ -76,19 +83,26 @@ export default function Projects() {
         ));
 
 
-  return (
-
-    <Container className="text-center" style={{marginLeft:"5%", marginRight:"5%"}}>
-
-        < ProjectsRequest />
-
-        <ListGroup>
-            <ProjectsList titles={testTitles} texts={testTexts} />
-        </ListGroup>
-
-
-
-    </Container>
-
-  );
+    return (
+        <Box>
+            <ResponsiveAppBar />
+            <PermanentDrawerLeft />
+            <Box
+                component="main"
+                sx={{
+          pl: 30,
+          flexGrow: 1,
+          height: '100vh',
+          overflow: 'auto',
+        }}
+        >
+            <Container className="text-center" maxWidth="lg" style={{ marginLeft: "5%", marginRight: "5%" }}>
+                < ProjectsRequest />
+                <ListGroup>
+                    <ProjectsList titles={testTitles} texts={testTexts} />
+                </ListGroup>
+            </Container>
+            </Box>
+        </Box>
+    );
 };

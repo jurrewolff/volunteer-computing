@@ -13,14 +13,15 @@ import Projects from "../Pages/Projects"
 import MoreInfo from "../Pages/MoreInfo"
 import PastProjects from "../Pages/PastProjects"
 import Logout from "../Pages/Logout"
-import { Test } from "../Pages/Upload"
+import Results from "../Pages/Results"
+import { Test } from "../Pages/Upload" // TODO: Afmaken GOEDE upload-page
+// TODO: User Information page toevoegen + maken
+// TODO: Account page toevoegen + maken 
 
 export default function JumpPage() {
     return (
         <div>
             <Routes>
-                {/* <Route path="/" element={<DashBoard />} />
-                <Route path="/login" element={<Login />} /> */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login/*" element={<Login />} />
                 <Route path="/logout/*" element={<Logout />} />
@@ -30,18 +31,9 @@ export default function JumpPage() {
                 <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/upload" element={<Test />} />
-                <Route path="*" element={<NoPage />} />
+                <Route path="/results" element={<Results />} />
 
-                {/* <Route key="/" element={<Home />} />
-                <Route key="/login/*" element={<Login />} />
-                <Route key="/signup/*" element={<SignUp />} />
-                <Route key="/dashBoard" element={<DashBoard />} />
-                <Route key="/projects" element={<Projects />} />
-                <Route path="/upload" element={<Upload />} />
-                <Route key="/moreInfo/:title/:action" element={<MoreInfo />} />
-                <Route key="/pastProjects" element={<PastProjects />} />
-                <Route key="/upload" element={<Test />} />
-                <Route key="*" element={<NoPage />} /> */}
+                <Route path="*" element={<NoPage />} />
             </Routes>
         </div>
     );

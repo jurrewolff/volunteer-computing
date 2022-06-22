@@ -2,6 +2,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { ListGroup, Container, Row, Col, Button, Card} from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+import ResponsiveAppBar from '../Components/Navbar';
+import PermanentDrawerLeft from '../Components/SideMenu';
+import Box from '@mui/material/Box';
+
 
 export default function PastProjects() {
 
@@ -39,17 +43,25 @@ export default function PastProjects() {
         ));
 
 
-  return (
-
-
-    <Container className="text-center" style={{marginLeft:"5%", marginRight:"5%"}}>
-
-        <ListGroup>
-            <ProjectsList titles={testTitles} texts={testTexts} />
-        </ListGroup>
-
-    </Container>
-
-
-  );
+    return (
+        <Box>
+            <ResponsiveAppBar />
+            <PermanentDrawerLeft />
+            <Box
+                component="main"
+                sx={{
+                    pl: 30,
+                    flexGrow: 1,
+                    height: '100vh',
+                    overflow: 'auto',
+                }}
+            >
+                <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
+                    <ListGroup>
+                        <ProjectsList titles={testTitles} texts={testTexts} />
+                    </ListGroup>
+                </Container>
+            </Box>
+        </Box>
+    );
 };
