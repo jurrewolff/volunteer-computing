@@ -25,7 +25,6 @@ def projects():
     elif request.method == "GET":
         # Returns a list with a dictionary per project.
         projects = project.get_all_projects()
-        app.logger.warning(projects)
         return json.dumps(projects)
 
     elif request.method == "PATCH":
@@ -41,19 +40,17 @@ def projects():
 
 
 @app.route("/project", methods=["GET"])
-#@login_required
+@login_required
 def get_project():
     project_id = request.headers.get("project_id")
-    app.logger.warning("this is the received project_id: " + str(project_id))
     proj = project.get_project(project_id)
-    app.logger.warning("this is the received project:" + str(proj))
     return json.dumps(proj)
 
 @app.route("/my_projects", methods=["GET"])
-#@login_required
+@login_required
 def get_past_projects():
-    project_id = request.headers.get("project_id")
-    projects = results.get_projects_of_user(project_id)
-    return build_response(HTTPStatus.OK, projects)
+    user_id = request.headers.get("user_id")
+    result = results.get_projects_of_user(user_id)
+    return json.dumps(result)
     
     

@@ -25,9 +25,13 @@ export default function PastProjects() {
     }, []);
 
 
-    const ProjectsList = (data) =>
-        {console.log(data)}
-        data.map( (project, index) => (
+    const ProjectsList = (data) => {
+        // If no projects exist. This is returned.
+        if(data.lenght == 0) {
+            return <h1>You have not yet contributed to any projects.</h1>
+        }
+
+        return data.map((project, index) => (
 
             <Card key={"past" + project.project_id} className="mb-3" style={{width:"80%", height:"100px", marginTop:"5%", marginLeft:"5%", marginRight:"100%"}}>
                 <Row>
@@ -47,12 +51,12 @@ export default function PastProjects() {
             </Card>
 
         ));
+    }
 
 
-  return (
-
-    <div>
-        {ProjectsList(data)}
-    </div>
-  );
+    return (
+        <div>
+            {ProjectsList(data)}
+        </div>
+    );
 };

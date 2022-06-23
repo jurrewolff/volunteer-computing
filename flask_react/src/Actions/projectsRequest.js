@@ -19,8 +19,6 @@ export const ProjectsRequest = () => {
                 .then(res => res.json())
                 .then(data => {
                     setData(data)
-                    console.log(data)
-                    console.log("now useEffect is being executed")
                 })
     }, []);
 
@@ -52,9 +50,9 @@ export const ProjectsRequest = () => {
     const readProjects = ({data}) => {
         
         // If no projects exists. Nothing is displayed.
-        // if(data[0] = {}) {
-        //     return <h1>no projects available</h1>
-        // }
+        if(data.lenght == 0) {
+            return <h1>There are no projects to contribute to.</h1>
+        }
 
         const getRightIndex = ((index) => {
             return index + Math.ceil(data.length / 2)
