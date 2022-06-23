@@ -10,10 +10,6 @@ export const FileUpload = (props) => {
     const hiddenFileInput = React.useRef(null);
 
 
-    // const handleClick = event => {
-    //     hiddenFileInput.current.click();
-    // };
-
     const handleChange = event => {
         const fileUploaded = event.target.files[0];
         props.handleFile(fileUploaded);
@@ -27,11 +23,9 @@ export const FileUpload = (props) => {
                 headers: {
                     'name': props.fName,
                     'description': props.pass
-                    // 'description': props.pass
-                    // 'description': props.pass
                 }
             };
-            fetch("/signup", requestOptions)
+            fetch("/upload", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                     setData(result)

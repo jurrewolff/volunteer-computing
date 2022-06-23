@@ -1,4 +1,6 @@
 import os
+import shutil
+from urllib import response
 from app import app
 from flask import (
     flash,
@@ -46,9 +48,10 @@ def dl_output(proj_id):
 @app.route("/upload", methods=["GET", "POST"])
 def upload_file():
     if request.method == "POST":
+        # _, proj_id = add_project_db()
         # check if the post request has the file part
         if "file" not in request.files or "input" not in request.files:
-            flash("No file part")
+            flash("Please upload program and input file")
             return redirect(request.url)
         file = request.files["file"]
         input = request.files["input"]
@@ -57,87 +60,52 @@ def upload_file():
         if file.filename == "" or input.filename == "":
             flash("No selected file")
             return redirect(request.url)
-        if file and input and allowed_file(file.filename):
+        if file and allowed_file(file.filename):
             response, proj_id = add_project_db()
             if proj_id != 0:
-                proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")
-
-                os.mkdir(proj_dir)
-                file.save(os.path.join(proj_dir, "main.c"))
-                input.save(os.path.join(proj_dir, "input"))
-                open(os.path.join(proj_dir, "output"), "x").close()
-                create_jobs(proj_id, request.form.get("qorum"))
+                if os.path.exists(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")):
+                    shutil.rmtree(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
+                os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
+                file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
+                input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
                 task = compile.delay(proj_id)
                 return redirect(url_for("taskstatus", task_id=task.id))
             return response
-
-            # return redirect(url_for('progress', name=filename, taskid=task.id))
-    return """
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=file name=input>
-      <input type=submit value=Upload>
-      <input type="text" name="name" value="name">
-      <input type="text" name="description" value="desc">
-      <input type="text" name="block_size" value="1">
-      <input type="text" name="owner" value="1">
-      <input type="text" name="random_validation" value="1">
-      <input type="text" name="max_runtime" value="1">
-      <input type="text" name="qorum" value="1">
-    </form>
-    """
+    return
 
 
 def add_project_db():
     if not request.headers:
         return build_response(
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
-        )
+        ), 0
 
     # Get info about user from header.
     new_project = {"project_id": pj.get_new_project_id()}
-    # new_project.update({"name": request.form.get("name")})
-    # new_project.update({"description": request.headers.get("description")})
-    # new_project.update({"block_size": request.headers.get("block_size")})
-    # new_project.update({"owner": request.headers.get("owner")})
-    # new_project.update({"random_validation": request.headers.get("random_validation")})
-    # new_project.update({"max_runtime": request.headers.get("max_runtime")})
-
-    new_project.update({"name": request.form.get("name")})
-    new_project.update({"description": request.form.get("description")})
-    new_project.update({"block_size": int(request.form.get("block_size"))})
+    new_project.update({"name": request.headers.get("name")})
+    new_project.update({"description": request.headers.get("description")})
+    new_project.update({"block_size": request.headers.get("block_size")})
     new_project.update({"trust_level": 1})
-    new_project.update({"owner": request.form.get("owner")})
-    new_project.update(
-        {"random_validation": int(request.form.get("random_validation"))}
-    )
-    new_project.update({"max_runtime": int(request.form.get("max_runtime"))})
-    new_project.update({"qorum": request.form.get("qorum")})
+    new_project.update({"owner": request.headers.get("owner")})
+    new_project.update({"random_validation": request.headers.get("random_validation")})
+    new_project.update({"max_runtime": request.headers.get("max_runtime")})
+    new_project.update({"qorum": request.headers.get("qorum")})
 
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
-        return (
-            build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name"),
-            0,
-        )
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name"), 0
     if not new_project["description"]:
         return build_response(
             HTTPStatus.BAD_REQUEST, "Please provide a project description"
-        )
+        ), 0
     if not new_project["block_size"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a block size"), 0
     if not new_project["owner"]:
-        return (
-            build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner"),
-            0,
-        )
+        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner"), 0
     if not new_project["random_validation"]:
         return build_response(
             HTTPStatus.BAD_REQUEST, "Please provide a validation method"
-        )
+        ), 0
     if not new_project["max_runtime"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a max runtime"), 0
 
@@ -146,12 +114,9 @@ def add_project_db():
     if not account_id_exists(new_project["owner"]) or not pj.insert_project(
         new_project
     ):
-        return (
-            build_response(
-                HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database"
-            ),
-            0,
-        )
+        return build_response(
+            HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database"
+        ), 0
 
     return (
         build_response(HTTPStatus.CREATED, "Project added to database"),
@@ -247,33 +212,4 @@ def serve_wasm(proj_id):
         "main.wasm",
         cache_timeout=604800,
     )  # cached for a week
-
-
-# @celery.task()
-# def compile(filename):
-#     return "some result"
-
-# @app.route('/status/<task_id>')
-# def taskstatus(task_id):
-#     task = compile.AsyncResult(task_id)
-#     if task.state == 'PENDING':
-#         # time.sleep(config.SERVER_SLEEP)
-#         response = {
-#             'queue_state': task.state,
-#             'status': 'Process is ongoing...',
-#             'status_update': url_for('taskstatus', task_id=task.id)
-#         }
-#     else:
-#         response = {
-#             'queue_state': task.state,
-#             'result': task.wait()
-#         }
-#     return jsonify(response)
-# # @app.route('/progress/<filename><taskid>' )
-# # def progress(filename, taskid):
-# #     return '''
-# #     <!doctype html>
-# #     <title>Compiled files</title>
-# #     <h1>File</h1>
-# #     '''
 

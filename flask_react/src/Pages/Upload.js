@@ -1,225 +1,156 @@
-import React from 'react'
+import React from 'react';
+import './Login.css';
+import { useState, useEffect } from 'react';
+
 import Button from '@mui/material/Button';
-import { useState, useEffect } from 'react'
-
-import { FileUpload } from '../Actions/uploadFile'
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-
-import Radio from '@mui/material/Radio';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-
 import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import { Routes, Route, useNavigate } from "react-router-dom"
 
-
-
-export const Test = (props) => {
-    // const [data, setData] = useState([{}])
+export default function Upload() {
     const paperStyle = { padding: 20, margin: "20px auto" }
-
-
+	const navigate = useNavigate();
 
     const [clicked, setClicked] = useState(false)
-    const hiddenFileInput = React.useRef(null);
-    const [size, setSize] = React.useState(10);
-    const [name, setName] = React.useState('');
-    const [description, setDescription] = React.useState('');
-    const [rvalidation, setRvalidation] = React.useState();
-    const [time, setTime] = React.useState('');
+    const [name, setName] = useState();
+    const [description, setDescription] = useState();
+    const [block_size, setBlocksize] = useState();
+    const [random_validation, setValidation] = useState();
+    const [max_runtime, setRuntime] = useState();
+	const [owner, setOwner] = useState();
+    const [qorum, setQorum] = useState();
 
-    const handleChange = (e) => {
-        setRvalidation((e.target).value);
-    };
+	useEffect(() => {
+        if (clicked) {
+			const formData = new FormData()
+			const codeFile = document.getElementById('file').files[0]
+			const inputFile = document.getElementById('input').files[0]
+			formData.append('file', codeFile)
+			formData.append('input', inputFile)
+			console.log(codeFile)
+			console.log(inputFile)
+            fetch("/upload", {method: 'POST',
+							  headers: {'name': name,
+										'description': description,
+										'block_size': block_size,
+										'owner': owner,
+										'random_validation': random_validation,
+										'max_runtime': max_runtime,
+                                        'qorum': qorum
+										},
+							  body: formData})
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log({ result })
+                });
 
-    // const handleClick = event => {
-    //     hiddenFileInput.current.click();
-    // };
-
-    // const handleChange = event => {
-    //     const fileUploaded = event.target.files[0];
-    //     props.handleFile(fileUploaded);
-    // };
+            navigate('/dashboard');
+            setClicked(false)
+        }
+	}, [clicked]);
 
     return (
         <>
-            <Grid component="main" maxWidth="sm" sx={{ mb: 4 }}>
+            <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                 <Paper elevation={10} style={paperStyle}
                     sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                    <Grid>
-                        <Grid>
-                            <TextField
-                                id="name"
-                                label="name"
-                                rows={4}
-                                variant="filled"
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                        </Grid>
-                        <Grid>
-                            <TextField
-                                id="Description"
-                                label="Multiline"
-                                multiline
-                                rows={4}
-                                variant="filled"
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
+                    <Typography component="h1" variant="h4" gutterBottom
+                        sx={{ textAlign: 'center' }}>
+                        Upload Project
+                    </Typography>
+                    <Divider variant="middle" />
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+							<Grid >
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    id="name"
+                                    label="Project name"
+                                    variant="outlined"
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                            </Grid>
+							<Grid >
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    id="description"
+                                    label="Project description"
+                                    variant="outlined"
+                                    onChange={(e) => setDescription(e.target.value)}
+                                />
+                            </Grid>
+							<Grid >
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    id="block_size"
+                                    label="Block size"
+                                    variant="outlined"
+                                    onChange={(e) => setBlocksize(e.target.value)}
+                                />
+                            </Grid>
+							<Grid >
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    id="owner"
+                                    label="Owner?"
+                                    variant="outlined"
+                                    onChange={(e) => setOwner(e.target.value)}
+                                />
+                            </Grid>
+							<Grid >
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    id="random_validation"
+                                    label="Random validation?"
+                                    variant="outlined"
+                                    onChange={(e) => setValidation(e.target.value)}
+                                />
+                            </Grid>
+							<Grid >
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    id="max_runtime"
+                                    label="Max runtime?"
+                                    variant="outlined"
+                                    onChange={(e) => setRuntime(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid >
+                                <TextField
+                                    margin="normal"
+                                    required
+                                    id="qorum"
+                                    label="Qorum?"
+                                    variant="outlined"
+                                    onChange={(e) => setQorum(e.target.value)}
+                                />
+                            </Grid>
+							<Grid>
+							<div>
+								<input type="file" id="file"/>
+								<input type="file" id="input"/>
+							</div>
+							</Grid>
+							<Button
+								variant="contained"
+								onClick={() => setClicked(true)}
+								sx={{ mt: 3, ml: 1 }}>
+								Upload Project
+							</Button>
                         </Grid>
                     </Grid>
-                    <Grid>
-                        <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <InputLabel id="blocksize">Blocksize</InputLabel>
-                            <Select
-                                labelId="size"
-                                id="size"
-                                value={size}
-                                label="Size"
-                                onChange={(e) => setSize(e.target.value)}
-                            >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
-                            <FormHelperText>With label + helper text</FormHelperText>
-                        </FormControl>
-                        <Grid>
-                            <FormControl>
-                                <FormLabel id="validation">Validation</FormLabel>
-                                <RadioGroup
-                                    aria-labelledby="demo-radio-buttons-group-label"
-                                    defaultValue="A"
-                                    name="radio-buttons-group"
-                                    onChange={handleChange}
-                                >
-                                    <FormControlLabel value="A" control={<Radio />} label="A" />
-                                    <FormControlLabel value="B" control={<Radio />} label="B" />
-                                </RadioGroup>
-                            </FormControl>
-                        </Grid>
-                        <Grid>
-                            <Select
-                                labelId="maxRuntime"
-                                id="demo-simple-select-helper"
-                                value={size}
-                                label="Size"
-                                onChange={(e) => setTime(e.target.value)}
-                            >
-                                {/* <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem> */}
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
-                        </Grid>
-                    </Grid>
-                    <FileUpload
-                        name={name} description={description} bsize={size}
-                        rvalidation={rvalidation} time={time} />
                 </Paper>
-            </Grid>
+            </Container>
         </>
     );
 }
-// Name desciption, blocksize, owner, randomvalidation, maxruntime
-
- // const navigate = useNavigate();
-
-
-    // useEffect(() => {
-    //     if (clicked) {
-    //         const requestOptions = {
-    //             method: 'POST',
-    //             headers: {
-    //                 'username': props.fName,
-    //                 'password': props.pass
-    //             }
-    //         };
-    //         fetch("/login", requestOptions)
-    //             .then((response) => response.json())
-    //             .then((result) => {
-    //                 setData(result)
-    //                 console.log({ result }) //DELETE
-    //             })
-
-    //         // navigate('/dashboard');
-    //         setClicked(false)
-    //     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [clicked, props.fName, props.pass]);
-
-
-
-//// Tessa's part:
-// import React, { useRef } from "react";
-// import "../App.css";
-// import "../eventHandlers";
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
-
-// function Upload() {
-// 	const fileUpload = useRef(null);
-// 	const chooseFile = (e) => {
-// 		console.log(e);
-// 	};
-
-// 	const handleUpload = () => {
-// 		console.log(fileUpload.current.click(), "fileUpload");
-// 	};
-
-// 	return (
-// 		<div className="m-3">
-// 			<label className="mx-3">Choose file: </label>
-// 			<input className="d-none" type="file" multiple id="input" ref={fileUpload}
-// 				onChange={chooseFile} />
-// 			<button className="btn btn-outline-primary">Upload</button>
-// 		</div>
-// 	);
-// }
-
-// export default Upload;
-
-// import React, { useState, useRef } from "react";
-
-// function Upload() {
-//   const [uploadedFileName, setUploadedFileName] = useState<String | null>(null);
-//   const inputRef = useRef<HTMLInputElement>(null);
-
-//   const handleUpload = () => {
-//     inputRef.current?.click();
-//   };
-//   const handleDisplayFileDetails = () => {
-//     inputRef.current?.files &&
-//       setUploadedFileName(inputRef.current.files[0].name);
-//   };
-
-//   return (
-//     <div className="m-3">
-//       <label className="mx-3">Choose file:</label>
-//       <input
-//         ref={inputRef}
-//         onChange={handleDisplayFileDetails}
-//         className="d-none"
-//         type="file"
-//       />
-//       <button
-//         onClick={handleUpload}
-//         className={`btn btn-outline-${
-//           uploadedFileName ? "success" : "primary"
-//         }`}
-//       >
-//         {uploadedFileName ? uploadedFileName : "Upload"}
-//       </button>
-//     </div>
-//   );
-// }
-
-// export default Upload;
