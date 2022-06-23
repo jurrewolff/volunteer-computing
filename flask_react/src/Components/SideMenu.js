@@ -42,7 +42,7 @@ const useStyles = makeStyles({
   root: {
     background: 'linear-gradient(45deg, #00315c 20%, #4987b9 90%)',
     border: 0,
-    borderRadius: 3,
+    borderRadius: 0,
     boxShadow: '0 3px 5px 2px rgba(255, 255, 255, 0.06)',
     // color: 'white',
     // height: 70,
@@ -63,7 +63,7 @@ const useStyles = makeStyles({
   child: {
     background: '#00315c',
     border: 0,
-    borderRadius: 3,
+    borderRadius: 0,
     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
     // color: 'white',
     // height: 70,
@@ -94,12 +94,12 @@ export default function PermanentDrawerLeft() {
     var icon = icons[index];
 
     return (
-      <Link to={path}>
+      <Link to={path} style={{ textDecoration: 'none' }}>
         <ListItemButton>
           <ListItemIcon>
             {icon}
           </ListItemIcon>
-          <ListItemText primary={page} sx={{ my: 2, color: 'black', display: 'block' }} />
+          <ListItemText primary={page} sx={{ my: 2, color: 'black', display: 'block', width: 120 }} />
         </ListItemButton>
       </Link>
     )
@@ -145,14 +145,14 @@ export default function PermanentDrawerLeft() {
           {pages.map((page, index) => (
             <ListItem key={page}>
               {makeLink(page, index)}
-              <Divider />
+              <Divider style={{color: 'black'}}/>
             </ListItem>
           ))}
         </List>
-        <Divider />
+        <Divider style={{backgroundColor: 'black', width:5}}/>
         <List className={classes.child}>
           <ListItem key={'User Info'} disablePadding>
-            <Link to={"/usage"}>
+            <Link to={"/usage"} style={{ textDecoration: 'none' }}>
               <ListItemButton>
                 <ListItemIcon>
                   <QuestionMarkIcon />
