@@ -6,9 +6,9 @@ import Box from '@mui/material/Box';
   
 const Results = () => {
   return (
-    <Box>
-    <ResponsiveAppBar />
-    <PermanentDrawerLeft />
+    // <Box>
+    // <ResponsiveAppBar />
+    // <PermanentDrawerLeft />
     <Box
         component="main"
         sx={{
@@ -22,8 +22,7 @@ const Results = () => {
       <h1>Researchers can view the results of submitted projects here.</h1>
     </div>
     </Box>
-    </Box>
-    
+    // </Box>
   );
 };
   

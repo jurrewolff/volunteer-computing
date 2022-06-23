@@ -78,6 +78,7 @@ export default function PermanentDrawerLeft() {
           width: drawerWidth,
           height: '100%',
           flexDirection: 'column',
+          style: 'blue',
 
           flexShrink: 10,
           '& .MuiDrawer-paper': {

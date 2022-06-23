@@ -1,4 +1,13 @@
 import * as React from 'react';
+import styles from './Navbar.css';
+
+import { styled } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import { StyledEngineProvider } from '@mui/material/styles';
+import { LogoutRequest } from '../Actions/logoutRequest';
+
+
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,6 +22,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
+
 import { Link } from "react-router-dom"
 
 // TODO: Account page maken!
@@ -20,7 +30,25 @@ const pages = ['Home'];
 const settings = ['Account', 'Logout'];
 
 
+// style={{ backgroundColor: 'yellow' }}
+
+const useStyles = makeStyles({
+  root: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 70,
+    padding: '0 30px',
+  },
+});
+
+
+
 const ResponsiveAppBar = () => {
+  const classes = useStyles();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -33,6 +61,16 @@ const ResponsiveAppBar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  // TODO: Logout request fixen 
+  const handleLogout = () => {
+    LogoutRequest();
   };
 
 
@@ -54,14 +92,11 @@ const ResponsiveAppBar = () => {
     )
   }
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   return (
-    <AppBar position="sticky">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+    <AppBar position="sticky" className={classes.root}>
+      <Container maxWidth="xl" >
+        <Toolbar disableGutters >
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
@@ -167,11 +202,11 @@ const ResponsiveAppBar = () => {
                   <Typography textAlign="center">{'Account'}</Typography>
                   </Link>
                 </MenuItem>
-                <MenuItem key={'Logout'} onClick={handleCloseUserMenu}>
-                  <Link to="/logout">
+                <Box>
+                <MenuItem key={'Logout'} onClick={handleLogout}> 
                   <Typography textAlign="center">{'Logout'}</Typography>
-                  </Link>
                 </MenuItem>
+                </Box>
             </Menu>
           </Box>
         </Toolbar>
@@ -180,40 +215,3 @@ const ResponsiveAppBar = () => {
   );
 };
 export default ResponsiveAppBar;
-
-
-
-
-
-
-// import React from "react";
-// import { Nav, NavLink, NavMenu } 
-//     from "./NavbarElements";
-
-// const NavBar = () => {
-//   return (
-//     <>
-//       <Nav>
-//         <NavMenu>
-//         <NavLink to="/Dashboard" activeStyle>
-//             Dashboard
-//           </NavLink>
-//           <NavLink to="/Projects" activeStyle>
-//             Browse projects
-//           </NavLink>
-//           <NavLink to="/PastProjects" activeStyle>
-//             History
-//           </NavLink>
-//           <NavLink to="/Upload" activeStyle>
-//             New project
-//           </NavLink>
-//           <NavLink to="/Results" activeStyle>
-//             Results
-//           </NavLink>
-//         </NavMenu>
-//       </Nav>
-//     </>
-//   );
-// };
-
-// export default NavBar;

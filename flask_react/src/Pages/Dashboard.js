@@ -10,8 +10,8 @@ import Container from '@mui/material/Container';
 const Dashboard = () => {
   return (
     <Box>
-      <ResponsiveAppBar />
-      <PermanentDrawerLeft />
+      {/* <ResponsiveAppBar />
+      <PermanentDrawerLeft /> */}
       <Box
         border="dashed"
         component="main"

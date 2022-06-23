@@ -51,9 +51,9 @@ export const Test = (props) => {
     // };
 
     return (
-        <Box>
-            <ResponsiveAppBar />
-            <PermanentDrawerLeft />
+        // <Box>
+        //     <ResponsiveAppBar />
+        //     <PermanentDrawerLeft />
             <Box
                 component="main"
                 sx={{
@@ -142,7 +142,7 @@ export const Test = (props) => {
                     </Grid>
                 </>
             </Box>
-        </Box>
+        // </Box>
     );
 }
 // Name desciption, blocksize, owner, randomvalidation, maxruntime

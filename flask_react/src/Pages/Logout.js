@@ -12,14 +12,11 @@ import Box from '@mui/material/Box';
 
 export default function Logout() {
     return (
-        <Box>
-        <ResponsiveAppBar />
-        <PermanentDrawerLeft />
+
         <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
             <Grid alignitems="center">
                 < LogoutRequest />
             </Grid>
         </Container>
-        </Box>
     );
 }

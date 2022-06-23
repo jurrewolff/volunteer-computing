@@ -83,9 +83,9 @@ export default function Projects() {
 
 
     return (
-        <Box>
-            <ResponsiveAppBar />
-            <PermanentDrawerLeft />
+        // <Box>
+        //     <ResponsiveAppBar />
+        //     <PermanentDrawerLeft />
             <Box
                 component="main"
                 sx={{
@@ -102,6 +102,6 @@ export default function Projects() {
                 </ListGroup>
             </Container>
             </Box>
-        </Box>
+        // </Box>
     );
 };

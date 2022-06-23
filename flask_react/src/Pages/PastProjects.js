@@ -45,8 +45,8 @@ export default function PastProjects() {
 
     return (
         <Box>
-            <ResponsiveAppBar />
-            <PermanentDrawerLeft />
+            {/* <ResponsiveAppBar />
+            <PermanentDrawerLeft /> */}
             <Box
                 component="main"
                 sx={{

@@ -1,41 +1,34 @@
-import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
-import { createTheme} from '@mui/material/styles';
-// import { ThemeProvider } from "styled-components";
+// theme.js
+import { createTheme } from '@material-ui/core/styles'
 
 
-// export const themeOptions = createTheme = {
-//   palette: {
-//     type: 'light',
-//     primary: {
-//       main: '#86b53f',
-//     },
-//     secondary: {
-//       main: '#f50057',
-//     },
-//   },
-// };
 
-export const themeOptions = createTheme = {
-  palette: {
-    type: 'light',
-    primary: {
-      main: '#86b53f',
+
+export const theme = createTheme({
+    components: {
+        MuiAppBar: {
+            styleOverrides: {
+                colorPrimary: {
+                    backgroundColor: "red"
+                }
+            }
+        }
     },
-    secondary: {
-      main: '#f50057',
+    palette: {
+        type: 'light',
+        primary: {
+            main: '#000000',
+        },
+        secondary: {
+            main: '#f50057',
+        },
+        background: {
+            default: '#f50057',
+        }
     },
-  },
-  props: {
-    MuiAppBar: {
-      color: 'inherit',
+    props: {
+        MuiAppBar: {
+            color: 'inherit',
+        },
     },
-  },
-  overrides: {
-    MuiAppBar: {
-      colorInherit: {
-        backgroundColor: '#689f38',
-        color: '#fff',
-      },
-    },
-  },
-};
+});
