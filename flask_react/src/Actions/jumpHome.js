@@ -1,8 +1,3 @@
-/*
- * Maakt het mogelijk om tussen webpagina's te switchen.
- * Is sneller dat http request, webpagina wordt nml niet telkens herladen
- */
-
 import { Routes, Route } from "react-router-dom"
 import Home from "../Pages/Home"
 import Upload from "../Pages/Upload"
@@ -16,8 +11,6 @@ import PastProjects from "../Pages/PastProjects"
 import Logout from "../Pages/Logout"
 import Results from "../Pages/Results"
 import Account from "../Pages/Account"
-
-import Usage from "../Pages/Usage"
 
 
 function JumpPage() {
@@ -34,7 +27,6 @@ function JumpPage() {
                 <Route path="/dashBoard" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
-                <Route path="/usage" element={<Usage />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/results/*" element={<Results />} />
                 <Route path="/account" element={<Account />} />
@@ -45,4 +37,3 @@ function JumpPage() {
 }
 
 export default JumpPage;
-
