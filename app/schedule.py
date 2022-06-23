@@ -72,8 +72,10 @@ def job_done(project_id, job_id, correct_result):
             update_trust_level(user_id, 'trust_level + 0.1')
 
     # write majority agreed result to fs
-    with open(os.path.join(app.config['RESULT_FOLDER'], f"{project_id}_{job_id}"), "a+") as file:
-        file.write(f'{job_id} ' + correct_result)
+    proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{project_id}")
+
+    with open(os.path.join(proj_dir, "output"), "a+") as file:
+        file.write(f'{job_id} ' + correct_result[0])
 
 
 def get_number_of_results(job_id, project_id):
@@ -102,6 +104,7 @@ def majority_agrees(project_id, job_id):
     try:
         most_common, second_most_common = c.most_common(2)
     except ValueError:
+        most_common =  c.most_common(1)
         # No second_most_common, i.e. only one result
         return most_common[0]
     if most_common[1] > second_most_common[1]:
@@ -114,7 +117,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
     random_replication = single_result_query(
         f"SELECT random_validation FROM Project WHERE  project_id = '{project_id}'")
     quorum_size = single_result_query(
-        f"SELECT quorum_size FROM Jobs WHERE '{job_id}' AND project_id = '{project_id}'")
+        f"SELECT quorum_size FROM Jobs WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
 
     if random_replication == 0:
         trust = decide_if_work_is_trusted(job_id, project_id)
@@ -124,7 +127,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
             return
         # quorum_size 1 and we trust the result so we are done
         if quorum_size == 1:
-            job_done(project_id, job_id, result)
+            job_done(project_id, job_id, result[0])
 
         else:
             # quorum not yet reached, we wait for someone to replicate the result.
@@ -157,7 +160,7 @@ def possible_jobs(project_id, user_id):
 
 def give_work(project_id, user_id):
     job_id, project_id = random.choice(possible_jobs(project_id, user_id))
-    return job_id, project_id
+    return job_id
 
 
 def fill_db():

@@ -14,7 +14,7 @@ from flask import (
 )
 import time
 from flask_login import login_required
-from .read_datafile import file_to_arguments
+from .read_datafile import file_to_arguments, get_line_from_file
 import app.models.project as pj
 from app.models.user import account_id_exists
 from app.util import build_response
@@ -184,20 +184,20 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
-@app.route("/runproject/<proj_id>", methods=("GET", "POST"))
+@app.route("/runproject/<project_id>/<job_id>", methods=("GET", "POST"))
 @login_required
-def datatest(proj_id):
-    job_id = None
+def datatest(project_id, job_id):
+    # TODO switch to request instead of params in url
     user_id = session["user_id"]
     if request.method == "POST":
         data = request.form.get("data")
-        receive_work(proj_id, job_id, user_id, data)
+        receive_work(project_id, job_id, user_id, data)
         # return redirect(f"/output/{proj_id}")
 
     # arguments from scheduler
-    job_id, project_id = give_work(project_id, user_id)
-    data = file_to_arguments(f"{app.config['PROJECTS_DIR']}/{proj_id}/input", start_line=job_id, end_line=job_id+1)
-    return render_template("template.html", data=data, name=proj_id)
+    job_id = give_work(project_id, user_id)
+    data = get_line_from_file(f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=job_id)
+    return render_template("template.html", data=data, name=project_id, job=job_id)
 
 
 @app.route("/<proj_id>.js")
