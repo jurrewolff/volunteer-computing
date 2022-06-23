@@ -13,8 +13,8 @@ import JumpPage from "./Actions/jumpPage"
 function App() {
   return (
     <>
-    <JumpPage />
-    {/* <JumpPage /> */}
+      <JumpPage />
+      {/* <JumpPage /> */}
       {/* Andere features */}
     </>
   )
