@@ -27,7 +27,7 @@ export default function PastProjects() {
 
     const ProjectsList = (data) => {
         // If no projects exist. This is returned.
-        if(data.lenght == 0) {
+        if(data.length === 0) {
             return <h1>You have not yet contributed to any projects.</h1>
         }
 
@@ -55,8 +55,8 @@ export default function PastProjects() {
 
 
     return (
-        <div>
+        <Container className="text-center" style={{marginLeft:"5%", marginRight:"5%"}}>
             {ProjectsList(data)}
-        </div>
+        </Container>
     );
 };
