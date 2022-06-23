@@ -37,10 +37,8 @@ export const SignupRequest = (props) => {
                 }
             };
             fetch("/signup", requestOptions)
-                .then((response) => response.json())
                 .then((result) => {
                     setData(result)
-                    console.log({ result }) //DELETE
                 });
 
             navigate('/dashboard');
@@ -60,7 +58,7 @@ export const SignupRequest = (props) => {
                 Sign up
             </Button>
             <Routes>
-                <Route path="/login" element={<DashBoard />} />
+                <Route key="/login" element={<DashBoard />} />
             </Routes>
         </div>
     );
