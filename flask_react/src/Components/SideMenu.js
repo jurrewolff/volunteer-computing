@@ -23,14 +23,14 @@ import Cookies from 'js-cookie'
 const drawerWidth = 240;
 
 // Add researcher only pages here
-const researcherPages = ['Result']
-const researcherPaths = ['/results']
-const researcherIcons = [<InboxIcon />];
+const researcherPages = [ 'New Project', 'Result']
+const researcherPaths = [ "/upload", '/results']
+const researcherIcons = [<FileUploadIcon />, <InboxIcon />];
 
 // Add generally available pages here
-let pages = ['Dashboard', 'Projects', 'Past Projects', 'New Project'];
-let icons = [<WarehouseIcon />, <StorageIcon />, <SourceIcon />, <FileUploadIcon />];
-let paths = ["/dashboard", "/projects", "/pastprojects", "/upload"];
+let pages = ['Dashboard', 'Projects', 'Past Projects'];
+let icons = [<WarehouseIcon />, <StorageIcon />, <SourceIcon />];
+let paths = ["/dashboard", "/projects", "/pastprojects"];
 
 if (Cookies.get("is_researcher") === "1") {
   pages = pages.concat(researcherPages)
