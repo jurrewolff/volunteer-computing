@@ -5,7 +5,7 @@
 
 import { Routes, Route } from "react-router-dom"
 import Home from "../Pages/Home"
-import Login from "../Pages/Login"
+import { Login} from "../Pages/Login"
 import NoPage from "../Pages/NoPage"
 import SignUp from "../Pages/SignUp"
 import DashBoard from "../Pages/Dashboard"
@@ -17,7 +17,8 @@ import Results from "../Pages/Results"
 import { Test } from "../Pages/Upload" // TODO: Afmaken GOEDE upload-page
 // TODO: Account page toevoegen + maken 
 
-export default function JumpPage() {
+
+function JumpPage() {
     return (
         <div>
             <Routes>
@@ -39,6 +40,7 @@ export default function JumpPage() {
     );
 }
 
+export default JumpPage;
 
 
 // function JumpPage() {
@@ -56,5 +58,4 @@ export default function JumpPage() {
 //     </Router>
 // );
 // }
-  
-// export default JumpPage;
+

@@ -37,10 +37,8 @@ export const SignupRequest = (props) => {
                 }
             };
             fetch("/signup", requestOptions)
-                .then((response) => response.json())
                 .then((result) => {
                     setData(result)
-                    console.log({ result }) //DELETE
                 });
 
             navigate('/dashboard');

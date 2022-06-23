@@ -10,14 +10,17 @@ import { useState, useEffect } from 'react'
 
 import { Routes, Route, useNavigate } from "react-router-dom"
 import DashBoard from "../Pages/Dashboard"
+import Navbar from "../Components/Navbar"
 
 import Button from '@mui/material/Button';
+
+import Cookies from 'js-cookie';
 
 export const LoginRequest = (props) => {
     const [data, setData] = useState([{}])
     const [clicked, setClicked] = useState(false)
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -30,13 +33,10 @@ export const LoginRequest = (props) => {
                 }
             };
             fetch("/login", requestOptions)
-                .then((response) => response.json())
-                .then((result) => {
-                    setData(result)
-                    console.log({ result }) //DELETE
+                .then((response) => {
+                    response.json()
                 })
-                
-            // navigate('/dashboard');
+
             setClicked(false)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

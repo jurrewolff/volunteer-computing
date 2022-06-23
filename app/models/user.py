@@ -73,9 +73,10 @@ def get_user(username):
             "first_name": res[4],
             "last_name": res[5],
             "score": res[6],
-            "institution": res[7],
-            "upload_rights": res[8],
-            "background": res[9],
+            "trust_level": res[7],
+            "institution": res[8],
+            "is_researcher": res[9],
+            "background": res[10],
         }
     return False
 

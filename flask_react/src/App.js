@@ -11,10 +11,11 @@ import PermanentDrawerLeft from './Components/SideMenu';
 import JumpPage from "./Actions/jumpPage"
 
 function App() {
+
   return (
     <>
-    <JumpPage />
-    {/* <JumpPage /> */}
+      <JumpPage />
+      {/* <JumpPage /> */}
       {/* Andere features */}
     </>
   )

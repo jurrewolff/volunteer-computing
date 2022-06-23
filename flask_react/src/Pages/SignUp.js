@@ -3,12 +3,9 @@
 
 import React from 'react'; // niet per se nodig nu, toekomst wss wel
 import './Login.css';
-import { useState, useEffect, useRef } from 'react';
+import { useState} from 'react';
 
-// import { SignupRequest } from '../Actions/signupRequest';
-// import { Mf } from '../Actions/signupRequest';
 import { SignupRequest } from '../Actions/signupRequest';
-// import { SignupRequest } from '../Actions/signupRequest';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
@@ -18,8 +15,6 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-
-
 
 
 export default function Signup() {
@@ -36,9 +31,8 @@ export default function Signup() {
     const [inst, setInst] = useState();
     const [email, setEmail] = useState();
     const [pass, setPass] = useState();
-    const [isScientist, setIsScientist] = useState(0);
+    const [isResearcher, setIsResearcher] = useState(0);
     const [background, setBackground] = useState();
-    const [choice, setChoice] = useState(1);
 
     // UPGRADE in een statement
     // const fNameRef = useRef()
@@ -56,16 +50,16 @@ export default function Signup() {
     //     }
     // }, [clicked])
 
-    function clickIsScientist() {
-        setClicked(true)
+    function clickIsResearcher() {
+        setClicked(false)
 
-        setIsScientist(1)
+        setIsResearcher(1)
     }
 
     function clickIsVolunteer() {
-        setClicked(false)
+        setClicked(true)
 
-        setIsScientist(0)
+        setIsResearcher(0)
     }
 
     return (
@@ -155,7 +149,7 @@ export default function Signup() {
                                 < SignupRequest
                                     fName={fname} lName={lname} uName={uname}
                                     inst={inst} eMail={email} pass={pass}
-                                    isScientist={isScientist} background={background}
+                                    isResearcher={isResearcher} background={background}
                                 />
                                 <Link href="/login" variant="body2">
                                     {"Already have an account? Login"}
@@ -168,7 +162,7 @@ export default function Signup() {
                             maxWidth="sm">
                             <Grid>
                                 <Paper style={paperStyle}>
-                                    <Box><Typography variant="h4">Scientist </Typography></Box>
+                                    <Box><Typography variant="h4">Researcher </Typography></Box>
                                     <Typography>
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                         In congue massa eu metus mattis pellentesque. Proin ac porta eros.
@@ -178,11 +172,11 @@ export default function Signup() {
                                             display: 'flex',
                                             flexDirection: 'row-reverse',
                                         }}>
-                                        <Checkbox {...label} checked={clicked}
+                                        <Checkbox {...label} checked={!clicked}
                                             onChange={
                                                 (e) => {
-                                                    setIsScientist(e.target.value)
-                                                    clickIsScientist()
+                                                    setIsResearcher(e.target.value)
+                                                    clickIsResearcher()
                                                 }
                                             }
                                             inputProps={{ 'aria-label': 'controlled' }} />
@@ -204,10 +198,10 @@ export default function Signup() {
                                         display: 'flex',
                                         flexDirection: 'row-reverse',
                                     }}>
-                                        <Checkbox {...label} checked={!clicked}
+                                        <Checkbox {...label} checked={clicked}
                                             onChange={
                                                 (e) => {
-                                                    setIsScientist(e.target.value)
+                                                    setIsResearcher(e.target.value)
                                                     clickIsVolunteer()
                                                 }
                                             }

@@ -14,7 +14,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Projects() {
 
-
     const testTitles = ["Watermeloen", "Sesam", "Water",  "Watermeloen2", "Sesam2", "Water2", "Zeezout"]
     const testTexts = ["De watermeloen zorgt voor hydratatie, is rijk aan gezonde vitaminen en mineralen en is goed voor je immuunsysteem. Maar weet je ook hoeveel calorieën watermeloen bevat? Wat is een gele watermeloen precies en hoe kan je watermeloen het beste eten? Hier vind je alles wat je moet weten over deze vrucht.",
                 "De plant komt oorspronkelijk uit Afrika: het woord sesam komt uit het Arabisch saasim/simsim. Aldaar worden de sesamzaadjes vaak gebrand gegeten, net als pinda's. De wortels van de plant worden in de zomer geoogst en de zaden op het moment dat de omhulsels van de sesam bruin-zwart zijn verkleurd.",

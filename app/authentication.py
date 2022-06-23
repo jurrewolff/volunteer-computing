@@ -188,9 +188,15 @@ def login():
     session["name"] = username
     user_db = get_user(username)
     session["user_id"] = user_db["user_id"]
+    session["is_researcher"] = user_db["is_researcher"]
 
-    response.set_cookie("name", username, max_age=3600)
-    response.set_cookie("user_id", str(user_db["user_id"]), max_age=3600)
+    response.set_cookie("name", username, max_age=3600, samesite="strict")
+    response.set_cookie(
+        "user_id", str(user_db["user_id"]), max_age=3600, samesite="strict"
+    )
+    response.set_cookie(
+        "is_researcher", str(user_db["is_researcher"]), max_age=3600, samesite="strict"
+    )
 
     return response
 
@@ -208,7 +214,9 @@ def logout():
 
     session["name"] = ""
     session["user_id"] = ""
+    session["is_researcher"] = ""
     data.delete_cookie("name")
     data.delete_cookie("user_id")
+    data.delete_cookie("is_researcher")
 
     return data

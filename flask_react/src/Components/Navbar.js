@@ -14,7 +14,6 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import { Link } from "react-router-dom"
-import JumpPage from '../Actions/jumpPage';
 
 // TODO: Account page maken!
 const pages = ['Home'];
