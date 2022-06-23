@@ -8,6 +8,7 @@ from flask_login import login_required
 
 import json
 import app.models.project as project
+import app.models.results as results
 
 # TODO - Move existing routes to routes.py
 
@@ -39,7 +40,7 @@ def projects():
 
 @app.route("/results", methods=["POST", "GET", "PATCH", "DELETE"])
 @login_required
-def results():
+def get_results():
     response = {}
 
     if request.method == "POST":
@@ -61,3 +62,17 @@ def results():
         pass
 
     return jsonify(response)
+
+@app.route("/project", methods=["GET"])
+@login_required
+def get_project():
+    project_id = request.headers.get("project_id")
+    proj = project.get_project(project_id)
+    return json.dumps(proj)
+
+@app.route("/my_projects", methods=["GET"])
+@login_required
+def get_past_projects():
+    user_id = request.headers.get("user_id")
+    result = results.get_projects_of_user(user_id)
+    return json.dumps(result)
