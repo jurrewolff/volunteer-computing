@@ -18,5 +18,5 @@ def get_line_from_file(filename, line=0):
     Functie die een dict returned in de vorm van:
     {'arguments': [......], size: int, lines: range(....)}
     '''
-    args = ls.getline(filename, line)
+    args = ls.getline(filename, line+1)
     return {'arguments': args.strip(), 'size': 1, 'lines': line}
