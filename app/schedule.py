@@ -75,7 +75,7 @@ def job_done(project_id, job_id, correct_result):
     proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{project_id}")
 
     with open(os.path.join(proj_dir, "output"), "a+") as file:
-        file.write(f'{job_id} ' + correct_result)
+        file.write(f'{job_id} ' + correct_result[0])
 
 
 def get_number_of_results(job_id, project_id):

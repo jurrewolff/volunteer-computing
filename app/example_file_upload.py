@@ -12,7 +12,7 @@ from flask import (
 )
 import time
 from flask_login import login_required
-from .read_datafile import file_to_arguments
+from .read_datafile import file_to_arguments, get_line_from_file
 import app.models.project as pj
 from app.models.user import account_id_exists
 from app.util import build_response
@@ -231,7 +231,7 @@ def datatest(project_id, job_id):
 
     # arguments from scheduler
     job_id = give_work(project_id, user_id)
-    data = file_to_arguments(f"{app.config['PROJECTS_DIR']}/{project_id}/input", start_line=job_id, end_line=job_id+1)
+    data = get_line_from_file(f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=job_id)
     return render_template("template.html", data=data, name=project_id, job=job_id)
 
 

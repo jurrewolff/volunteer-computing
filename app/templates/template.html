@@ -31,8 +31,8 @@
         })()};
       for (let step = 0; step < data.size; step++) {
           // Runs 5 times, with values of step 0 through 4.
-          var to_execute = data.arguments[step].split(" ");
-          execute_C_file(to_execute, Module.print, data.lines[step]);
+          var to_execute = data.arguments.split(" ");
+          execute_C_file(to_execute, Module.print, data.lines);
       };
     </script>
 
