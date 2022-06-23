@@ -2,6 +2,7 @@ import mysql.connector as connector
 from itertools import count, filterfalse
 import app.models.user as user
 import app.models.project as project
+from main import app
 
 from app.models.database import *
 
@@ -31,9 +32,9 @@ def result_exists(val):
 # returned in a list of tuples. The tuples are of format (name, description, owner, contribution).
 def get_projects_of_user(user_id):
     projects = []
-    sql = f"SELECT * FROM Result WHERE user_id = '{user_id}'"
+    sql = f"SELECT DISTINCT Project.project_id, Project.name, Project.description FROM Result JOIN Project ON Result.project_id=Project.project_id WHERE Result.volunteer = '{user_id}'"
     db.cur.execute(sql)
-    res = db.cur.fetchone()
+    res = db.cur.fetchall()
     for x in res:
         project = {
             "project_id" : x[0],
@@ -41,4 +42,4 @@ def get_projects_of_user(user_id):
             "description" : x[2],
         }
         projects.append(project)
-    return res
+    return projects

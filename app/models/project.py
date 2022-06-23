@@ -48,8 +48,6 @@ def get_all_projects():
     db.cur.execute(sql)
     res = db.cur.fetchall()
     for x in res:
-        app.logger.warning("x = \n")
-        app.logger.warning(x)
         project = {
             "project_id" : x[0],
             "name" : x[1],
@@ -78,8 +76,6 @@ def get_project(project_id):
         sql = f"SELECT * FROM Project WHERE project_id = '{project_id}'"
         db.cur.execute(sql)
         res = db.cur.fetchone()
-        app.logger.warning("this is the results from get_projects in project.py")
-        app.logger.warning(res)
         return {
             "project_id" : res[0],
             "name" : res[1],

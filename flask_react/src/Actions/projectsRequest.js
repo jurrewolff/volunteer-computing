@@ -67,7 +67,7 @@ export const ProjectsRequest = () => {
 
         // If no projects exists. Nothing is displayed.
         if(data.length === 0) {
-            return <h1>no projects available</h1>
+            return <h1>There are no projects to contribute to.</h1>
         }
 
         const getRightIndex = ((index) => {
