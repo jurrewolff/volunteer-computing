@@ -72,7 +72,9 @@ def job_done(project_id, job_id, correct_result):
             update_trust_level(user_id, 'trust_level + 0.1')
 
     # write majority agreed result to fs
-    with open(os.path.join(app.config['RESULT_FOLDER'], f"{project_id}_{job_id}"), "a+") as file:
+    proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{project_id}")
+
+    with open(os.path.join(proj_dir, "output"), "a+") as file:
         file.write(f'{job_id} ' + correct_result)
 
 
