@@ -21,7 +21,6 @@ export const UploadRequest = (props) => {
 							  headers: {'name': props.name,
 										'description': props.description,
 										'block_size': props.block_size,
-										'owner': props.owner,
 										'random_validation': props.random_validation,
 										'max_runtime': props.max_runtime,
                                         'qorum': props.qorum

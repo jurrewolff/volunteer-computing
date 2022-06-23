@@ -18,7 +18,6 @@ export default function Upload() {
     const [block_size, setBlocksize] = useState();
     const [random_validation, setValidation] = useState();
     const [max_runtime, setRuntime] = useState();
-	const [owner, setOwner] = useState();
     const [qorum, setQorum] = useState();
 
     return (
@@ -67,16 +66,6 @@ export default function Upload() {
                                 <TextField
                                     margin="normal"
                                     required
-                                    id="owner"
-                                    label="Owner?"
-                                    variant="outlined"
-                                    onChange={(e) => setOwner(e.target.value)}
-                                />
-                            </Grid>
-							<Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
                                     id="random_validation"
                                     label="Random validation?"
                                     variant="outlined"
@@ -112,7 +101,7 @@ export default function Upload() {
 							<Grid alignitems="center">
                                 < UploadRequest
                                     name={name} description={description} block_size={block_size}
-                                    owner={owner} random_validation={random_validation}
+                                    random_validation={random_validation}
                                     max_runtime={max_runtime} qorum={qorum}
                                 />
                             </Grid>

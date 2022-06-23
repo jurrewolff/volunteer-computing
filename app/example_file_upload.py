@@ -68,12 +68,14 @@ def upload_file():
                 os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
                 file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
                 input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
+                create_jobs(proj_id, request.form.get("qorum"))
                 task = compile.delay(proj_id)
                 return redirect(url_for("taskstatus", task_id=task.id))
             return response
     return
 
 
+@login_required
 def add_project_db():
     if not request.headers:
         return build_response(
@@ -86,11 +88,11 @@ def add_project_db():
     new_project.update({"description": request.headers.get("description")})
     new_project.update({"block_size": request.headers.get("block_size")})
     new_project.update({"trust_level": 1})
-    new_project.update({"owner": request.headers.get("owner")})
     new_project.update({"random_validation": request.headers.get("random_validation")})
     new_project.update({"max_runtime": request.headers.get("max_runtime")})
     new_project.update({"qorum": request.headers.get("qorum")})
 
+    new_project.update({"owner": session["user_id"]})
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name"), 0
