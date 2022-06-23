@@ -186,12 +186,13 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
-@app.route("/runproject/<project_id>/<job_id>", methods=("GET", "POST"))
+@app.route("/runproject/<project_id>", methods=("GET", "POST"))
 @login_required
-def datatest(project_id, job_id):
+def datatest(project_id):
     # TODO switch to request instead of params in url
     user_id = session["user_id"]
     if request.method == "POST":
+        job_id = request.form.get("job_id")
         data = request.form.get("data")
         receive_work(project_id, job_id, user_id, data)
         # return redirect(f"/output/{proj_id}")

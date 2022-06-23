@@ -24,8 +24,9 @@ export const ProjectsRequest = () => {
     }, []);
 
     // Function for the responsive button.
-    function clickButton() {
-        var url = 'http://localhost:8001/runproject/';
+    const clickButton = (event, project_id) => {
+        console.log(event)
+        var url = `http://localhost:8001/runproject/${project_id}`;
         window.open(url, '_tab');
     }
 
@@ -41,7 +42,7 @@ export const ProjectsRequest = () => {
                     </Col>
                     <Col>
                         <Button
-                            onClick={clickButton}>
+                            onClick={event => clickButton(event, project.project_id)}>
                             Start computing
                         </Button>
                     </Col>
