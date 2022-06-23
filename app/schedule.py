@@ -127,7 +127,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
             return
         # quorum_size 1 and we trust the result so we are done
         if quorum_size == 1:
-            job_done(project_id, job_id, result)
+            job_done(project_id, job_id, result[0])
 
         else:
             # quorum not yet reached, we wait for someone to replicate the result.
