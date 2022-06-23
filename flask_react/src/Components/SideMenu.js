@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from "react-router-dom"
 
+import { makeStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -37,8 +38,56 @@ if (Cookies.get("is_researcher") === "1") {
   icons = icons.concat(researcherIcons)
 }
 
+const useStyles = makeStyles({
+  root: {
+    background: 'linear-gradient(45deg, #00315c 20%, #4987b9 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 255, 255, 0.06)',
+    // color: 'white',
+    // height: 70,
+    // padding: '0 30px',
+    position: "relative",
+    zIndex: 1,
+    width: drawerWidth,
+    height: '100%',
+    flexDirection: 'column',
+    style: 'yellow',
+
+    flexShrink: 10,
+    '& .MuiDrawer-paper': {
+      width: drawerWidth,
+      boxSizing: 'border-box',
+    }
+  },
+  child: {
+    background: '#00315c',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    // color: 'white',
+    // height: 70,
+    // padding: '0 30px',
+    position: "relative",
+    zIndex: 1,
+    width: drawerWidth,
+    height: '40%',
+    flexDirection: 'column',
+    style: 'yellow',
+
+    flexShrink: 10,
+    '& .MuiDrawer-paper': {
+      width: drawerWidth,
+      boxSizing: 'border-box',
+
+  }
+}
+});
+
 
 export default function PermanentDrawerLeft() {
+  const classes = useStyles();
+
   const makeLink = (page, index) => {
 
     var path = paths[index];
@@ -60,7 +109,7 @@ export default function PermanentDrawerLeft() {
   return (
     // <Box sx={{ display: 'flex' }}>
     <>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       {/* <AppBar
         position="fixed"
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
@@ -71,27 +120,28 @@ export default function PermanentDrawerLeft() {
           </Typography>
         </Toolbar>
       </AppBar> */}
-      <Drawer
-        sx={{
-          position: "relative",
-          zIndex: 1,
-          width: drawerWidth,
-          height: '100%',
-          flexDirection: 'column',
-          style: 'blue',
+      <Drawer position="sticky"
+        // sx={{
+        //   position: "relative",
+        //   zIndex: 1,
+        //   width: drawerWidth,
+        //   height: '100%',
+        //   flexDirection: 'column',
+        //   style: 'blue',
 
-          flexShrink: 10,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
+        //   flexShrink: 10,
+        //   '& .MuiDrawer-paper': {
+        //     width: drawerWidth,
+        //     boxSizing: 'border-box',
+        //   },
+        // }}
         variant="permanent"
         anchor="left"
+        className={classes.root}
       >
         <Toolbar />
         <Divider />
-        <List>
+        <List className={classes.root}>
           {pages.map((page, index) => (
             <ListItem key={page}>
               {makeLink(page, index)}
@@ -100,7 +150,7 @@ export default function PermanentDrawerLeft() {
           ))}
         </List>
         <Divider />
-        <List>
+        <List className={classes.child}>
           <ListItem key={'User Info'} disablePadding>
             <Link to={"/userinfo"}>
               <ListItemButton>
