@@ -114,7 +114,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
     random_replication = single_result_query(
         f"SELECT random_validation FROM Project WHERE  project_id = '{project_id}'")
     quorum_size = single_result_query(
-        f"SELECT quorum_size FROM Jobs WHERE '{job_id}' AND project_id = '{project_id}'")
+        f"SELECT quorum_size FROM Jobs WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
 
     if random_replication == 0:
         trust = decide_if_work_is_trusted(job_id, project_id)
