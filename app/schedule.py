@@ -102,6 +102,7 @@ def majority_agrees(project_id, job_id):
     try:
         most_common, second_most_common = c.most_common(2)
     except ValueError:
+        most_common =  c.most_common(1)
         # No second_most_common, i.e. only one result
         return most_common[0]
     if most_common[1] > second_most_common[1]:
