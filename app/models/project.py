@@ -2,6 +2,7 @@ import mysql.connector as connector
 from itertools import count, filterfalse
 
 from app.models.database import *
+import app.models.user as user
 
 # Returns True if project exists, returns False otherwise.
 def project_exists(project_id):
@@ -69,5 +70,22 @@ def get_project(project_id):
             "random_validation" : res[5],
             "max_runtime" : res[6]
         }
+    else:
+        return False
+
+def get_projects_from_user(user_id):
+    if user.account_id_exists(user_id):
+        sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
+        db.cur.execute(sql)
+        projects = []
+        res = db.cur.fetchall()
+        for x in res:
+            project = {
+                "project_id" : x[0],
+                "name" : x[1],
+                "description" : x[2],
+            }
+            projects.append(project)
+        return projects
     else:
         return False

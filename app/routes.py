@@ -36,3 +36,28 @@ def projects():
         pass
 
     return jsonify(response)
+
+@app.route("/results", methods=["POST", "GET", "PATCH", "DELETE"])
+@login_required
+def results():
+    response = {}
+
+    if request.method == "POST":
+        # TODO - Create project in DB
+        response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
+        pass
+    elif request.method == "GET":
+        # Returns a list with a dictionary per project.
+        projects = project.get_projects_from_user(1)
+        return json.dumps(projects)
+
+    elif request.method == "PATCH":
+        # TODO - Update project in DB
+        response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
+        pass
+    elif request.method == "DELETE":
+        # TODO - Delete project from DB
+        response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
+        pass
+
+    return jsonify(response)
