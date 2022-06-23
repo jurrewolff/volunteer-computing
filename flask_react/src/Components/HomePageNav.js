@@ -73,7 +73,7 @@ export default function Nav(props) {
             })
     }
 
-    const toggleAbout = (event) => {
+    const toggleToElement = (element) => {
         scroll.scrollToTop()
     }
 
@@ -210,17 +210,15 @@ export default function Nav(props) {
                             MUI
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            {/* {navItems.map((item) => ( */}
-
-                            <Button
-                                key={'About'}
-                                onClick={toggleAbout}
-                                sx={{ color: '#fff' }}>
-                                {'About'}
-                            </Button>
-
-
-                            {/* ))} */}
+                            {navItems.map((item) => (
+                                <Button
+                                    id={item}
+                                    // key={'About'}
+                                    onClick={toggleToElement(item)}
+                                    sx={{ color: '#fff' }}>
+                                    {item}
+                                </Button>
+                            ))}
                         </Box>
                         <Box>
                             {auth ? AccountNotLoggedIn() : AccountLoggedIn()}
