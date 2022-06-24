@@ -27,7 +27,7 @@ def insert_project(dic):
             dic["owner"],
             dic["random_validation"],
             dic["max_runtime"],
-            dic["qorum"]
+            dic["quorum"]
         )
         db.cur.execute(sql, val)
         db.con.commit()

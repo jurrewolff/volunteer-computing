@@ -68,7 +68,7 @@ def upload_file():
                 os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
                 file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
                 input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
-                create_jobs(proj_id, request.form.get("qorum"))
+                create_jobs(proj_id)
                 task = compile.delay(proj_id)
                 return redirect(url_for("taskstatus", task_id=task.id))
             return response
@@ -86,13 +86,19 @@ def add_project_db():
     new_project = {"project_id": pj.get_new_project_id()}
     new_project.update({"name": request.headers.get("name")})
     new_project.update({"description": request.headers.get("description")})
-    new_project.update({"block_size": request.headers.get("block_size")})
+    new_project.update({"quorum": 1})
     new_project.update({"trust_level": 1})
-    new_project.update({"random_validation": request.headers.get("random_validation")})
-    new_project.update({"max_runtime": request.headers.get("max_runtime")})
-    new_project.update({"qorum": request.headers.get("qorum")})
+    new_project.update({"max_runtime": 0})
 
     new_project.update({"owner": session["user_id"]})
+
+    if "always_check" in request.headers and request.headers.get("always_check"):
+        new_project.update({"random_validation": 0})
+    else:
+        new_project.update({"random_validation": 1})
+
+    new_project.update({"block_size": request.headers.get("block_size") if type(request.headers.get("block_size")) == int else 1})
+
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name"), 0
@@ -100,16 +106,6 @@ def add_project_db():
         return build_response(
             HTTPStatus.BAD_REQUEST, "Please provide a project description"
         ), 0
-    if not new_project["block_size"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a block size"), 0
-    if not new_project["owner"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner"), 0
-    if not new_project["random_validation"]:
-        return build_response(
-            HTTPStatus.BAD_REQUEST, "Please provide a validation method"
-        ), 0
-    if not new_project["max_runtime"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a max runtime"), 0
 
     # Insert project into database.
 
@@ -150,7 +146,7 @@ celery = make_celery(app)
 
 
 # @celery.task(name="create_jobs")
-def create_jobs(project_id, quorum):
+def create_jobs(project_id, quorum=1):
     from app.models.jobs import insert_job
     with open(os.path.join(app.config['PROJECTS_DIR'], f'{project_id}/input'), encoding="utf-8") as f:
         for i,line in enumerate(f):

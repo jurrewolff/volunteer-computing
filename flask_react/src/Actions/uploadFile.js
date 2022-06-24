@@ -21,9 +21,7 @@ export const UploadRequest = (props) => {
 							  headers: {'name': props.name,
 										'description': props.description,
 										'block_size': props.block_size,
-										'random_validation': props.random_validation,
-										'max_runtime': props.max_runtime,
-                                        'qorum': props.qorum
+										'always_check': props.always_check,
 										},
 							  body: formData})
                 .then((response) => response.json())

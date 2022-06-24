@@ -5,7 +5,7 @@ from app.models.database import *
 import app.models.project as pj
 
 # Inserts a project into the 'project' table.
-# val should be of format: (job_id, project_id, qorum_size, done).
+# val should be of format: (job_id, project_id, qUorum_size, done).
 def insert_job(val, project):
     if pj.project_exists(project):
         sql = "INSERT INTO Jobs VALUES (%s, %s, %s, %s)"
