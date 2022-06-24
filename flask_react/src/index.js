@@ -6,6 +6,10 @@ import App from './App';
 // import Router voor page switching
 import { BrowserRouter } from "react-router-dom";
 
+// import react-bootstrap
+// import react-bootstrap;
+// import "../node_modules/bootstrap/dist/css/bootstrap.css";
+// import '../bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

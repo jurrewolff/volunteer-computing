@@ -2,20 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom"
 
 
-export default function Footer() {
+export default function Topbar() {
   return (
-    <footer>
+    <header>
     <div>
         <div>
             <div><span>Copyright © Groep G</span></div>
             <div>
                 <ul>
-                    <li><Link to="/dashboard"><i>Link 1</i></Link></li>
-                    <li><Link to="/home"><i></i>Link 2</Link></li>
+                    <li><Link to="/SignUp"><i>Sign Up</i></Link></li>
+                    <li><Link to="/Login"><i></i>Log in</Link></li>
                 </ul>
             </div>
         </div>
     </div>
-</footer>
+</header>
   );
 }

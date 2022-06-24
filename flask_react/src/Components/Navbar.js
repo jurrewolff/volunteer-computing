@@ -1,217 +1,160 @@
-import * as React from 'react';
-import styles from './Navbar.css';
-
-import { styled } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
-import { StyledEngineProvider } from '@mui/material/styles';
-import { LogoutRequest } from '../Actions/logoutRequest';
-
-
-
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-
-
+import React from "react"
 import { Link } from "react-router-dom"
-
-// TODO: Account page maken!
-const pages = ['Home'];
-const settings = ['Account', 'Logout'];
-
-
-// style={{ backgroundColor: 'yellow' }}
-
-const useStyles = makeStyles({
-  root: {
-    background: 'linear-gradient(45deg, #4987b9 30%, #dce775 90%)',
-    border: 0,
-    borderRadius: 0,
-    boxShadow: '0 3px 5px 2px rgba(255, 255, 255, 0.06)',
-    color: 'white',
-    height: 70,
-    padding: '0 30px',
-  },
-});
+import JumpPage from '../Actions/jumpPage'
+import styled from "styled-components";
 
 
 
-const ResponsiveAppBar = () => {
-  const classes = useStyles();
-
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
-  // TODO: Logout request fixen 
-  const handleLogout = () => {
-    LogoutRequest();
-  };
+// export default function Navbar() {
+//     return (
+//         <>
+//             <nav>
+//                 <Link to="/" >Home</Link>
+//                 <ul>
+//                     <li><Link to="/login">login</Link></li>
+//                     <li><Link to="/dashboard">Dashboard</Link></li>
+//                     <li><Link to="/signup">Sign up</Link></li>
+//                     <li><Link to="/projects">Projects</Link></li>
+//                     {/* <li><Link to="/upload">Upload</Link></li> */}
+//                     <li><Link to="/pastProjects">Past projects</Link></li>
+//                     <li><Link to="/upload">Upload</Link></li>
+//                 </ul>
+//             </nav>
+//             <JumpPage />
+//         </>
+//     )
+// }
 
 
-  const makeLink = (page, link) => {
-    return (
-      <>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        <Link to={link} style={{ textDecoration: 'none' }}>
-          <Button
-            // key={page}
-            // onClick={handleCloseNavMenu}
-            sx={{ my: 2, color: 'white', display: 'block' }}
-          >
-            {page}
-          </Button>
-        </Link>
-        </Box >
-      </>
-    )
+/* Make text/icons look good (can be deleted) */
+
+const NavIcon = styled.div`
+`;
+
+const StyledNavItem = styled.div`
+  height: 70px;
+  width: 75px; /* width must be same size as NavBar to center */
+  text-align: center; /* Aligns <a> inside of NavIcon div */
+  margin-bottom: 0;   /* Puts space between NavItems */
+  a {
+    font-size: 2.7em;
+    color: ${(props) => props.active ? "white" : "#9FFFCB"};
+    :hover {
+      opacity: 0.7;
+      text-decoration: none; /* Gets rid of underlining of icons */
+    }  
   }
+`;
+
+class NavItem extends React.Component {
+    handleClick = () => {
+        const { path, onItemClick } = this.props;
+        onItemClick(path);
+      }
 
 
-  return (
-    <AppBar position="sticky" className={classes.root}>
-      <Container maxWidth="xl" >
-        <Toolbar disableGutters >
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'white',
-              textDecoration: 'none',
-            }}
-          >
-            CompuTeam
-          </Typography>
+    render() {
+        const { active } = this.props;
+        return (
+        <StyledNavItem active={active}>
+            <Link to={this.props.path} className={this.props.css} onClick={this.handleClick}>
+                <NavIcon></NavIcon>
+            </Link>
+        </StyledNavItem>
+      );
+    }
+}
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page}
-                  onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
 
-          {makeLink("Home", "/")}
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-                <MenuItem key={'Account'} onClick={handleCloseUserMenu}>
-                  <Link to="/account">
-                  <Typography textAlign="center">{'Account'}</Typography>
-                  </Link>
-                </MenuItem>
-                <Box>
-                <MenuItem key={'Logout'} onClick={handleLogout}> 
-                  <Typography textAlign="center">{'Logout'}</Typography>
-                </MenuItem>
-                </Box>
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
-  );
-};
-export default ResponsiveAppBar;
+
+
+/* This defines the actual bar going down the screen */
+const StyledSideNav = styled.div`
+  position: fixed;     /* Fixed Sidebar (stay in place on scroll and position relative to viewport) */
+  height: 100%;
+  width: 125px;     /* Set the width of the sidebar */
+  z-index: 1;      /* Stay on top of everything */
+  top: 3.4em;      /* Stay at the top */
+  background-color: #222; /* Black */
+  overflow-x: hidden;     /* Disable horizontal scroll */
+  padding-top: 10px;
+`;
+
+class SideNav extends React.Component {
+    render() {
+        return (
+            <>
+            <nav>
+            <StyledSideNav>
+                <Link to="/" >Home</Link>
+                <ul>
+                    <li><Link to="/login">login</Link></li>
+                    <li><Link to="/logout">logout</Link></li>
+                    <li><Link to="/dashboard">Dashboard</Link></li>
+                    <li><Link to="/signup">Sign up</Link></li>
+                    <li><Link to="/projects">Projects</Link></li>
+                    {/* <li><Link to="/upload">Upload</Link></li> */}
+                    <li><Link to="/pastProjects">Past projects</Link></li>
+                    <li><Link to="/upload">Upload</Link></li>
+                </ul>
+                </StyledSideNav>
+            </nav>
+            <JumpPage />
+        </>
+        )
+    }
+
+}
+
+export default class Navbar extends React.Component {
+    render() {
+        return (
+            <SideNav></SideNav>
+        )
+    }
+}
+
+
+
+
+
+
+
+
+
+
+//// Oud van Tessa:
+
+// import React from "react";
+// import { Nav, NavLink, NavMenu } 
+//     from "./NavbarElements";
+  
+// const Navbar = () => {
+//   return (
+//     <>
+//       <Nav>
+//         <NavMenu>
+//         <NavLink to="/Dashboard" activeStyle>
+//             Dashboard
+//           </NavLink>
+//           <NavLink to="/Projects" activeStyle>
+//             Browse projects
+//           </NavLink>
+//           <NavLink to="/PastProjects" activeStyle>
+//             History
+//           </NavLink>
+//           <NavLink to="/Upload" activeStyle>
+//             New project
+//           </NavLink>
+//           <NavLink to="/Results" activeStyle>
+//             Results
+//           </NavLink>
+//         </NavMenu>
+//       </Nav>
+//     </>
+//   );
+// };
+  
+// export default Navbar;
+

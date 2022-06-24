@@ -49,7 +49,7 @@ export const ProjectsRequest = () => {
 
         <CardActions >
           <Button
-            variant="contained" color="success" onClick={clickButton()} style={{ margin: "10%" }}>
+            variant="contained" color="success" onClick={clickButton} style={{ margin: "10%" }}>
             Start computing
           </Button>
           <Link style={{ margin: "10%" }} to={"/moreInfo/" + project.project_id}>More info</Link>

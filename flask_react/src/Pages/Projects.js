@@ -1,25 +1,17 @@
-import Box from '@mui/material/Box';
-
-
-import { Container } from "react-bootstrap";
-import { ProjectsRequest } from '../Actions/projectsRequest'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { ListGroup, Container, Row, Col, Button, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
+import { ProjectsRequest } from '../Actions/projectsRequest'
+import { LoginRequest } from '../Actions/loginRequest'
 
 export default function Projects() {
+
     return (
-        <Box
-            component="main"
-            sx={{
-                pl: 30,
-                flexGrow: 1,
-                height: '100vh',
-                overflow: 'auto',
-            }}
-        >
-            <Container className="text-center" maxWidth="lg" style={{ marginLeft: "5%", marginRight: "5%" }}>
-                < ProjectsRequest />
-            </Container>
-        </Box>
+
+        <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
+            < ProjectsRequest />
+        </Container>
+
     );
 };
