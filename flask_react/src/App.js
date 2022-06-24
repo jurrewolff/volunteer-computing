@@ -15,22 +15,12 @@ import PermanentDrawerLeft from './Components/SideMenu'
 import JumpPage from "./Actions/jumpPage"
 
 
-const MyComponent = () => {
-  const theme = useTheme();
-  return <JumpPage bgcolor={theme.palette.background.default} width={100} height={100} />;
-};
+
 
 function App() {
 
   return (
-    <ThemeProvider theme={theme}>
-      <>
-        <ResponsiveAppBar />
-        <PermanentDrawerLeft />
-        <MyComponent />
-        {/* Andere features */}
-      </>
-    </ThemeProvider>
+    <JumpPage />
   )
 }
 

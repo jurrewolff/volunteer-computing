@@ -1,78 +1,62 @@
-/* Login page, waar nu alleen een textfield en een knop in staat */
+/* LOGIN PAGE
+ * Renders the login page. Utilizes the fetch api which is implemented in
+ * the loginRequest file. After the user input is valuated this function is
+ * called. The response is handled depending on the status.
+ */
 
-import React from 'react';
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+// Package and functionality imports
+import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { LoginRequest } from '../Actions/loginRequest';
 
-
-import { LoginRequest } from '../Actions/loginRequest'
-import { useNavigate } from "react-router-dom"
-
-
-import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+// Material ui imports https://mui.com
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import { GridWrapper } from '../Components/NavbarElements';
+import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-
-
-import DashBoard from "./Dashboard"
-
-// import Divider from '@mui/material/Divider';
-// import Box from '@mui/material/Box';
-
-
-
-// import ResponsiveAppBar from '../Components/Navbar2';
-// import PermanentDrawerLeft from '../Components/SideMenu';
+import TextField from '@mui/material/TextField';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 export default function Login() {
-    const paperStyle = { padding: 20, width: '75%' }
-
+    const navigate = useNavigate();
+    const paperStyle = { padding: 20, width: '75%' } // styling
 
     const [uname, setUname] = useState("");
-    const [msgUser, setMsgUser] = useState("");
-    const [userError, setUserError] = useState(false);
-
     const [pass, setPass] = useState("");
+    const [msgUser, setMsgUser] = useState("");
     const [msgPass, setMsgPass] = useState("");
+    const [userError, setUserError] = useState(false);
     const [passError, setPassError] = useState(false);
-
-    const [temp, setTemp] = useState(false)
-    const [errorMessage, setErrormessage] = useState([{}])
 
     const [check1, setCheck1] = useState(false)
     const [check2, setCheck2] = useState(false)
+    const [authenticated, setAuthenticated] = useState(false)
 
-    const navigate = useNavigate();
-
-    useEffect((pass, uname) => {
+    // Executes only if there are no errors
+    useEffect(() => {
         if (!userError && !passError && check1 && check2) {
-            console.log(userError, passError)
+            LoginRequest(uname, pass).then(response => {
+                switch (response.code) {
+                    case 200:
+                        setAuthenticated(true)
+                        break;
+                    case 400 || 401:
+                        setMsgPass(response.description)
+                        setPassError(true)
 
-            let db_response = LoginRequest({ uname, pass })
-
-            switch (db_response["code"]) {
-                case 200:
-                    setMsgPass(db_response["msg"])
-                    setPassError(true)
-
-                    setMsgUser("")
-                    setUserError(true)
-                    break;
-                default:
-                    setMsgPass("Something went wrong, not your fault")
-                    setPassError(true)
-                    break;
+                        setMsgUser("")
+                        setUserError(true)
+                        break;
+                    default:
+                        setMsgPass("Something went wrong, not your fault")
+                        setPassError(true)
+                        break;
+                }
             }
+            );
         }
-        // else {
-        //     return
-        // }
     }, [userError, passError, check1, check2]);
-
 
     const handleLogin = () => {
         if (uname === "") {
@@ -86,41 +70,13 @@ export default function Login() {
         if (pass === "") {
             setMsgPass("Password is required")
             setPassError(true)
-
         } else {
             setPassError(false)
             setCheck2(true)
         }
-
-        // if (!userError && !passError) {
-        //     console.log(userError, passError)
-
-        //     let db_response = LoginRequest({ uname, pass })
-
-        //     switch (db_response["code"]) {
-        //         case 200:
-        //             setMsgPass(db_response["msg"])
-        //             setPassError(true)
-
-        //             setMsgUser("")
-        //             setUserError(true)
-        //             break;
-        //         default:
-        //             setMsgPass("Something went wrong, not your fault")
-        //             setPassError(true)
-        //             break;
-        //     }
-        // }
-        // console.log(test)
-        // < LoginRequest uName={uname} pass={pass} />
-
-        // setTemp(true)
-        // }
     }
 
-    // console.log(temp)
-
-    const normalPass = (props) => {
+    const normalPass = () => {
         return (
             <TextField
                 required
@@ -153,8 +109,6 @@ export default function Login() {
         )
     }
 
-
-
     const normalName = () => {
         return (
             <TextField
@@ -169,7 +123,6 @@ export default function Login() {
             />
         )
     }
-
 
     const errorName = (msg) => {
         return (
@@ -206,14 +159,10 @@ export default function Login() {
                 </Typography>
                 <Grid item xs={6}>
                     <Grid>
-                        {
-                            userError ? errorName(msgUser) : normalName()
-                        }
+                        {userError ? errorName(msgUser) : normalName()}
                     </Grid>
                     <Grid >
-                        {
-                            passError ? errorPass(msgPass) : normalPass()
-                        }
+                        {passError ? errorPass(msgPass) : normalPass()}
                     </Grid>
                     <Grid
                         container
@@ -237,7 +186,7 @@ export default function Login() {
                     </Grid>
                 </Grid>
             </Paper>
-            {temp && navigate("/dashboard")}
+            {authenticated && navigate("/dashboard")}
         </Container >
     );
 }

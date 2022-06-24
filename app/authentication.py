@@ -165,6 +165,10 @@ def login():
     username = request.headers.get("username")
     password = request.headers.get("password")
 
+
+    app.logger.warning(f"user: {username}, pass: {password}")
+
+
     if not username:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
     if not password:
@@ -172,7 +176,7 @@ def login():
 
     user_obj = load_user(username)  # username not found erbij doen?
     if not user_obj:
-        return build_response(HTTPStatus.OK, "username or password is incorrect")
+        return build_response(HTTPStatus.UNAUTHORIZED, "username or password is incorrect")
 
     if authenticate_user(username, password):
         if not login_user(user_obj):

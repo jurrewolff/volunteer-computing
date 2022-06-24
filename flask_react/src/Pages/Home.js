@@ -1,39 +1,27 @@
-import React from 'react'; // niet per se nodig nu, toekomst wss wel
-import './Dashboard.css';
+/* HOMEPAGE
+ *
+ *
+ *
+ */
 
-// const Home = () => {
-//     return <h1>Home</h1>;
-// };
-import { useState } from 'react'
-// export default Home;
-import Nav from '../Components/HomePageNav'
-import Footer from '../Components/Footer'
+import Cookies from 'js-cookie';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Footer from '../Components/Footer';
+import Nav from '../Components/HomePageNav';
 
 
-
-import { Link } from 'react-router-dom'
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
-import Image from '../Images/grey.jpg';
 
 const styles = {
     paperContainer: {
         background: 'rgba(0, 0, 0, 0.2)',
-        // backgroundImage: `url(${Image})`,
         width: '100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -41,16 +29,12 @@ const styles = {
     }
 };
 
-
-// sx={{ textAlign: 'left' }}
-// noWrap>{message}<
 export default function Home() {
     const [clicked, setClicked] = useState(false);
+
+    //DELETE ??
     const linkVars = window.location.pathname.split("/").slice(2)
-
-
     const ids = []
-
 
     // Function for the responsive button.
     // Ik snap niet waarom deze hier moet staan

@@ -1,3 +1,34 @@
+// /*
+//  * Voor het registreren van een gebruiker. Werkt nu alleen met mockup database,
+//  * waarbij alleen username en ww vereist zijn.
+//  * code 200: is goed, alle andere zijn erros.
+//  */
+
+
+// export const SignupRequest = (userInfo) => {
+
+//     const requestOptions = {
+//         method: 'POST',
+//         headers: {
+//             'email': userInfo["eMail"],
+//             'password': userInfo["pass"],
+//             'username': userInfo["uName"],
+//             'lastname': userInfo["lName"],
+//             'firstname': userInfo["fName"],
+//             'institution': userInfo["inst"],
+//             'background': userInfo["background"],
+//             'is_researcher': userInfo["isResearcher"]
+//         }
+//     };
+
+//     return (fetch("/signup", requestOptions)
+//         .then((response) => response.json())
+//         .then((result) => {
+//             return result;
+//         })
+//     )
+// }
+
 /*
  * Voor het registreren van een gebruiker. Werkt nu alleen met mockup database,
  * waarbij alleen username en ww vereist zijn.
