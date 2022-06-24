@@ -28,14 +28,16 @@ export const ProjectsRequest = () => {
       })
   }, []);
 
-  // Function for the responsive button.
-  function clickButton() {
-    var url = 'http://localhost:8001/runproject/';
-    window.open(url, '_tab');
-  }
 
   // Returns a card with the given project
   const getCard = ((project) => {
+
+    // Function for the responsive button.
+    function clickButton() {
+        var url = 'http://localhost:8001/runproject/' + project.project_id;
+        window.open(url, '_tab');
+    }
+
     return (
       <Card style={{ width: "100%", height: "90%", marginTop: "5%", marginLeft: "100px" }} sx={{ minWidth: 275 }}>
         <CardContent>
