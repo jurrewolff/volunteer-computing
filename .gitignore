@@ -163,3 +163,4 @@ app/static
 
 #cache
 emcc_cache
+node_modules
