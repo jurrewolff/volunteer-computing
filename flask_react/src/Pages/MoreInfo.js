@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function MoreInfo() {
 
     const [project, setProject] = useState({});
     const linkVars = window.location.pathname.split("/").slice(2);
+    const navigate = useNavigate();
 
     // Retrieves and updates data.
     useEffect(() => {
@@ -22,6 +23,11 @@ export default function MoreInfo() {
                 setProject(data)
             })
     }, []);
+
+    // Return one page previous.
+    function goBack() {
+        navigate(-1)
+    }
 
 
     // Function for the responsive button.
@@ -43,11 +49,11 @@ export default function MoreInfo() {
 
             </Card>
 
-            <Link to="/Projects">
-                <Button variant="primary" size="lg" style={{ marginRight: "20px" }}>
-                    Back
-                </Button>
-            </Link>
+
+            <Button variant="primary" size="lg" style={{ marginRight: "20px" }} onClick={goBack}>
+                Back
+            </Button>
+
 
             {/* The text and color of the button and the link are dependent on the url of the page */}
             <Button
