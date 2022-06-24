@@ -4,6 +4,10 @@
  *
  */
 
+// TODO navigate naar homepage
+// TODO werkend maken
+// UPDATE schoonmaken
+
 import { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate } from "react-router-dom"
 

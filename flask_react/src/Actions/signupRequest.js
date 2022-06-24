@@ -5,6 +5,8 @@
 //  */
 
 
+// TODO werkend maken
+
 // export const SignupRequest = (userInfo) => {
 
 //     const requestOptions = {

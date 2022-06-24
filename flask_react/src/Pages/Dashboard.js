@@ -6,6 +6,8 @@ import PermanentDrawerLeft from '../Components/SideMenu';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
+
+// TODO FIXEN!!!
 // import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import useTheme from '@mui/material/styles/useTheme'
 import { ThemeProvider } from '@material-ui/core/styles'

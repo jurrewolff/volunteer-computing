@@ -17,6 +17,9 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 
+// TODO netter maken
+// UPDATE styling
+
 export default function Footer() {
     return (
         <Box

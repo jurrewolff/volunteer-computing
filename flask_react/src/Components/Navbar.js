@@ -1,9 +1,6 @@
 import * as React from 'react';
-import styles from './Navbar.css';
 
-import { styled } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { StyledEngineProvider } from '@mui/material/styles';
 import { LogoutRequest } from '../Actions/logoutRequest';
 
 
@@ -25,6 +22,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 import { Link } from "react-router-dom"
 
+// TODO cleanup
 // TODO: Account page maken!
 const pages = ['Home'];
 const settings = ['Account', 'Logout'];
@@ -68,7 +66,7 @@ const ResponsiveAppBar = () => {
     setAnchorElUser(null);
   };
 
-  // TODO: Logout request fixen 
+  // TODO: Logout request fixen
   const handleLogout = () => {
     LogoutRequest();
   };
@@ -78,15 +76,15 @@ const ResponsiveAppBar = () => {
     return (
       <>
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-        <Link to={link}>
-          <Button
-            // key={page}
-            // onClick={handleCloseNavMenu}
-            sx={{ my: 2, color: 'white', display: 'block' }}
-          >
-            {page}
-          </Button>
-        </Link>
+          <Link to={link}>
+            <Button
+              // key={page}
+              // onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              {page}
+            </Button>
+          </Link>
         </Box >
       </>
     )
@@ -173,7 +171,7 @@ const ResponsiveAppBar = () => {
             LOGO
           </Typography>
 
-          {makeLink("Home", "/")}
+          {/* {makeLink("Home", "/")} */}
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
@@ -197,16 +195,16 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-                <MenuItem key={'Account'} onClick={handleCloseUserMenu}>
-                  <Link to="/account">
+              <MenuItem key={'Account'} onClick={handleCloseUserMenu}>
+                <Link to="/account">
                   <Typography textAlign="center">{'Account'}</Typography>
-                  </Link>
-                </MenuItem>
-                <Box>
-                <MenuItem key={'Logout'} onClick={handleLogout}> 
+                </Link>
+              </MenuItem>
+              <Box>
+                <MenuItem key={'Logout'} onClick={handleLogout}>
                   <Typography textAlign="center">{'Logout'}</Typography>
                 </MenuItem>
-                </Box>
+              </Box>
             </Menu>
           </Box>
         </Toolbar>

@@ -22,6 +22,9 @@ import Cookies from 'js-cookie'
 
 const drawerWidth = 240;
 
+
+// TODO
+
 // Add researcher only pages here
 const researcherPages = [ 'New Project', 'Result']
 const researcherPaths = [ "/upload", '/results']
@@ -204,7 +207,7 @@ export default function PermanentDrawerLeft() {
 // }
 
 // const idxs = [
-//     {id: 0, path: "/", icon: <InboxIcon />}, 
+//     {id: 0, path: "/", icon: <InboxIcon />},
 //     {id: 1, path: "/login", icon: <MailIcon />}
 // ];
 
