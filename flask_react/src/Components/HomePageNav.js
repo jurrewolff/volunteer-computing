@@ -195,8 +195,8 @@ export default function Nav(props) {
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             {navItems.map((item) => (
                                 <Button
-                                    id={item}
-                                    // key={'About'}
+                                    // id={String(item)}
+                                    key={item}
                                     onClick={toggleToElement(item)}
                                     sx={{ color: '#fff' }}>
                                     {item}

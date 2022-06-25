@@ -10,8 +10,9 @@ import Container from '@mui/material/Container';
 const NoPage = () => {
   return (
     <Box>
-      <ResponsiveAppBar />
-      <PermanentDrawerLeft />
+      {/* Graag ook niet meer toevoegen */}
+      {/* <ResponsiveAppBar />
+      <PermanentDrawerLeft /> */}
       <Box
         border="dashed"
         component="main"
