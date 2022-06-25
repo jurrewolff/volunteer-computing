@@ -28,7 +28,7 @@ function JumpPage() {
                 <Route path="/upload/*" element={<Upload />} />
                 <Route path="/logout/*" element={<Logout />} />
                 <Route path="/signup/*" element={<SignUp />} />
-                <Route path="/dashBoard" element={<DashBoard />} />
+                <Route path="/dashBoard/*" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
                 <Route path="/pastProjects" element={<PastProjects />} />

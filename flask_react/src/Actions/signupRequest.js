@@ -31,10 +31,6 @@ export const SignupRequest = (email, pass, uname, lname, fname, inst,
         background = ""
     }
 
-    console.log("request!")
-    console.log(email, pass, uname, lname, fname, inst,
-        background, isScientist)
-
     const requestOptions = {
         method: 'POST',
         headers: {
