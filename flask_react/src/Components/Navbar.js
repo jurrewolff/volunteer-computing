@@ -42,7 +42,7 @@ const StyledNavItem = styled.div`
     :hover {
       opacity: 0.7;
       text-decoration: none; /* Gets rid of underlining of icons */
-    }  
+    }
   }
 `;
 
@@ -97,6 +97,7 @@ class SideNav extends React.Component {
                     {/* <li><Link to="/upload">Upload</Link></li> */}
                     <li><Link to="/pastProjects">Past projects</Link></li>
                     <li><Link to="/upload">Upload</Link></li>
+                    <li><Link to="/results">Results</Link></li>
                 </ul>
                 </StyledSideNav>
             </nav>
@@ -127,9 +128,9 @@ export default class Navbar extends React.Component {
 //// Oud van Tessa:
 
 // import React from "react";
-// import { Nav, NavLink, NavMenu } 
+// import { Nav, NavLink, NavMenu }
 //     from "./NavbarElements";
-  
+
 // const Navbar = () => {
 //   return (
 //     <>
@@ -155,6 +156,5 @@ export default class Navbar extends React.Component {
 //     </>
 //   );
 // };
-  
-// export default Navbar;
 
+// export default Navbar;
