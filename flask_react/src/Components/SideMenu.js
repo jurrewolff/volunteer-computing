@@ -26,8 +26,8 @@ const drawerWidth = 240;
 // TODO
 
 // Add researcher only pages here
-const researcherPages = [ 'New Project', 'Result']
-const researcherPaths = [ "/upload", '/results']
+const researcherPages = ['New Project', 'Result']
+const researcherPaths = ["/upload", '/results']
 const researcherIcons = [<FileUploadIcon />, <InboxIcon />];
 
 // Add generally available pages here
@@ -83,8 +83,8 @@ const useStyles = makeStyles({
       width: drawerWidth,
       boxSizing: 'border-box',
 
+    }
   }
-}
 });
 
 

@@ -17,7 +17,6 @@ import Logout from "../Pages/Logout"
 import Results from "../Pages/Results"
 import Account from "../Pages/Account"
 
-
 function JumpPage() {
     return (
         <div>

@@ -4,32 +4,58 @@
 //  * code 200: is goed, alle andere zijn erros.
 //  */
 
+import { useState, useEffect } from 'react'
+import Button from '@mui/material/Button';
+import { Routes, Route, useNavigate } from "react-router-dom"
+import DashBoard from "../Pages/Dashboard"
+
 
 // TODO werkend maken
 
-// export const SignupRequest = (userInfo) => {
+export const SignupRequest = (email, pass, uname, lname, fname, inst,
+    backgr, isScientist) => {
 
-//     const requestOptions = {
-//         method: 'POST',
-//         headers: {
-//             'email': userInfo["eMail"],
-//             'password': userInfo["pass"],
-//             'username': userInfo["uName"],
-//             'lastname': userInfo["lName"],
-//             'firstname': userInfo["fName"],
-//             'institution': userInfo["inst"],
-//             'background': userInfo["background"],
-//             'is_researcher': userInfo["isResearcher"]
-//         }
-//     };
+    var is_Scientist = 0
+    var l_name = lname
+    var f_name = fname
+    var institution = inst
+    var background = backgr
 
-//     return (fetch("/signup", requestOptions)
-//         .then((response) => response.json())
-//         .then((result) => {
-//             return result;
-//         })
-//     )
-// }
+    if (isScientist) {
+        is_Scientist = 1
+    }
+    else {
+        l_name = ""
+        f_name = ""
+        institution = ""
+        background = ""
+    }
+
+    console.log("request!")
+    console.log(email, pass, uname, lname, fname, inst,
+        background, isScientist)
+
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'email': email,
+            'password': pass,
+            'username': uname,
+            'lastname': l_name,
+            'firstname': f_name,
+            'institution': institution,
+            'background': background,
+            'is_researcher': is_Scientist
+        }
+    };
+
+    return (fetch("/signup", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+            return result;
+        })
+    )
+}
 
 /*
  * Voor het registreren van een gebruiker. Werkt nu alleen met mockup database,
@@ -37,65 +63,62 @@
  * code 200: is goed, alle andere zijn erros.
  */
 
-import { useState, useEffect } from 'react'
-import Button from '@mui/material/Button';
-import { Routes, Route, useNavigate } from "react-router-dom"
-import DashBoard from "../Pages/Dashboard"
 
 
 
-// In props zitten de meegegeven variabelen van SignUp.js,
-// wordt verzameld in <SignupRequest .... />
-export const SignupRequest = (props) => {
 
-    // In data wordt de responde verzameld
-    const [data, setData] = useState([{}])
-    const [clicked, setClicked] = useState(false)
+// // In props zitten de meegegeven variabelen van SignUp.js,
+// // wordt verzameld in <SignupRequest .... />
+// export const SignupRequest = (props) => {
 
-    const navigate = useNavigate();
+//     // In data wordt de responde verzameld
+//     const [data, setData] = useState([{}])
+//     const [clicked, setClicked] = useState(false)
 
-    useEffect(() => {
-        if (clicked) {
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'username': props.uName,
-                    'password': props.pass,
-                    'email': props.eMail,
-                    'firstname': props.fName,
-                    'lastname': props.lName,
-                    'institution': props.inst,
-                    'is_researcher': props.isResearcher,
-                    'background': props.background,
-                }
-            };
-            fetch("/signup", requestOptions)
-                .then((result) => {
-                    setData(result)
-                });
+//     const navigate = useNavigate();
 
-            navigate('/dashboard');
-            setClicked(false)
-        }
+//     useEffect(() => {
+//         if (clicked) {
+//             const requestOptions = {
+//                 method: 'POST',
+//                 headers: {
+//                     'username': props.uName,
+//                     'password': props.pass,
+//                     'email': props.eMail,
+//                     'firstname': props.fName,
+//                     'lastname': props.lName,
+//                     'institution': props.inst,
+//                     'is_researcher': props.isResearcher,
+//                     'background': props.background,
+//                 }
+//             };
+//             fetch("/signup", requestOptions)
+//                 .then((result) => {
+//                     setData(result)
+//                 });
 
-        // const username = result.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clicked, props.fName, props.pass]);
+//             navigate('/dashboard');
+//             setClicked(false)
+//         }
 
-    return (
-        <div>
-            <Button
-                variant="contained"
-                onClick={() => setClicked(true)}
-                sx={{ mt: 3, ml: 1 }}>
-                Sign up
-            </Button>
-            <Routes>
-                <Route key="/login" element={<DashBoard />} />
-            </Routes>
-        </div>
-    );
-}
+//         // const username = result.
+//         // eslint-disable-next-line react-hooks/exhaustive-deps
+//     }, [clicked, props.fName, props.pass]);
+
+//     return (
+//         <div>
+//             <Button
+//                 variant="contained"
+//                 onClick={() => setClicked(true)}
+//                 sx={{ mt: 3, ml: 1 }}>
+//                 Sign up
+//             </Button>
+//             {/* <Routes>
+//                 <Route key="/login" element={<DashBoard />} />
+//             </Routes> */}
+//         </div>
+//     );
+// }
 
 // checken of alles is ingevuld
 // {activeStep === steps.length - 1 ? 'Place order' : 'Next'}

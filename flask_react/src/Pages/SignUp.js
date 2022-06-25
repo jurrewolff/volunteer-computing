@@ -1,286 +1,12 @@
-// // SVP nog niet alle gecommende code weghalen, miss nog nodig in toekomst!!!!!
-
-
-// import React from 'react'; // niet per se nodig nu, toekomst wss wel
-// import './Login.css';
-// import { useState, useEffect } from 'react';
-// import { useNavigate } from "react-router-dom";
-// import { LoginRequest } from '../Actions/loginRequest';
-
-// import { SignupRequest } from '../Actions/signupRequest';
-// import TextField from '@mui/material/TextField';
-// import Paper from '@mui/material/Paper';
-// import Checkbox from '@mui/material/Checkbox';
-// import Divider from '@mui/material/Divider';
-// import Typography from '@mui/material/Typography';
-// import Container from '@mui/material/Container';
-// import Grid from '@mui/material/Grid';
-// import Link from '@mui/material/Link';
-// import Box from '@mui/material/Box';
-// import Button from '@mui/material/Button';
-
-
-// export default function Signup() {
-//     const paperStyle = { padding: 20, margin: "20px auto" }
-//     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
-//     const navigate = useNavigate();
-
-//     const [msgUser, setMsgUser] = useState("");
-//     const [msgPass, setMsgPass] = useState("");
-//     const [userError, setUserError] = useState(false);
-//     const [passError, setPassError] = useState(false);
-
-//     const [check1, setCheck1] = useState(false)
-//     const [check2, setCheck2] = useState(false)
-//     const [authenticated, setAuthenticated] = useState(false)
-
-//     // const [option1, setOption1] = React.useState(true);
-//     // const [option2, setOption2] = React.useState(false);
-//     const [clicked, setClicked] = useState(true)
-
-//     const [inst, setInst] = useState();
-//     const [pass, setPass] = useState();
-//     const [fname, setFname] = useState();
-//     const [lname, setLname] = useState();
-//     const [uname, setUname] = useState();
-//     const [email, setEmail] = useState();
-//     const [background, setBackground] = useState();
-//     const [isResearcher, setIsResearcher] = useState(true);
-
-
-//     useEffect(() => {
-//         if (!userError && !passError && check1 && check2) {
-//             SignupRequest(uname, pass).then(response => {
-//                 switch (response.code) {
-//                     case 200:
-//                         setAuthenticated(true)
-//                         break;
-//                     case 400 || 401:
-//                         setMsgPass(response.description)
-//                         setPassError(true)
-
-//                         setMsgUser("")
-//                         setUserError(true)
-//                         break;
-//                     default:
-//                         setMsgPass("Something went wrong, not your fault")
-//                         setPassError(true)
-//                         break;
-//                 }
-//             }
-//             );
-//         }
-//     }, [userError, passError, check1, check2]);
-
-//     const handleSignup = () => {
-//         if (uname === "") {
-//             setMsgUser("Need to fill this in")
-//             setUserError(true)
-//         } else {
-//             setUserError(false)
-//             setCheck1(true)
-//         }
-
-//         if (pass === "") {
-//             setMsgPass("Password is required")
-//             setPassError(true)
-//         } else {
-//             setPassError(false)
-//             setCheck2(true)
-//         }
-//     }
-
-
-//     function clickIsResearcher() {
-//         setClicked(false)
-//         setIsResearcher(true)
-//     }
-
-//     function clickIsVolunteer() {
-//         setClicked(true)
-//         setIsResearcher(false)
-//     }
-
-//     return (
-//         <>
-//             <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-//                 <Paper elevation={10} style={paperStyle}
-//                     sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-//                     <Typography component="h1" variant="h4" gutterBottom
-//                         sx={{ textAlign: 'center' }}>
-//                         Sign up
-//                     </Typography>
-//                     <Divider variant="middle" />
-//                     <Grid container spacing={3}>
-//                         <Grid item xs={6}>
-//                             {isResearcher &&
-//                                 <Grid >
-//                                     <TextField
-//                                         margin="normal"
-//                                         required
-//                                         id="fname"
-//                                         label="First name"
-//                                         variant="outlined"
-//                                         onChange={(e) => setFname(e.target.value)}
-//                                     />
-//                                 </Grid>
-//                             }
-//                             <Grid>
-//                                 {isResearcher &&
-//                                     <TextField
-//                                         margin="normal"
-//                                         required
-//                                         id="lname"
-//                                         label="Last name"
-//                                         variant="outlined"
-//                                         onChange={(e) => setLname(e.target.value)}
-//                                     />
-//                                 }
-//                             </Grid>
-//                             <Grid>
-
-//                                 <TextField
-//                                     margin="normal"
-//                                     required
-//                                     id="uname"
-//                                     label="Username"
-//                                     variant="outlined"
-//                                     onChange={(e) => setUname(e.target.value)}
-//                                 />
-//                             </Grid>
-//                             {isResearcher &&
-//                                 <Grid>
-//                                     <TextField
-//                                         margin="normal"
-//                                         id="institution"
-//                                         label="Institution"
-//                                         variant="outlined"
-//                                         onChange={(e) => setInst(e.target.value)}
-//                                     />
-//                                 </Grid>
-//                             }
-//                             {isResearcher &&
-
-//                                 <Grid>
-//                                     <TextField
-//                                         margin="normal"
-//                                         id="background"
-//                                         label="Background"
-//                                         variant="outlined"
-//                                         onChange={(e) => setBackground(e.target.value)}
-//                                     />
-//                                 </Grid>
-//                             }
-//                             <Grid >
-//                                 <TextField
-//                                     margin="normal"
-//                                     required
-//                                     id="email"
-//                                     label="E-mail"
-//                                     variant="outlined"
-//                                     onChange={(e) => setEmail(e.target.value)}
-//                                 />
-//                             </Grid>
-//                             <Grid >
-//                                 <TextField
-//                                     margin="normal"
-//                                     required
-//                                     id="password"
-//                                     label="Password"
-//                                     type="password"
-//                                     autoComplete="current-password"
-//                                     onChange={(e) => setPass(e.target.value)}
-//                                 />
-//                             </Grid>
-//                             <Grid alignitems="center">
-//                                 <Button
-//                                     variant="contained"
-//                                     onClick={() => handleSignup()}
-//                                     sx={{ mt: 3, ml: 1 }}>
-//                                     Sign up
-//                                 </Button>
-//                                 <Link href="/login" variant="body2">
-//                                     {"Already have an account? Login"}
-//                                 </Link>
-//                             </Grid>
-
-//                         </Grid>
-//                         <Grid container direction={'column'} item xs={6}
-//                             justifyContent="center"
-//                             maxWidth="sm">
-//                             <Grid>
-//                                 <Paper style={paperStyle}>
-//                                     <Box><Typography variant="h4">Researcher </Typography></Box>
-//                                     <Typography>
-//                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-//                                         In congue massa eu metus mattis pellentesque. Proin ac porta eros.
-//                                     </Typography>
-//                                     <Box
-//                                         sx={{
-//                                             display: 'flex',
-//                                             flexDirection: 'row-reverse',
-//                                         }}>
-//                                         <Checkbox {...label} checked={!clicked}
-//                                             onChange={
-//                                                 (e) => {
-//                                                     setIsResearcher(e.target.value)
-//                                                     clickIsResearcher()
-//                                                 }
-//                                             }
-//                                             inputProps={{ 'aria-label': 'controlled' }} />
-//                                     </Box>
-//                                 </Paper>
-//                             </Grid>
-
-//                             <Divider orientation="horizontal" />
-
-//                             <Grid >
-//                                 <Paper style={paperStyle}>
-//                                     <Box><Typography variant="h4">Volunteer </Typography></Box>
-//                                     <Typography>
-//                                         Lorem ipsum dolor sit amet, consectetur
-//                                         adipiscing elit. In congue massa eu metus mattis pellentesque.
-//                                         Proin ac porta eros.
-//                                     </Typography>
-//                                     <Box sx={{
-//                                         display: 'flex',
-//                                         flexDirection: 'row-reverse',
-//                                     }}>
-//                                         <Checkbox {...label} checked={clicked}
-//                                             onChange={
-//                                                 (e) => {
-//                                                     setIsResearcher(e.target.value)
-//                                                     clickIsVolunteer()
-//                                                 }
-//                                             }
-//                                             inputProps={{ 'aria-label': 'controlled' }} />
-//                                     </Box>
-//                                 </Paper>
-//                             </Grid>
-//                         </Grid>
-//                     </Grid>
-//                 </Paper>
-//                 {authenticated && navigate("/dashboard")}
-//             </Container>
-//         </>
-//     );
-// }
-
-// // container
-// // justifyContent="stretch"
-// // alignItems="space-between"
-// // divider={<Divider orientation="horizontal" flexItem />}
-// // spacing={1}
-
-// SVP nog niet alle gecommende code weghalen, miss nog nodig in toekomst!!!!!
-
-
-import React from 'react'; // niet per se nodig nu, toekomst wss wel
-import './Login.css';
-import { useState } from 'react';
-
+/*
+ *
+ *
+ */
+import Nav from '../Components/HomePageNav';
+import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import { SignupRequest } from '../Actions/signupRequest';
+
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
@@ -290,56 +16,114 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-
+import Button from '@mui/material/Button';
 
 export default function Signup() {
+    const navigate = useNavigate();
     const paperStyle = { padding: 20, margin: "20px auto" }
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-    // const [option1, setOption1] = React.useState(true);
-    // const [option2, setOption2] = React.useState(false);
+    const [pass, setPass] = useState("");
+    const [inst, setInst] = useState("");
+    const [fname, setFname] = useState("");
+    const [lname, setLname] = useState("");
+    const [uname, setUname] = useState("");
+    const [email, setEmail] = useState("");
+    const [background, setBackground] = useState("");
+
+    const [msgPass, setMsgPass] = useState("")
+
+    const [passError, setPassError] = useState(false);
+    const [fnameError, setFnameError] = useState(false);
+    const [lnameError, setLnameError] = useState(false);
+    const [unameError, setUnameError] = useState(false);
+    const [emailError, setEmailError] = useState(false);
+
+    const [check1, setCheck1] = useState(false)
+    const [check2, setCheck2] = useState(false)
+    const [check3, setCheck3] = useState(false)
+    const [check4, setCheck4] = useState(false)
+    const [check5, setCheck5] = useState(false)
+
     const [clicked, setClicked] = useState(true)
+    const [isScientist, setIsScientist] = useState(true);
+    const [authenticated, setAuthenticated] = useState(false)
 
-    const [fname, setFname] = useState();
-    const [lname, setLname] = useState();
-    const [uname, setUname] = useState();
-    const [inst, setInst] = useState();
-    const [email, setEmail] = useState();
-    const [pass, setPass] = useState();
-    const [isResearcher, setIsResearcher] = useState(0);
-    const [background, setBackground] = useState();
-
-    // UPGRADE in een statement
-    // const fNameRef = useRef()
-    // const lNameRef = useRef()
-    // const uNameRef = useRef()
-    // const institutionRef = useRef()
-    // const eMailRef = useRef()
-    // const passwordRef = useRef()
-    // const choiceRef = useRef()
-
-    // useEffect(() => {
-    //     if (clicked) {
-    //         // TODO check of shit is ingevuld of niet
-    //         setClicked(false)
-    //     }
-    // }, [clicked])
-
-    function clickIsResearcher() {
-        setClicked(false)
-
-        setIsResearcher(1)
+    function clickIsScientist() {
+        setClicked(true)
+        setIsScientist(true)
     }
 
     function clickIsVolunteer() {
-        setClicked(true)
-
-        setIsResearcher(0)
+        setClicked(false)
+        setIsScientist(false)
     }
+
+    const handleSignup = () => {
+        if (fname === "" && isScientist) {
+            setFnameError(true)
+        } else {
+            setFnameError(false)
+            setCheck1(true)
+        }
+
+        if (lname === "" && isScientist) {
+            setLnameError(true)
+        } else {
+            setLnameError(false)
+            setCheck2(true)
+        }
+
+        if (uname === "") {
+            setUnameError(true)
+        } else {
+            setUnameError(false)
+            setCheck3(true)
+        }
+
+        if (email === "") {
+            setEmailError(true)
+        } else {
+            setEmailError(false)
+            setCheck4(true)
+        }
+
+        if (pass === "") {
+            setPassError(true)
+            setMsgPass("Password is required")
+        } else {
+            setPassError(false)
+            setCheck5(true)
+        }
+    }
+
+    useEffect(() => {
+        if (!fnameError && !unameError && !emailError && !lnameError &&
+            !passError && check1 && check2 && check3 && check4 && check5) {
+            SignupRequest(email, pass, uname, lname, fname, inst,
+                background, isScientist).then(response => {
+                    switch (response.code) {
+                        case 201:
+                            setAuthenticated(true)
+                            break;
+                        case 400:
+                        case 401:
+                            setMsgPass(response.description)
+                            setPassError(true)
+                            break;
+                        default:
+                            setMsgPass("Something went wrong, not your fault")
+                            setPassError(true)
+                            break;
+                    }
+                }
+                );
+        }
+    }, [fnameError, unameError, emailError, passError, lnameError, check1,
+        check2]);
 
     return (
         <>
-            {/* <h1>SignUp</h1> */}
             <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                 <Paper elevation={10} style={paperStyle}
                     sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -351,93 +135,127 @@ export default function Signup() {
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="fname"
-                                    // ref={fNameRef}
-                                    label="First name"
-                                    variant="outlined"
-                                    onChange={(e) => setFname(e.target.value)}
-                                />
+                                {
+                                    <TextField
+                                        required={isScientist}
+                                        disabled={!isScientist}
+                                        margin="normal"
+                                        variant="outlined"
+                                        label={"First name"}
+                                        error={fnameError}
+                                        helperText={fnameError ? 'First name is required' : ' '}
+                                        onChange={(e) => setFname(e.target.value)}
+                                        sx={{ mb: -1.5 }}
+                                    />
+                                }
                             </Grid>
                             <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="lname"
-                                    label="Last name"
-                                    variant="outlined"
-                                    onChange={(e) => setLname(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="uname"
-                                    label="Username"
-                                    variant="outlined"
-                                    onChange={(e) => setUname(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    margin="normal"
-                                    id="institution"
-                                    label="Institution"
-                                    variant="outlined"
-                                    onChange={(e) => setInst(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    margin="normal"
-                                    id="background"
-                                    label="Background"
-                                    variant="outlined"
-                                    onChange={(e) => setBackground(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="email"
-                                    label="E-mail"
-                                    variant="outlined"
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="password"
-                                    label="Password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    onChange={(e) => setPass(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid alignitems="center">
-                                < SignupRequest
-                                    fName={fname} lName={lname} uName={uname}
-                                    inst={inst} eMail={email} pass={pass}
-                                    isResearcher={isResearcher} background={background}
-                                />
-                                <Link href="/login" variant="body2">
-                                    {"Already have an account? Login"}
-                                </Link>
+                                {
+                                    <TextField
+                                        required={isScientist}
+                                        disabled={!isScientist}
+                                        margin="normal"
+                                        variant="outlined"
+                                        label="Last name"
+                                        error={lnameError}
+                                        helperText={lnameError ? 'Last name is required' : ' '}
+                                        onChange={(e) => setLname(e.target.value)}
+                                        sx={{ mb: -1.5 }}
+                                    />
+                                }
                             </Grid>
 
+                            <Grid >
+                                {
+                                    <TextField
+                                        margin="normal"
+                                        disabled={!isScientist}
+                                        variant="outlined"
+                                        label="Institution"
+                                        onChange={(e) => setInst(e.target.value)}
+                                        sx={{ mb: 1 }}
+                                    />
+                                }
+                            </Grid>
+                            <Grid >
+                                {
+                                    <TextField
+                                        margin="normal"
+                                        disabled={!isScientist}
+                                        variant="outlined"
+                                        label="Background"
+                                        onChange={(e) => setBackground(e.target.value)}
+                                        sx={{ mb: 1 }}
+                                    />
+                                }
+                            </Grid>
+                            <Grid >
+                                <TextField
+                                    required
+                                    margin="normal"
+                                    variant="outlined"
+                                    label="Username"
+                                    error={unameError}
+                                    helperText={unameError ? 'Username is required' : ' '}
+                                    onChange={(e) => setUname(e.target.value)}
+                                    sx={{ mb: -1.5 }}
+                                />
+                            </Grid>
+                            <Grid >
+                                <TextField
+                                    required
+                                    margin="normal"
+                                    variant="outlined"
+                                    error={emailError}
+                                    helperText={emailError ? 'E-mail is required' : ' '}
+                                    label="E-mail"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    sx={{ mb: -1.5 }}
+                                />
+                            </Grid>
+                            <Grid >
+                                <TextField
+                                    required
+                                    type="password"
+                                    id="password"
+                                    margin="normal"
+                                    variant="outlined"
+                                    error={passError}
+                                    helperText={passError ? msgPass : ' '}
+                                    label="Password"
+                                    onChange={(e) => setPass(e.target.value)}
+                                    sx={{ mb: -1.5 }}
+                                />
+                            </Grid>
+                            <Grid>
+                                <Grid>
+                                    {/* TODO back knop */}
+                                    <Button
+                                        variant="contained"
+                                        // onClick={() => setClicked(true)}
+                                        sx={{ mt: 3, mb: 2, ml: 1, mr: 2 }}>
+                                        Back
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => handleSignup()}
+                                        sx={{ mt: 3, mb: 2, ml: 1 }}>
+                                        Sign up
+                                    </Button>
+                                </Grid>
+                                <Grid>
+                                    <Link href="/login" variant="body2" sx={{ ml: 1 }}>
+                                        {"Already have an account? Login"}
+                                    </Link>
+                                </Grid>
+                            </Grid>
                         </Grid>
                         <Grid container direction={'column'} item xs={6}
                             justifyContent="center"
                             maxWidth="sm">
                             <Grid>
                                 <Paper style={paperStyle}>
-                                    <Box><Typography variant="h4">Researcher </Typography></Box>
+                                    <Box><Typography variant="h4">Scientist </Typography></Box>
                                     <Typography>
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                         In congue massa eu metus mattis pellentesque. Proin ac porta eros.
@@ -447,11 +265,11 @@ export default function Signup() {
                                             display: 'flex',
                                             flexDirection: 'row-reverse',
                                         }}>
-                                        <Checkbox {...label} checked={!clicked}
+                                        <Checkbox {...label} checked={clicked}
                                             onChange={
                                                 (e) => {
-                                                    setIsResearcher(e.target.value)
-                                                    clickIsResearcher()
+                                                    setIsScientist(e.target.value)
+                                                    clickIsScientist()
                                                 }
                                             }
                                             inputProps={{ 'aria-label': 'controlled' }} />
@@ -473,10 +291,10 @@ export default function Signup() {
                                         display: 'flex',
                                         flexDirection: 'row-reverse',
                                     }}>
-                                        <Checkbox {...label} checked={clicked}
+                                        <Checkbox {...label} checked={!clicked}
                                             onChange={
                                                 (e) => {
-                                                    setIsResearcher(e.target.value)
+                                                    setIsScientist(e.target.value)
                                                     clickIsVolunteer()
                                                 }
                                             }
@@ -487,13 +305,8 @@ export default function Signup() {
                         </Grid>
                     </Grid>
                 </Paper>
+                {authenticated && navigate("/login")}
             </Container>
         </>
     );
 }
-
-// container
-// justifyContent="stretch"
-// alignItems="space-between"
-// divider={<Divider orientation="horizontal" flexItem />}
-// spacing={1}

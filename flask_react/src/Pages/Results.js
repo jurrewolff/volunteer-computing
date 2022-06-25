@@ -380,6 +380,9 @@ import { useState, useEffect } from 'react'
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+import PermanentDrawerLeft from '../Components/SideMenu';
+import ResponsiveAppBar from '../Components/Navbar'
+
 export default function Results() {
 
   const [data, setData] = useState([{}]);
@@ -428,8 +431,12 @@ export default function Results() {
 
 
   return (
-    <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
-      {readResults({ data })}
-    </Container>
+    <>
+      <ResponsiveAppBar />
+      <PermanentDrawerLeft />
+      <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
+        {readResults({ data })}
+      </Container>
+    </>
   );
 };

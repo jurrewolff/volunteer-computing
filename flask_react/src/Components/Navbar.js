@@ -23,6 +23,8 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from "react-router-dom"
 
 // TODO cleanup
+
+
 // TODO: Account page maken!
 const pages = ['Home'];
 const settings = ['Account', 'Logout'];
@@ -212,4 +214,6 @@ const ResponsiveAppBar = () => {
     </AppBar>
   );
 };
+
+
 export default ResponsiveAppBar;
