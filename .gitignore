@@ -160,7 +160,9 @@ cython_debug/
 .idea/
 node_modules/
 app/static
+./flask_react/package-lock.json
 
 #cache
 emcc_cache
 node_modules
+
