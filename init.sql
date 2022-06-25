@@ -27,6 +27,7 @@ owner int,
 random_validation BOOL,
 max_runtime int,
 quorum_size int,
+progress int DEFAULt 0,
 PRIMARY KEY (project_id),
 FOREIGN KEY (owner) REFERENCES User(user_id)
 );

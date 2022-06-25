@@ -4,7 +4,7 @@ npm run build
 cd ..
 
 if [ -d "./app/static" ]; then
-    rm -rf app/static
+    sudo rm -rf app/static
 fi
 
 mkdir app/static

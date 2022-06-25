@@ -24,6 +24,9 @@ import subprocess
 from app.authentication import *
 from app.schedule import give_work, receive_work
 ALLOWED_EXTENSIONS = {"c"}
+from app.models.database import *
+import numpy as np
+
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -70,7 +73,6 @@ def upload_file():
                 input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
                 create_jobs(proj_id)
                 task = compile.delay(proj_id)
-                return redirect(url_for("taskstatus", task_id=task.id))
             return response
     return
 
@@ -165,6 +167,25 @@ def compile(proj_id):
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
 
+def change_prog_percentage(project_id, per):
+    query = f"UPDATE Project SET progress = '{per}' WHERE project_id = '{project_id}';"
+    db.cur.execute(query)
+    db.con.commit()
+
+
+def calculate_per(project_id):
+    sql = f"SELECT done FROM Jobs WHERE {project_id}"
+    db.cur.execute(sql)
+    res = db.cur.fetchall()
+    done_or_not = [x[0] for x in res]
+    done = np.count_nonzero(np.array(done_or_not) == 1)
+    with open(os.path.join(app.config['PROJECTS_DIR'], f'{project_id}/test'), "a+") as file:
+        file.write(str(done_or_not))
+    with open(os.path.join(app.config['PROJECTS_DIR'], f'{project_id}/test1'), "a+") as file:
+        file.write(str(done))
+    perc = int(done/len(done_or_not) * 100)
+    change_prog_percentage(project_id, perc)
+
 
 @app.route("/taskstatus/<task_id>")
 def taskstatus(task_id):
@@ -182,14 +203,16 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
-@app.route("/runproject/<project_id>/<job_id>", methods=("GET", "POST"))
+@app.route("/runproject/<project_id>", methods=("GET", "POST"))
 @login_required
-def datatest(project_id, job_id):
+def datatest(project_id):
     # TODO switch to request instead of params in url
     user_id = session["user_id"]
     if request.method == "POST":
         data = request.form.get("data")
+        job_id = request.form.get("job_id")
         receive_work(project_id, job_id, user_id, data)
+        calculate_per(project_id)
         # return redirect(f"/output/{proj_id}")
 
     # arguments from scheduler

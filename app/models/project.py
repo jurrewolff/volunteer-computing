@@ -1,5 +1,6 @@
 import mysql.connector as connector
 from itertools import count, filterfalse
+from main import app
 
 from app.models.database import *
 import app.models.user as user
@@ -17,7 +18,7 @@ def project_exists(project_id):
 
 def insert_project(dic):
     if not project_exists(dic["project_id"]):
-        sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0)"
         val = (
             dic["project_id"],
             dic["name"],
@@ -45,6 +46,21 @@ def get_new_project_id():
 def get_all_projects():
     projects = []
     sql = f"SELECT * FROM Project"
+    db.cur.execute(sql)
+    res = db.cur.fetchall()
+    for x in res:
+        project = {
+            "project_id" : x[0],
+            "name" : x[1],
+            "description" : x[2],
+        }
+        projects.append(project)
+    return projects
+
+# Returns a list of all project. 1 tuple per project.
+def get_projects_researchers(user_id):
+    projects = []
+    sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
     db.cur.execute(sql)
     res = db.cur.fetchall()
     for x in res:
