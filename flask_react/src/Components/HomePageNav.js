@@ -14,13 +14,11 @@ import Menu from '@mui/material/Menu';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import ListItem from '@mui/material/ListItem';
 import MenuIcon from '@mui/icons-material/Menu';
-import FormGroup from '@mui/material/FormGroup';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -81,9 +79,6 @@ export default function Nav(props) {
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            {/* <Typography variant="h6" sx={{ my: 2 }}>
-                Logo
-            </Typography> */}
             <Divider />
             <List>
                 {navItems.map((item) => (
@@ -180,18 +175,6 @@ export default function Nav(props) {
                 sx={{ display: 'flex' }}
             >
                 <AppBar component="nav">
-                    <FormGroup>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={auth}
-                                    onChange={handleChange}
-                                    aria-label="login switch"
-                                />
-                            }
-                            label={auth ? 'Logout' : 'Login'}
-                        />
-                    </FormGroup>
                     <Toolbar>
                         <IconButton
                             color="inherit"

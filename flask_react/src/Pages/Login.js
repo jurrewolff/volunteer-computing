@@ -12,6 +12,7 @@ import { LoginRequest } from '../Actions/loginRequest';
 
 
 // Material ui imports https://mui.com
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
@@ -146,55 +147,69 @@ export default function Login() {
 
     return (
         <>
-            <Nav />
-            <Container
-                component="main"
-                maxWidth="sm"
-                sx={{ mb: 4 }}>
-                <Paper
-                    elevation={10}
-                    style={paperStyle}
-                    sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+            <Nav page="login" />
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minHeight="100vh"
+            >
+                <Container
+                    component="main"
+                    maxWidth="sm"
                 >
-                    <Typography
-                        component="h1"
-                        variant="h4"
-                        sx={{ textAlign: 'center' }}
-                        gutterBottom
+                    <Paper
+                        elevation={10}
+                        style={paperStyle}
+                        sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
                     >
-                        Login
-                    </Typography>
-                    <Grid item xs={6}>
-                        <Grid>
-                            {userError ? errorName(msgUser) : normalName()}
-                        </Grid>
-                        <Grid >
-                            {passError ? errorPass(msgPass) : normalPass()}
-                        </Grid>
-                        <Grid
-                            container
-                            direction="column"
-                            justifyContent="space-between"
-                            alignItems="flex-start">
-                            <Grid sx={{ pb: 1 }}>
-                                <Button
-                                    variant="contained"
-                                    onClick={() => handleLogin()}
-                                    sx={{ mt: 3, ml: 1 }}
-                                >
-                                    Log in
-                                </Button>
+                        <Typography
+                            component="h1"
+                            variant="h4"
+                            sx={{ textAlign: 'center' }}
+                            gutterBottom
+                        >
+                            Login
+                        </Typography>
+                        <Grid item xs={6}>
+                            <Grid>
+                                {userError ? errorName(msgUser) : normalName()}
                             </Grid>
-                            <Grid sx={{ pl: 1.5 }}>
-                                <Link href="/signup" variant="body2">
-                                    {"Don't have an account yet? Signup!"}
-                                </Link>
+                            <Grid >
+                                {passError ? errorPass(msgPass) : normalPass()}
+                            </Grid>
+                            <Grid
+                                container
+                                direction="column"
+                                justifyContent="space-between"
+                                alignItems="flex-start">
+                                <Grid sx={{ pb: 1 }}>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => navigate(-1)}
+                                        sx={{ mt: 3, ml: 1, mr: 2 }}
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => handleLogin()}
+                                        sx={{ mt: 3, ml: 1 }}
+                                    >
+                                        Log in
+                                    </Button>
+                                </Grid>
+                                <Grid sx={{ pl: 1.5 }}>
+                                    <Link href="/signup" variant="body2">
+                                        {"Don't have an account yet? Signup!"}
+                                    </Link>
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
-                </Paper>
-                {authenticated && navigate("/dashboard")}
-            </Container >
+                    </Paper>
+                    {authenticated && navigate("/dashboard")}
+                </Container >
+            </Box>
         </>
     );
 }

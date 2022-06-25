@@ -120,193 +120,201 @@ export default function Signup() {
                 );
         }
     }, [fnameError, unameError, emailError, passError, lnameError, check1,
-        check2]);
+        check2, check3, check4, check5]);
 
     return (
         <>
-            <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-                <Paper elevation={10} style={paperStyle}
-                    sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                    <Typography component="h1" variant="h4" gutterBottom
-                        sx={{ textAlign: 'center' }}>
-                        Sign up
-                    </Typography>
-                    <Divider variant="middle" />
-                    <Grid container spacing={3}>
-                        <Grid item xs={6}>
-                            <Grid >
-                                {
-                                    <TextField
-                                        required={isScientist}
-                                        disabled={!isScientist}
-                                        margin="normal"
-                                        variant="outlined"
-                                        label={"First name"}
-                                        error={fnameError}
-                                        helperText={fnameError ? 'First name is required' : ' '}
-                                        onChange={(e) => setFname(e.target.value)}
-                                        sx={{ mb: -1.5 }}
-                                    />
-                                }
-                            </Grid>
-                            <Grid >
-                                {
-                                    <TextField
-                                        required={isScientist}
-                                        disabled={!isScientist}
-                                        margin="normal"
-                                        variant="outlined"
-                                        label="Last name"
-                                        error={lnameError}
-                                        helperText={lnameError ? 'Last name is required' : ' '}
-                                        onChange={(e) => setLname(e.target.value)}
-                                        sx={{ mb: -1.5 }}
-                                    />
-                                }
-                            </Grid>
+            <Nav page="login" />
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minHeight="100vh"
+                sx={{ pt: 8 }}
+            >
+                <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+                    <Paper elevation={10} style={paperStyle}
+                        sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                        <Typography component="h1" variant="h4" gutterBottom
+                            sx={{ textAlign: 'center' }}>
+                            Sign up
+                        </Typography>
+                        <Divider variant="middle" />
+                        <Grid container spacing={3}>
+                            <Grid item xs={6}>
+                                <Grid >
+                                    {
+                                        <TextField
+                                            required={isScientist}
+                                            disabled={!isScientist}
+                                            margin="normal"
+                                            variant="outlined"
+                                            label={"First name"}
+                                            error={fnameError}
+                                            helperText={fnameError ? 'First name is required' : ' '}
+                                            onChange={(e) => setFname(e.target.value)}
+                                            sx={{ mb: -1.5 }}
+                                        />
+                                    }
+                                </Grid>
+                                <Grid >
+                                    {
+                                        <TextField
+                                            required={isScientist}
+                                            disabled={!isScientist}
+                                            margin="normal"
+                                            variant="outlined"
+                                            label="Last name"
+                                            error={lnameError}
+                                            helperText={lnameError ? 'Last name is required' : ' '}
+                                            onChange={(e) => setLname(e.target.value)}
+                                            sx={{ mb: -1.5 }}
+                                        />
+                                    }
+                                </Grid>
 
-                            <Grid >
-                                {
+                                <Grid >
+                                    {
+                                        <TextField
+                                            margin="normal"
+                                            disabled={!isScientist}
+                                            variant="outlined"
+                                            label="Institution"
+                                            onChange={(e) => setInst(e.target.value)}
+                                            sx={{ mb: 1 }}
+                                        />
+                                    }
+                                </Grid>
+                                <Grid >
+                                    {
+                                        <TextField
+                                            margin="normal"
+                                            disabled={!isScientist}
+                                            variant="outlined"
+                                            label="Background"
+                                            onChange={(e) => setBackground(e.target.value)}
+                                            sx={{ mb: 1 }}
+                                        />
+                                    }
+                                </Grid>
+                                <Grid >
                                     <TextField
+                                        required
                                         margin="normal"
-                                        disabled={!isScientist}
                                         variant="outlined"
-                                        label="Institution"
-                                        onChange={(e) => setInst(e.target.value)}
-                                        sx={{ mb: 1 }}
+                                        label="Username"
+                                        error={unameError}
+                                        helperText={unameError ? 'Username is required' : ' '}
+                                        onChange={(e) => setUname(e.target.value)}
+                                        sx={{ mb: -1.5 }}
                                     />
-                                }
-                            </Grid>
-                            <Grid >
-                                {
+                                </Grid>
+                                <Grid >
                                     <TextField
+                                        required
                                         margin="normal"
-                                        disabled={!isScientist}
                                         variant="outlined"
-                                        label="Background"
-                                        onChange={(e) => setBackground(e.target.value)}
-                                        sx={{ mb: 1 }}
+                                        error={emailError}
+                                        helperText={emailError ? 'E-mail is required' : ' '}
+                                        label="E-mail"
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        sx={{ mb: -1.5 }}
                                     />
-                                }
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    required
-                                    margin="normal"
-                                    variant="outlined"
-                                    label="Username"
-                                    error={unameError}
-                                    helperText={unameError ? 'Username is required' : ' '}
-                                    onChange={(e) => setUname(e.target.value)}
-                                    sx={{ mb: -1.5 }}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    required
-                                    margin="normal"
-                                    variant="outlined"
-                                    error={emailError}
-                                    helperText={emailError ? 'E-mail is required' : ' '}
-                                    label="E-mail"
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    sx={{ mb: -1.5 }}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    required
-                                    type="password"
-                                    id="password"
-                                    margin="normal"
-                                    variant="outlined"
-                                    error={passError}
-                                    helperText={passError ? msgPass : ' '}
-                                    label="Password"
-                                    onChange={(e) => setPass(e.target.value)}
-                                    sx={{ mb: -1.5 }}
-                                />
-                            </Grid>
-                            <Grid>
-                                <Grid>
-                                    {/* TODO back knop */}
-                                    <Button
-                                        variant="contained"
-                                        // onClick={() => setClicked(true)}
-                                        sx={{ mt: 3, mb: 2, ml: 1, mr: 2 }}>
-                                        Back
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => handleSignup()}
-                                        sx={{ mt: 3, mb: 2, ml: 1 }}>
-                                        Sign up
-                                    </Button>
+                                </Grid>
+                                <Grid >
+                                    <TextField
+                                        required
+                                        type="password"
+                                        id="password"
+                                        margin="normal"
+                                        variant="outlined"
+                                        error={passError}
+                                        helperText={passError ? msgPass : ' '}
+                                        label="Password"
+                                        onChange={(e) => setPass(e.target.value)}
+                                        sx={{ mb: -1.5 }}
+                                    />
                                 </Grid>
                                 <Grid>
-                                    <Link href="/login" variant="body2" sx={{ ml: 1 }}>
-                                        {"Already have an account? Login"}
-                                    </Link>
+                                    <Grid>
+                                        <Button
+                                            variant="contained"
+                                            onClick={() => navigate(-1)}
+                                            sx={{ mt: 3, mb: 2, ml: 1, mr: 2 }}>
+                                            Back
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            onClick={() => handleSignup()}
+                                            sx={{ mt: 3, mb: 2, ml: 1 }}>
+                                            Sign up
+                                        </Button>
+                                    </Grid>
+                                    <Grid>
+                                        <Link href="/login" variant="body2" sx={{ ml: 1 }}>
+                                            {"Already have an account? Login"}
+                                        </Link>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid container direction={'column'} item xs={6}
-                            justifyContent="center"
-                            maxWidth="sm">
-                            <Grid>
-                                <Paper style={paperStyle}>
-                                    <Box><Typography variant="h4">Scientist </Typography></Box>
-                                    <Typography>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                        In congue massa eu metus mattis pellentesque. Proin ac porta eros.
-                                    </Typography>
-                                    <Box
-                                        sx={{
+                            <Grid container direction={'column'} item xs={6}
+                                justifyContent="center"
+                                maxWidth="sm">
+                                <Grid>
+                                    <Paper style={paperStyle}>
+                                        <Box><Typography variant="h4">Scientist </Typography></Box>
+                                        <Typography>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            In congue massa eu metus mattis pellentesque. Proin ac porta eros.
+                                        </Typography>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'row-reverse',
+                                            }}>
+                                            <Checkbox {...label} checked={clicked}
+                                                onChange={
+                                                    (e) => {
+                                                        setIsScientist(e.target.value)
+                                                        clickIsScientist()
+                                                    }
+                                                }
+                                                inputProps={{ 'aria-label': 'controlled' }} />
+                                        </Box>
+                                    </Paper>
+                                </Grid>
+
+                                <Divider orientation="horizontal" />
+
+                                <Grid >
+                                    <Paper style={paperStyle}>
+                                        <Box><Typography variant="h4">Volunteer </Typography></Box>
+                                        <Typography>
+                                            Lorem ipsum dolor sit amet, consectetur
+                                            adipiscing elit. In congue massa eu metus mattis pellentesque.
+                                            Proin ac porta eros.
+                                        </Typography>
+                                        <Box sx={{
                                             display: 'flex',
                                             flexDirection: 'row-reverse',
                                         }}>
-                                        <Checkbox {...label} checked={clicked}
-                                            onChange={
-                                                (e) => {
-                                                    setIsScientist(e.target.value)
-                                                    clickIsScientist()
+                                            <Checkbox {...label} checked={!clicked}
+                                                onChange={
+                                                    (e) => {
+                                                        setIsScientist(e.target.value)
+                                                        clickIsVolunteer()
+                                                    }
                                                 }
-                                            }
-                                            inputProps={{ 'aria-label': 'controlled' }} />
-                                    </Box>
-                                </Paper>
-                            </Grid>
-
-                            <Divider orientation="horizontal" />
-
-                            <Grid >
-                                <Paper style={paperStyle}>
-                                    <Box><Typography variant="h4">Volunteer </Typography></Box>
-                                    <Typography>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit. In congue massa eu metus mattis pellentesque.
-                                        Proin ac porta eros.
-                                    </Typography>
-                                    <Box sx={{
-                                        display: 'flex',
-                                        flexDirection: 'row-reverse',
-                                    }}>
-                                        <Checkbox {...label} checked={!clicked}
-                                            onChange={
-                                                (e) => {
-                                                    setIsScientist(e.target.value)
-                                                    clickIsVolunteer()
-                                                }
-                                            }
-                                            inputProps={{ 'aria-label': 'controlled' }} />
-                                    </Box>
-                                </Paper>
+                                                inputProps={{ 'aria-label': 'controlled' }} />
+                                        </Box>
+                                    </Paper>
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
-                </Paper>
-                {authenticated && navigate("/login")}
-            </Container>
+                    </Paper>
+                    {authenticated && navigate("/login")}
+                </Container>
+            </Box>
         </>
     );
 }
