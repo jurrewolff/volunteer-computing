@@ -5,45 +5,15 @@ from collections import Counter
 
 from app import app
 from app.models.database import db
-
-
-def increment_quorum_size(project_id, job_id):
-    query = f"""
-    UPDATE Jobs
-    SET quorum_size = quorum_size + 1
-    WHERE job_id = '{job_id}' AND project_id = '{project_id}'
-    """
-    db.cur.execute(query)
-    db.con.commit()
-    # check if succes
-
-def save_result(project_id, job_id, volunteer_id, result):
-    # save to db
-    query = f"INSERT INTO Result (job_id, project_id, volunteer, result) VALUES ('{job_id}','{project_id}','{volunteer_id}', '{result}')"
-    db.cur.execute(query)
-    db.con.commit()
-
-
-def get_volunteer(job_id, project_id):
-    query = f"SELECT volunteer FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
-    db.cur.execute(query)
-    res = db.cur.fetchone()
-    return res
-
-
-def get_trust_level(job_id, project_id):
-    user_id = get_volunteer(job_id, project_id)[0]
-    query = f"SELECT (SELECT trust_level FROM User WHERE  user_id = '{user_id}'),(SELECT trust_level FROM Project WHERE  project_id = '{project_id}') FROM DUAL"
-    db.cur.execute(query)
-    res = db.cur.fetchone()
-    return res
+from app.models.jobs import increment_quorum_size, possible_jobs
+from app.models.results import get_volunteer, save_result, get_number_of_results
+from app.models.user import get_trust_level, update_trust_level
 
 
 def decide_if_work_is_trusted(job_id, project_id):
     user_trust_level, project_trust_level = get_trust_level(job_id, project_id)
     if user_trust_level > project_trust_level:
         # dont trust host
-        # increment_quorum_size(job)
         return False
     else:
         # host is trused
@@ -51,9 +21,9 @@ def decide_if_work_is_trusted(job_id, project_id):
             user_trust_level / project_trust_level)
         if random.uniform(0, 1) <= probabilty_of_duplication:
             # Do a check
-            # increment_quorum_size(job)
             return False
         return True
+
 
 def job_done(project_id, job_id, correct_result):
     query = f"UPDATE Jobs SET done = 1 WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
@@ -78,22 +48,9 @@ def job_done(project_id, job_id, correct_result):
         file.write(f'{job_id} ' + correct_result[0])
 
 
-def get_number_of_results(job_id, project_id):
-    query = f"SELECT COUNT(*) FROM Result WHERE job_id ='{job_id}' AND project_id = '{project_id}';"
-    db.cur.execute(query)
-    res = db.cur.fetchone()
-    return res
-
-
 def single_result_query(query):
     db.cur.execute(query)
     return db.cur.fetchone()[0]
-
-
-def update_trust_level(user_id, update_rule):
-    query = f"UPDATE User SET trust_level = {update_rule} WHERE user_id = '{user_id}';"
-    db.cur.execute(query)
-    db.con.commit()
 
 
 def majority_agrees(project_id, job_id):
@@ -104,12 +61,13 @@ def majority_agrees(project_id, job_id):
     try:
         most_common, second_most_common = c.most_common(2)
     except ValueError:
-        most_common =  c.most_common(1)
+        most_common = c.most_common(1)
         # No second_most_common, i.e. only one result
         return most_common[0]
     if most_common[1] > second_most_common[1]:
         return most_common[0]
     return False
+
 
 def receive_work(project_id, job_id, volunteer_id, result):
     save_result(project_id, job_id, volunteer_id, result)
@@ -140,22 +98,6 @@ def receive_work(project_id, job_id, volunteer_id, result):
             increment_quorum_size(project_id, job_id)
             return
     return
-
-
-def possible_jobs(project_id, user_id):
-    query = f"""
-    SELECT job_id, project_id
-    FROM Jobs
-    WHERE  project_id = '{project_id}' AND Jobs.done = 0 AND '{user_id}' NOT IN (
-        SELECT volunteer
-        FROM Result
-        WHERE Result.job_id = Jobs.job_id AND project_id = '{project_id}'
-    )
-    """
-    db.cur.execute(query)
-    res = db.cur.fetchall()
-    return res
-    # all jobs where done == false if replication == true not result from this user yet.user
 
 
 def give_work(project_id, user_id):
