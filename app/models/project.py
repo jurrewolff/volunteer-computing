@@ -88,3 +88,25 @@ def get_project(project_id):
         }
     else:
         return False
+
+def get_n_open_jobs(project_id):
+    query = f"""
+    SELECT COUNT(*)
+    FROM Jobs
+    WHERE  project_id = '{project_id}' AND Jobs.done = 0
+    """
+    db.cur.execute(query)
+    return db.cur.fetchone()[0]
+def possible_jobs(project_id, user_id):
+    query = f"""
+    SELECT job_id, project_id
+    FROM Jobs
+    WHERE  project_id = '{project_id}' AND Jobs.done = 0 AND '{user_id}' NOT IN (
+        SELECT volunteer
+        FROM Result
+        WHERE Result.job_id = Jobs.job_id AND project_id = '{project_id}'
+    )
+    """
+    db.cur.execute(query)
+    res = db.cur.fetchall()
+    return res

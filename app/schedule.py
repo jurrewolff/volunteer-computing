@@ -6,8 +6,9 @@ from collections import Counter
 from app import app
 from app.models.database import db
 from app.models.jobs import increment_quorum_size, possible_jobs
-from app.models.results import get_volunteer, save_result, get_number_of_results
+from app.models.results import save_result, get_number_of_results
 from app.models.user import get_trust_level, update_trust_level
+from app.models.project import get_n_open_jobs
 
 
 def decide_if_work_is_trusted(job_id, project_id):
@@ -44,8 +45,16 @@ def job_done(project_id, job_id, correct_result):
     # write majority agreed result to fs
     proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{project_id}")
 
-    with open(os.path.join(proj_dir, "output"), "a+") as file:
-        file.write(f'{job_id} ' + correct_result[0])
+    # with open(os.path.join(proj_dir, "output"), "a+") as file:
+    #     file.write(f'{job_id} ' + correct_result[0])
+
+    # Check if this was the last open job for this project
+    print("open jibs:", get_n_open_jobs(project_id))
+    if get_n_open_jobs(project_id) == 0:
+        db.cur.execute(
+            f"UPDATE Project SET done = 1 WHERE project_id = '{project_id}';")
+        db.con.commit()
+        # TODO put reseult file in correct order
 
 
 def single_result_query(query):
@@ -109,10 +118,10 @@ def fill_db():
     def execute(s):
         db.cur.execute(s)
         db.con.commit()
-    execute("INSERT INTO User (user_id, trust_level) VALUES (1, 0);")
-    execute("INSERT INTO User (user_id, trust_level) VALUES (2, 0);")
-    execute("INSERT INTO User (user_id, trust_level) VALUES (3, 0);")
-    execute("INSERT INTO Project (project_id, owner, random_validation, quorum_size, trust_level) VALUES (1,1, 0, 2, 1);")
+    execute("INSERT INTO User (user_id, trust_level) VALUES (1, 0.01);")
+    execute("INSERT INTO User (user_id, trust_level) VALUES (2, 0.01);")
+    execute("INSERT INTO User (user_id, trust_level) VALUES (3, 0.01);")
+    execute("INSERT INTO Project (project_id, owner, random_validation, quorum_size, trust_level, done) VALUES (1,1, 0, 2, 1, 0);")
     execute(
         "INSERT INTO Jobs (job_id, project_id, quorum_size, done) VALUES (1,1,3, 0);")
 
