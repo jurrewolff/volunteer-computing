@@ -5,13 +5,11 @@
  */
 
 import { useState } from 'react'
-import { Link } from "react-router-dom"
-import { Link as scrollLink, animateScroll as scroll } from 'react-scroll';
+import { Link, useNavigate } from "react-router-dom"
+import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
 import { LogoutRequest } from '../Actions/logoutRequest';
 
-
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
 import Menu from '@mui/material/Menu';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -44,7 +42,9 @@ const handleLogout = () => {
 
 export default function Nav(props) {
     const { window } = props;
+    const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = useState(false);
+
 
     const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -79,26 +79,20 @@ export default function Nav(props) {
             })
     }
 
-    const toggleToElement = (element) => {
-        scroll.scrollToTop()
+    const handleToggle = () => {
+        if (props.home) {
+            scroll.scrollToTop()
+        }
+        else {
+            navigate("/")
+        }
+    }
+
+    const toggleToElement2 = (element) => {
+        scroll.scrollToBottom()
     }
 
     const container = window !== undefined ? () => window().document.body : undefined;
-
-    const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Divider />
-            <List>
-                {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <ListItemText primary={item} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </Box>
-    );
 
 
     const AccountNotLoggedIn = () => {
@@ -171,7 +165,7 @@ export default function Nav(props) {
                     <Link to="/dashBoard">
                         <MenuItem onClick={handleClose}>Dashboard</MenuItem>
                     </Link>
-                    <MenuItem onClick={handleLogout()}>Logout</MenuItem>
+                    <MenuItem onClick={handleLogOut}>Logout</MenuItem>
                 </Menu>
             </Box>
         )
@@ -197,18 +191,28 @@ export default function Nav(props) {
                             variant="h6"
                             component="div"
                             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                            onClick={handleToggle}
+                        // onClick={console.log(props.home)}
                         >
                             MUI
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             {navItems.map((item) => (
-                                <Button
-                                    // id={String(item)}
+                                props.home &&
+                                <ScrollLink
                                     key={item}
-                                    onClick={toggleToElement(item)}
-                                    sx={{ color: '#fff' }}>
-                                    {item}
-                                </Button>
+                                    to={item}
+                                    spy={true}
+                                    smooth={true}
+                                    offset={-70}
+                                    duration={1100}
+                                >
+                                    <Button
+                                        key={item}
+                                        sx={{ color: '#fff' }}>
+                                        {item}
+                                    </Button>
+                                </ScrollLink>
                             ))}
                         </Box>
                         <Box>
@@ -230,7 +234,6 @@ export default function Nav(props) {
                             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                         }}
                     >
-                        {drawer}
                     </Drawer>
                 </Box>
             </Box >

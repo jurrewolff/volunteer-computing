@@ -147,7 +147,7 @@ export default function Login() {
 
     return (
         <>
-            <Nav page="login" />
+            <Nav home={false} />
             <Box
                 display="flex"
                 justifyContent="center"

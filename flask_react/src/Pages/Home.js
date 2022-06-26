@@ -19,6 +19,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 
+
 const styles = {
     paperContainer: {
         background: 'rgba(0, 0, 0, 0.2)',
@@ -45,7 +46,7 @@ export default function Home() {
     }
 
     return (<>
-        <Nav />
+        <Nav home={true} />
         <Grid
             justifyContent="center"
             alignItems="center"
