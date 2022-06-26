@@ -10,7 +10,7 @@ from flask import (
     jsonify,
     send_from_directory,
     render_template,
-    session
+    session,
 )
 import time
 from flask_login import login_required
@@ -23,13 +23,15 @@ from celery import Celery
 import subprocess
 from app.authentication import *
 from app.schedule import give_work, receive_work
+
 ALLOWED_EXTENSIONS = {"c"}
+
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route("/output/<proj_id>")
+@app.route("/api/output/<proj_id>")
 def send_output(proj_id):
     with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output") as f:
         return render_template("content.html", text=f.read(), proj_id=proj_id)
@@ -38,14 +40,14 @@ def send_output(proj_id):
     )  # cached for a week
 
 
-@app.route("/download/<proj_id>")
+@app.route("/api/download/<proj_id>")
 def dl_output(proj_id):
     return send_from_directory(
         os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "output"
     )  # cached for a week
 
 
-@app.route("/upload", methods=["GET", "POST"])
+@app.route("/api/upload", methods=["GET", "POST"])
 def upload_file():
     if request.method == "POST":
         # _, proj_id = add_project_db()
@@ -63,8 +65,12 @@ def upload_file():
         if file and allowed_file(file.filename):
             response, proj_id = add_project_db()
             if proj_id != 0:
-                if os.path.exists(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")):
-                    shutil.rmtree(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
+                if os.path.exists(
+                    os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")
+                ):
+                    shutil.rmtree(
+                        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")
+                    )
                 os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
                 file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
                 input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
@@ -78,9 +84,12 @@ def upload_file():
 @login_required
 def add_project_db():
     if not request.headers:
-        return build_response(
-            HTTPStatus.BAD_REQUEST, "request is missing request headers"
-        ), 0
+        return (
+            build_response(
+                HTTPStatus.BAD_REQUEST, "request is missing request headers"
+            ),
+            0,
+        )
 
     # Get info about user from header.
     new_project = {"project_id": pj.get_new_project_id()}
@@ -95,19 +104,31 @@ def add_project_db():
     new_project.update({"owner": session["user_id"]})
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name"), 0
+        return (
+            build_response(HTTPStatus.BAD_REQUEST, "Please provide a project name"),
+            0,
+        )
     if not new_project["description"]:
-        return build_response(
-            HTTPStatus.BAD_REQUEST, "Please provide a project description"
-        ), 0
+        return (
+            build_response(
+                HTTPStatus.BAD_REQUEST, "Please provide a project description"
+            ),
+            0,
+        )
     if not new_project["block_size"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a block size"), 0
     if not new_project["owner"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner"), 0
+        return (
+            build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner"),
+            0,
+        )
     if not new_project["random_validation"]:
-        return build_response(
-            HTTPStatus.BAD_REQUEST, "Please provide a validation method"
-        ), 0
+        return (
+            build_response(
+                HTTPStatus.BAD_REQUEST, "Please provide a validation method"
+            ),
+            0,
+        )
     if not new_project["max_runtime"]:
         return build_response(HTTPStatus.BAD_REQUEST, "Please provide a max runtime"), 0
 
@@ -116,9 +137,12 @@ def add_project_db():
     if not account_id_exists(new_project["owner"]) or not pj.insert_project(
         new_project
     ):
-        return build_response(
-            HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database"
-        ), 0
+        return (
+            build_response(
+                HTTPStatus.INTERNAL_SERVER_ERROR, "Failed to add project to database"
+            ),
+            0,
+        )
 
     return (
         build_response(HTTPStatus.CREATED, "Project added to database"),
@@ -152,8 +176,12 @@ celery = make_celery(app)
 # @celery.task(name="create_jobs")
 def create_jobs(project_id, quorum):
     from app.models.jobs import insert_job
-    with open(os.path.join(app.config['PROJECTS_DIR'], f'{project_id}/input'), encoding="utf-8") as f:
-        for i,line in enumerate(f):
+
+    with open(
+        os.path.join(app.config["PROJECTS_DIR"], f"{project_id}/input"),
+        encoding="utf-8",
+    ) as f:
+        for i, line in enumerate(f):
             # TODO decide if we want to store the input in the db
             insert_job((i, project_id, quorum, False), project_id)
 
@@ -170,7 +198,7 @@ def compile(proj_id):
     return "done"
 
 
-@app.route("/taskstatus/<task_id>")
+@app.route("/api/taskstatus/<task_id>")
 def taskstatus(task_id):
     task = compile.AsyncResult(task_id)
     if task.state == "PENDING":
@@ -186,7 +214,7 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
-@app.route("/runproject/<project_id>", methods=("GET", "POST"))
+@app.route("/api/runproject/<project_id>", methods=("GET", "POST"))
 @login_required
 def datatest(project_id):
     # TODO switch to request instead of params in url
@@ -195,24 +223,25 @@ def datatest(project_id):
         data = request.form.get("data")
         job_id = request.form.get("job_id")
         receive_work(project_id, job_id, user_id, data)
-        # return redirect(f"/output/{proj_id}")
+        # return redirect(f"/api/output/{proj_id}")
 
     # arguments from scheduler
     job_id = give_work(project_id, user_id)
-    data = get_line_from_file(f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=job_id)
+    data = get_line_from_file(
+        f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=job_id
+    )
     return render_template("template.html", data=data, name=project_id, job=job_id)
 
 
-@app.route("/<proj_id>.js")
+@app.route("/api/<proj_id>.js")
 def jstemplate(proj_id):
     return render_template("template.js", name=proj_id)
 
 
-@app.route("/<proj_id>.wasm")
+@app.route("/api/<proj_id>.wasm")
 def serve_wasm(proj_id):
     return send_from_directory(
         os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"),
         "main.wasm",
         cache_timeout=604800,
     )  # cached for a week
-

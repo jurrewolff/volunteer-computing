@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Button, Card } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom"
+import { Container, Button, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"
 
 export default function MoreInfo() {
 
@@ -17,7 +17,7 @@ export default function MoreInfo() {
                 'project_id': linkVars[0]
             }
         };
-        fetch("/project", requestOptions)
+        fetch("/api/project", requestOptions)
             .then((res) => res.json())
             .then((data) => {
                 setProject(data)
@@ -32,7 +32,7 @@ export default function MoreInfo() {
 
     // Function for the responsive button.
     function clickButton() {
-        var url = 'http://localhost:8001/runproject/' + linkVars[0];
+        var url = 'http://localhost:8001/api/runproject/' + linkVars[0];
         window.open(url, '_tab');
     }
 

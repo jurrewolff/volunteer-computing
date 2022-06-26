@@ -1,4 +1,17 @@
-.App {
+.appbar {
+  color: #20b2aa;
+  background: 'yellow';
+
+}
+
+.slider:hover {
+  color: #2e8b57;
+}
+
+
+
+
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +48,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */

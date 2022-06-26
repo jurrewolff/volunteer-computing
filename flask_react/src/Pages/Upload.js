@@ -32,7 +32,7 @@ export default function Upload() {
                     <Divider variant="middle" />
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
-							<Grid >
+                            <Grid >
                                 <TextField
                                     margin="normal"
                                     required
@@ -42,7 +42,7 @@ export default function Upload() {
                                     onChange={(e) => setName(e.target.value)}
                                 />
                             </Grid>
-							<Grid >
+                            <Grid >
                                 <TextField
                                     margin="normal"
                                     required
@@ -52,7 +52,7 @@ export default function Upload() {
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </Grid>
-							<Grid >
+                            <Grid >
                                 <TextField
                                     margin="normal"
                                     required
@@ -62,7 +62,7 @@ export default function Upload() {
                                     onChange={(e) => setBlocksize(e.target.value)}
                                 />
                             </Grid>
-							<Grid >
+                            <Grid >
                                 <TextField
                                     margin="normal"
                                     required
@@ -72,7 +72,7 @@ export default function Upload() {
                                     onChange={(e) => setValidation(e.target.value)}
                                 />
                             </Grid>
-							<Grid >
+                            <Grid >
                                 <TextField
                                     margin="normal"
                                     required
@@ -92,13 +92,13 @@ export default function Upload() {
                                     onChange={(e) => setQorum(e.target.value)}
                                 />
                             </Grid>
-							<Grid>
-							<div>
-								<input type="file" id="file"/>
-								<input type="file" id="input"/>
-							</div>
-							</Grid>
-							<Grid alignitems="center">
+                            <Grid>
+                                <div>
+                                    <input type="file" id="file" />
+                                    <input type="file" id="input" />
+                                </div>
+                            </Grid>
+                            <Grid alignitems="center">
                                 < UploadRequest
                                     name={name} description={description} block_size={block_size}
                                     random_validation={random_validation}

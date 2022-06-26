@@ -10,22 +10,25 @@ export const UploadRequest = (props) => {
 
     useEffect(() => {
         if (clicked) {
-			const formData = new FormData()
-			const codeFile = document.getElementById('file').files[0]
-			const inputFile = document.getElementById('input').files[0]
-			formData.append('file', codeFile)
-			formData.append('input', inputFile)
-			console.log(codeFile)
-			console.log(inputFile)
-            fetch("/upload", {method: 'POST',
-							  headers: {'name': props.name,
-										'description': props.description,
-										'block_size': props.block_size,
-										'random_validation': props.random_validation,
-										'max_runtime': props.max_runtime,
-                                        'qorum': props.qorum
-										},
-							  body: formData})
+            const formData = new FormData()
+            const codeFile = document.getElementById('file').files[0]
+            const inputFile = document.getElementById('input').files[0]
+            formData.append('file', codeFile)
+            formData.append('input', inputFile)
+            console.log(codeFile)
+            console.log(inputFile)
+            fetch("/api/upload", {
+                method: 'POST',
+                headers: {
+                    'name': props.name,
+                    'description': props.description,
+                    'block_size': props.block_size,
+                    'random_validation': props.random_validation,
+                    'max_runtime': props.max_runtime,
+                    'qorum': props.qorum
+                },
+                body: formData
+            })
                 .then((response) => response.json())
                 .then((result) => {
                     console.log({ result })
@@ -34,7 +37,7 @@ export const UploadRequest = (props) => {
             navigate('/dashboard');
             setClicked(false)
         }
-	}, [clicked]);
+    }, [clicked]);
 
     return (
         <div>

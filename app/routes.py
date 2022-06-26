@@ -13,7 +13,7 @@ import app.models.results as results
 # TODO - Move existing routes to routes.py
 
 
-@app.route("/projects", methods=["POST", "GET", "PATCH", "DELETE"])
+@app.route("/api/projects", methods=["POST", "GET", "PATCH", "DELETE"])
 @login_required
 def projects():
     response = {}
@@ -38,7 +38,8 @@ def projects():
 
     return jsonify(response)
 
-@app.route("/results", methods=["POST", "GET", "PATCH", "DELETE"])
+
+@app.route("/api/results", methods=["POST", "GET", "PATCH", "DELETE"])
 @login_required
 def get_results():
     response = {}
@@ -63,14 +64,16 @@ def get_results():
 
     return jsonify(response)
 
-@app.route("/project", methods=["GET"])
+
+@app.route("/api/project", methods=["GET"])
 @login_required
 def get_project():
     project_id = request.headers.get("project_id")
     proj = project.get_project(project_id)
     return json.dumps(proj)
 
-@app.route("/my_projects", methods=["GET"])
+
+@app.route("/api/my_projects", methods=["GET"])
 @login_required
 def get_past_projects():
     user_id = request.headers.get("user_id")

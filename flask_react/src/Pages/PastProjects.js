@@ -1,8 +1,6 @@
-
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ListGroup, Container, Row, Col, Button, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import Cookies from "js-cookie";
 
 
@@ -17,7 +15,7 @@ export default function PastProjects() {
                 'user_id': Cookies.get("user_id")
             }
         };
-        fetch("/my_projects", requestOptions)
+        fetch("/api/my_projects", requestOptions)
             .then(res => res.json())
             .then(data => {
                 setData(data)
@@ -52,7 +50,6 @@ export default function PastProjects() {
 
         ));
     }
-
 
     return (
         <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>

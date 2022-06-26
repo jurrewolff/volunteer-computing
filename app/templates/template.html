@@ -8,11 +8,11 @@
   <body>
     Running project #{{name}}!
 
-    <script type="text/javascript" src="/{{name}}.js"></script>
+    <script type="text/javascript" src="/api/{{name}}.js"></script>
 
     <script type='text/javascript'>
       var request = new XMLHttpRequest();
-      request.open('POST', '/runproject/{{name}}', true);
+      request.open('POST', '/api/runproject/{{name}}', true);
       request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       var data = {{ data | tojson }};
       var Module = {
