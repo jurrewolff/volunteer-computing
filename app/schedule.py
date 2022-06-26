@@ -45,8 +45,8 @@ def job_done(project_id, job_id, correct_result):
     # write majority agreed result to fs
     proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{project_id}")
 
-    # with open(os.path.join(proj_dir, "output"), "a+") as file:
-    #     file.write(f'{job_id} ' + correct_result[0])
+    with open(os.path.join(proj_dir, "output"), "a+") as file:
+        file.write(f'{job_id} ' + correct_result[0])
 
     # Check if this was the last open job for this project
     print("open jibs:", get_n_open_jobs(project_id))
