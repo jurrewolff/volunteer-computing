@@ -117,7 +117,9 @@ export default function PermanentDrawerLeft() {
             >
                 <Toolbar />
                 <Divider />
-                <List className={classes.root}>
+                <List
+                    className={classes.root}
+                >
                     {pages.map((page, index) => (
                         <ListItem key={page}>
                             {makeLink(page, index)}
@@ -126,7 +128,9 @@ export default function PermanentDrawerLeft() {
                     ))}
                 </List>
                 <Divider />
-                <List className={classes.child}>
+                <List
+                    className={classes.child}
+                >
                     <ListItem key={'User Info'} disablePadding>
                         <Link to={"/userinfo"}>
                             <ListItemButton>

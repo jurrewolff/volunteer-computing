@@ -7,6 +7,8 @@
 import { useState } from 'react'
 import { Link } from "react-router-dom"
 import { Link as scrollLink, animateScroll as scroll } from 'react-scroll';
+import { LogoutRequest } from '../Actions/logoutRequest';
+
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -34,6 +36,12 @@ const navItems = ['About', 'Scientist', 'Volunteer', 'Product'];
 /*
  * TODO
  */
+
+const handleLogout = () => {
+    LogoutRequest();
+};
+
+
 export default function Nav(props) {
     const { window } = props;
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -163,7 +171,7 @@ export default function Nav(props) {
                     <Link to="/dashBoard">
                         <MenuItem onClick={handleClose}>Dashboard</MenuItem>
                     </Link>
-                    <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                    <MenuItem onClick={handleLogout()}>Logout</MenuItem>
                 </Menu>
             </Box>
         )
