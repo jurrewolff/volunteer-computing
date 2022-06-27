@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 export default function Results() {
   const [data, setData] = useState([{}]);
   const navigate = useNavigate();
+  let user_cookie = Cookies.get("user_id")
 
 
   useEffect(() => {
@@ -16,12 +17,10 @@ export default function Results() {
       }
     };
 
-    navigate({
-      goTo: '/login',
-      when: true,
-      onPaths: ['/dashboard', '/results'],
-      otherwiseGoTo: '/signUp',
-    })
+    if (!user_cookie) {
+      console.log("User not logged in, results page restricted")
+      return navigate('/login')
+    }
 
     fetch("/api/results", requestOptions)
       .then(res => res.json())
