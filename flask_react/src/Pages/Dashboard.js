@@ -45,4 +45,7 @@ const Dashboard = () => {
   );
 };
 
+// data.delete_cookie("name")
+// data.delete_cookie("user_id")
+
 export default Dashboard;

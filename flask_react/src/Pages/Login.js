@@ -7,14 +7,13 @@
 // Package and functionality imports
 import Nav from '../Components/HomePageNav';
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginRequest } from '../Actions/loginRequest';
 
 
 // Material ui imports https://mui.com
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -200,7 +199,7 @@ export default function Login() {
                                     </Button>
                                 </Grid>
                                 <Grid sx={{ pl: 1.5 }}>
-                                    <Link href="/signup" variant="body2">
+                                    <Link to="/signup" variant="body2">
                                         {"Don't have an account yet? Signup!"}
                                     </Link>
                                 </Grid>

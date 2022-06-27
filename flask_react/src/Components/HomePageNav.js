@@ -8,6 +8,8 @@ import { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
 import { LogoutRequest } from '../Actions/logoutRequest';
+import Cookies from 'js-cookie'
+
 
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
@@ -45,18 +47,15 @@ export default function Nav(props) {
     const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    // if (Cookies.get("user_id") != "")
 
-    const [auth, setAuth] = useState(true);
+    // const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
 
     const [logOutStatus, setLogoutStatus] = useState("");
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
-    };
-
-    const handleChange = (event) => {
-        setAuth(event.target.checked);
     };
 
     const handleMenu = (event) => {
@@ -86,10 +85,6 @@ export default function Nav(props) {
         else {
             navigate("/")
         }
-    }
-
-    const toggleToElement2 = (element) => {
-        scroll.scrollToBottom()
     }
 
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -216,7 +211,8 @@ export default function Nav(props) {
                             ))}
                         </Box>
                         <Box>
-                            {auth ? AccountNotLoggedIn() : AccountLoggedIn()}
+                            {Cookies.get("user_id") != "" ?
+                                AccountNotLoggedIn() : AccountLoggedIn()}
                         </Box>
                     </Toolbar >
                 </AppBar >

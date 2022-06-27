@@ -25,10 +25,10 @@ export const SignupRequest = (email, pass, uname, lname, fname, inst,
         is_Scientist = 1
     }
     else {
-        l_name = ""
-        f_name = ""
-        institution = ""
-        background = ""
+        l_name = " "
+        f_name = " "
+        institution = " "
+        background = " "
     }
 
     const requestOptions = {
@@ -44,6 +44,9 @@ export const SignupRequest = (email, pass, uname, lname, fname, inst,
             'is_researcher': is_Scientist
         }
     };
+
+    console.log(requestOptions)
+
 
     return (fetch("/signup", requestOptions)
         .then((response) => response.json())

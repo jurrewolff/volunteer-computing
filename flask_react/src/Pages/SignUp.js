@@ -4,7 +4,7 @@
  */
 import Nav from '../Components/HomePageNav';
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SignupRequest } from '../Actions/signupRequest';
 
 import TextField from '@mui/material/TextField';
@@ -14,7 +14,6 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
@@ -251,7 +250,10 @@ export default function Signup() {
                                         </Button>
                                     </Grid>
                                     <Grid>
-                                        <Link href="/login" variant="body2" sx={{ ml: 1 }}>
+                                        <Link
+                                            to="/login"
+                                            variant="body2" sx={{ ml: 1 }}
+                                        >
                                             {"Already have an account? Login"}
                                         </Link>
                                     </Grid>
