@@ -49,8 +49,14 @@ def get_results():
         response = build_response(HTTPStatus.NOT_IMPLEMENTED, "Implement me!")
         pass
     elif request.method == "GET":
+        user_id = request.headers.get("user_id")
+        if not user_id:
+            return build_response(
+                HTTPStatus.BAD_REQUEST, "request is missing 'user_id' request header"
+            )
+
         # Returns a list with a dictionary per project.
-        projects = project.get_projects_from_user(1)
+        projects = project.get_projects_from_user(user_id)
         return json.dumps(projects)
 
     elif request.method == "PATCH":

@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react'
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Results() {
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
-    fetch("/api/projects")
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'user_id': Cookies.get("user_id")
+      }
+    };
+
+    fetch("/api/results", requestOptions)
       .then(res => res.json())
       .then(data => {
         setData(data)
