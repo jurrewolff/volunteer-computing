@@ -1,4 +1,4 @@
-function execute_C_file(input, c_out, line) {
+function execute_C_file(input, c_out) {
 
 // The Module object: Our interface to the outside world. We import
 // and export values on it. There are various ways Module can be used:
@@ -814,7 +814,7 @@ function UTF8ArrayToString(heapOrArray, idx, maxBytesToRead) {
       }
     }
   }
-  return line + " " + str;
+  return str;
 }
 
 // Given a pointer 'ptr' to a null-terminated UTF8-encoded string in the emscripten HEAP, returns a
