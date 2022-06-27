@@ -52,7 +52,7 @@ def job_done(project_id, job_id, correct_result):
     proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{project_id}")
 
     with open(os.path.join(proj_dir, "output"), "a+") as file:
-        file.write(f'{job_id} ' + correct_result[0])
+        file.write(f'{job_id} ' + correct_result)
 
     # Check if this was the last open job for this project
     print("open jibs:", get_n_open_jobs(project_id))
@@ -105,7 +105,8 @@ def receive_work(project_id, job_id, volunteer_id, result):
             return
         # quorum_size 1 and we trust the result so we are done
         if quorum_size == 1:
-            job_done(project_id, job_id, result[0])
+            job_done(project_id, job_id, result)
+            return
 
         else:
             # quorum not yet reached, we wait for someone to replicate the result.
@@ -113,7 +114,8 @@ def receive_work(project_id, job_id, volunteer_id, result):
     if n_results == quorum_size:
         majority_result = majority_agrees(project_id, job_id)
         if majority_result != False:
-            job_done(project_id, job_id, majority_result[0])
+            job_done(project_id, job_id, majority_result)
+            return
         else:
             increment_quorum_size(project_id, job_id)
             return
