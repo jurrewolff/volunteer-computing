@@ -6,6 +6,8 @@ from app.models.database import *
 import app.models.user as user
 
 # Returns True if project exists, returns False otherwise.
+
+
 def project_exists(project_id):
     sql = f"SELECT 1 FROM Project WHERE project_id = '{project_id}'"
     db.cur.execute(sql)
@@ -20,7 +22,7 @@ def project_exists(project_id):
 
 def insert_project(dic):
     if not project_exists(dic["project_id"]):
-        sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         val = (
             dic["project_id"],
             dic["name"],
@@ -30,7 +32,8 @@ def insert_project(dic):
             dic["owner"],
             dic["random_validation"],
             dic["max_runtime"],
-            dic["qorum"],
+            dic["quorum"],
+            0,
             0,
         )
         db.cur.execute(sql, val)
@@ -54,7 +57,10 @@ def get_all_projects():
     res = db.cur.fetchall()
     return [{"project_id": x[0], "name": x[1], "description": x[2]} for x in res]
 
+
 # Returns a list of all project. 1 tuple per project.
+
+
 def get_projects_researchers(user_id):
     projects = []
     sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
@@ -111,3 +117,21 @@ def possible_jobs(project_id, user_id):
     db.cur.execute(query)
     res = db.cur.fetchall()
     return res
+
+
+def get_projects_from_user(user_id):
+    if user.account_id_exists(user_id):
+        sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
+        db.cur.execute(sql)
+        projects = []
+        res = db.cur.fetchall()
+        for x in res:
+            project = {
+                "project_id": x[0],
+                "name": x[1],
+                "description": x[2],
+            }
+            projects.append(project)
+        return projects
+    else:
+        return False

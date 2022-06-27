@@ -25,6 +25,8 @@ from app.authentication import *
 from app.schedule import give_work, receive_work
 
 ALLOWED_EXTENSIONS = {"c"}
+from app.models.database import *
+import numpy as np
 
 
 def allowed_file(filename):
@@ -74,9 +76,8 @@ def upload_file():
                 os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
                 file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
                 input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
-                create_jobs(proj_id, request.form.get("qorum"))
+                create_jobs(proj_id)
                 task = compile.delay(proj_id)
-                return redirect(url_for("taskstatus", task_id=task.id))
             return response
     return
 
@@ -95,13 +96,25 @@ def add_project_db():
     new_project = {"project_id": pj.get_new_project_id()}
     new_project.update({"name": request.headers.get("name")})
     new_project.update({"description": request.headers.get("description")})
-    new_project.update({"block_size": request.headers.get("block_size")})
+    new_project.update({"quorum": 1})
     new_project.update({"trust_level": 1})
-    new_project.update({"random_validation": request.headers.get("random_validation")})
-    new_project.update({"max_runtime": request.headers.get("max_runtime")})
-    new_project.update({"qorum": request.headers.get("qorum")})
+    new_project.update({"max_runtime": 0})
 
     new_project.update({"owner": session["user_id"]})
+
+    if "always_check" in request.headers and request.headers.get("always_check"):
+        new_project.update({"random_validation": 0})
+    else:
+        new_project.update({"random_validation": 1})
+
+    new_project.update(
+        {
+            "block_size": request.headers.get("block_size")
+            if type(request.headers.get("block_size")) == int
+            else 1
+        }
+    )
+
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
         return (
@@ -115,22 +128,6 @@ def add_project_db():
             ),
             0,
         )
-    if not new_project["block_size"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a block size"), 0
-    if not new_project["owner"]:
-        return (
-            build_response(HTTPStatus.BAD_REQUEST, "Please provide a project owner"),
-            0,
-        )
-    if not new_project["random_validation"]:
-        return (
-            build_response(
-                HTTPStatus.BAD_REQUEST, "Please provide a validation method"
-            ),
-            0,
-        )
-    if not new_project["max_runtime"]:
-        return build_response(HTTPStatus.BAD_REQUEST, "Please provide a max runtime"), 0
 
     # Insert project into database.
 
@@ -174,7 +171,7 @@ celery = make_celery(app)
 
 
 # @celery.task(name="create_jobs")
-def create_jobs(project_id, quorum):
+def create_jobs(project_id, quorum=1):
     from app.models.jobs import insert_job
 
     with open(
@@ -196,6 +193,22 @@ def compile(proj_id):
     os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
     # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
     return "done"
+
+
+def change_prog_percentage(project_id, per):
+    query = f"UPDATE Project SET progress = '{per}' WHERE project_id = '{project_id}';"
+    db.cur.execute(query)
+    db.con.commit()
+
+
+def calculate_per(project_id):
+    sql = f"SELECT done FROM Jobs WHERE project_id = {project_id};"
+    db.cur.execute(sql)
+    res = db.cur.fetchall()
+    done_or_not = [x[0] for x in res]
+    done = np.count_nonzero(np.array(done_or_not) == 1)
+    perc = int(done / len(done_or_not) * 100)
+    change_prog_percentage(project_id, perc)
 
 
 @app.route("/api/taskstatus/<task_id>")
@@ -224,7 +237,8 @@ def datatest(project_id):
         data = request.form.get("data")
         job_id = request.form.get("job_id")
         receive_work(project_id, job_id, user_id, data)
-        # return redirect(f"/api/output/{proj_id}")
+        calculate_per(project_id)
+        # return redirect(f"/output/{proj_id}")
 
     # arguments from scheduler
     job_id = give_work(project_id, user_id)
