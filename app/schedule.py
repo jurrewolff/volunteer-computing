@@ -12,6 +12,9 @@ from app.models.project import get_n_open_jobs
 
 
 def decide_if_work_is_trusted(job_id, project_id):
+    """
+    Decides if work is trusted based on the submitting users trustlevel
+    """
     user_trust_level, project_trust_level = get_trust_level(job_id, project_id)
     if user_trust_level > project_trust_level:
         # dont trust host
@@ -27,6 +30,9 @@ def decide_if_work_is_trusted(job_id, project_id):
 
 
 def job_done(project_id, job_id, correct_result):
+    """
+    Updates the database an filesystem when a job is done.
+    """
     query = f"UPDATE Jobs SET done = 1 WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
     db.cur.execute(query)
     db.con.commit()
@@ -79,6 +85,9 @@ def majority_agrees(project_id, job_id):
 
 
 def receive_work(project_id, job_id, volunteer_id, result):
+    """
+    Receives a result. When enough results have been collected for a job it will be marked as done.
+    """
     if job_marked_done(project_id, job_id,):
         return
     save_result(project_id, job_id, volunteer_id, result)
@@ -112,6 +121,9 @@ def receive_work(project_id, job_id, volunteer_id, result):
 
 
 def give_work(project_id, user_id):
+    """
+    Gives work. Picks a random job from all open jobs where this user has not yet submitted a result.
+    """
     job_id, project_id = random.choice(possible_jobs(project_id, user_id))
     return job_id
 
@@ -139,23 +151,3 @@ def test():
     receive_work(1, 1, 2, "2")
     receive_work(1, 1, 3, "1")
 # test()
-
-    # random from possible_work
-# BOINC maintains an estimate E(H) of host H's recent error rate.
-# This is maintained as follows:
-
-#  * It is initialized to 0.1
-#  * It is multiplied by 0.95 when H reports a correct (replicated) result.
-#  * It is incremented by 0.1 when H reports an incorrect (replicated) result.
-
-# Thus, it takes a long time to earn a good reputation
-# and a short time to lose it.
-
-# The adaptive replication policy is as follows.
-
-#  * Each job is initially marked as unreplicated.
-#  * On each request, the scheduler decides whether to trust the host as follows:
-#   * If E(H) > A, don't trust the host.
-#   * Otherwise, trust the host with probability 1 - sqrt( E(H)/A ).
-#  * If we decide to trust the host, preferentially send it unreplicated jobs.
-#  * Otherwise, p
