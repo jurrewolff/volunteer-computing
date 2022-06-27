@@ -1,5 +1,5 @@
 """Routes for handling incoming API requests."""
-
+from app.models.user import get_user
 from main import app
 from http import HTTPStatus
 from app.util import build_response
@@ -8,11 +8,12 @@ from flask_login import login_required
 
 import json
 import app.models.project as project
+import app.models.results as results
 
 # TODO - Move existing routes to routes.py
 
 
-@app.route("/projects", methods=["POST", "GET", "PATCH", "DELETE"])
+@app.route("/api/projects", methods=["POST", "GET", "PATCH", "DELETE"])
 @login_required
 def projects():
     response = {}
@@ -37,9 +38,10 @@ def projects():
 
     return jsonify(response)
 
-@app.route("/results", methods=["POST", "GET", "PATCH", "DELETE"])
+
+@app.route("/api/results", methods=["POST", "GET", "PATCH", "DELETE"])
 @login_required
-def results():
+def get_results():
     response = {}
 
     if request.method == "POST":
@@ -61,3 +63,47 @@ def results():
         pass
 
     return jsonify(response)
+
+
+@app.route("/api/project", methods=["GET"])
+@login_required
+def get_project():
+    project_id = request.headers.get("project_id")
+    proj = project.get_project(project_id)
+    return json.dumps(proj)
+
+
+@app.route("/api/my_projects", methods=["GET"])
+@login_required
+def get_past_projects():
+    user_id = request.headers.get("user_id")
+    result = results.get_projects_of_user(user_id)
+    return json.dumps(result)
+
+
+@app.route("/api/userdata", methods=["GET"])
+@login_required
+def userdata():
+
+    if not request.headers:
+        return build_response(
+            HTTPStatus.BAD_REQUEST, "request is missing request headers"
+        )
+
+    username = request.headers.get("username")
+    if not username:
+        return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
+
+    user_db = get_user(username)
+
+    if not user_db:
+        return build_response(
+            HTTPStatus.NOT_FOUND,
+            "user with username {} does not exist".format(username),
+        )
+
+    response = build_response(
+        HTTPStatus.OK, "fetched data for user {}".format(username), data=user_db
+    )
+
+    return response

@@ -74,7 +74,7 @@ def load_user(username: str) -> User:
     return User.get(username)
 
 
-@app.route("/signup", methods=["POST"])
+@app.route("/api/signup", methods=["POST"])
 def signup():
     """
     Handle signup request; Extract and check presence of request headers,
@@ -150,7 +150,7 @@ def signup():
     return build_response(HTTPStatus.CREATED, "new user is inserted into db")
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login():
     """
     Handle login request; Check request headers, get user from db,
@@ -165,6 +165,10 @@ def login():
     username = request.headers.get("username")
     password = request.headers.get("password")
 
+
+    app.logger.warning(f"user: {username}, pass: {password}")
+
+
     if not username:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
     if not password:
@@ -172,7 +176,7 @@ def login():
 
     user_obj = load_user(username)  # username not found erbij doen?
     if not user_obj:
-        return build_response(HTTPStatus.OK, "username or password is incorrect")
+        return build_response(HTTPStatus.UNAUTHORIZED, "username or password is incorrect")
 
     if authenticate_user(username, password):
         if not login_user(user_obj):
@@ -188,14 +192,20 @@ def login():
     session["name"] = username
     user_db = get_user(username)
     session["user_id"] = user_db["user_id"]
+    session["is_researcher"] = user_db["is_researcher"]
 
-    response.set_cookie("name", username, max_age=3600)
-    response.set_cookie("user_id", str(user_db["user_id"]), max_age=3600)
+    response.set_cookie("name", username, max_age=3600, samesite="strict")
+    response.set_cookie(
+        "user_id", str(user_db["user_id"]), max_age=3600, samesite="strict"
+    )
+    response.set_cookie(
+        "is_researcher", str(user_db["is_researcher"]), max_age=3600, samesite="strict"
+    )
 
     return response
 
 
-@app.route("/logout", methods=["GET"])
+@app.route("/api/logout", methods=["GET"])
 @login_required
 def logout():
     """Handle logout request"""
@@ -208,7 +218,9 @@ def logout():
 
     session["name"] = ""
     session["user_id"] = ""
+    session["is_researcher"] = ""
     data.delete_cookie("name")
     data.delete_cookie("user_id")
+    data.delete_cookie("is_researcher")
 
     return data

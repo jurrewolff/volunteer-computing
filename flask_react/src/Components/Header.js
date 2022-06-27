@@ -22,7 +22,7 @@ const Styles = styled.div`
     left: 30%;
     right: 30%;
   }
-  
+
 `;
 
 export const Header = () => (
@@ -35,7 +35,7 @@ export const Header = () => (
       </Form>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
-          <Nav.Item><Nav.Link href="/Account">Account</Nav.Link></Nav.Item> 
+          <Nav.Item><Nav.Link href="/Account">Account</Nav.Link></Nav.Item>
           <Nav.Item><Nav.Link href="/LogOut">Logout</Nav.Link></Nav.Item>
         </Nav>
       </Navbar.Collapse>
@@ -43,25 +43,3 @@ export const Header = () => (
   </Styles>
 )
 
-// Oude versie:
-// import React from "react";
-// import { Link } from "react-router-dom"
-
-
-// export default function Header() {
-//   return (
-//     <header>
-//     <div>
-//         <div>
-//             <div><span>Logo!!!!</span></div>
-//             <div>
-//                 <ul>
-//                     <li><Link to="/Account"><i>Account</i></Link></li>
-//                     <li><Link to="/LogOut"><i></i>Log out</Link></li>
-//                 </ul>
-//             </div>
-//         </div>
-//     </div>
-// </header>
-//   );
-// }

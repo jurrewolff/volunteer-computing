@@ -158,5 +158,11 @@ cython_debug/
 .DS_Store
 .vscode
 .idea/
-node_modules/
+node_modules
 app/static
+*.icloud
+flask_react/package-lock.json
+flask_react/node_modules
+
+#cache
+emcc_cache

@@ -8,15 +8,12 @@
   <body>
     Running project #{{name}}!
 
-    <script type="text/javascript" src="/{{name}}.js"></script>
+    <script type="text/javascript" src="/api/{{name}}.js"></script>
 
     <script type='text/javascript'>
       var request = new XMLHttpRequest();
-      request.open('POST', '/runproject/{{name}}', true);
+      request.open('POST', '/api/runproject/{{name}}', true);
       request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      request.onreadystatechange = function() {
-          // do something
-      };
       var data = {{ data | tojson }};
       var Module = {
         final: '',
@@ -26,7 +23,7 @@
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
             Module.final += text + "\n";
             Module.reads += 1;
-            if (Module.reads == data.size) request.send('data=' + Module.final + '&job_id={{job}}');
+            if (Module.reads == data.size) request.send('data=' + Module.final + "&job_id={{job}}");
           };
         })()};
       for (let step = 0; step < data.size; step++) {
