@@ -26,6 +26,7 @@ import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Cookies from 'js-cookie'
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
@@ -168,7 +169,12 @@ export default function Nav(props) {
                     <Link to="/dashBoard">
                         <MenuItem onClick={handleClose}>Dashboard</MenuItem>
                     </Link>
-                    <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                    <Link to="/">
+                        <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                    </Link>
+                    <Link to="/userinfo">
+                        <MenuItem onClick={handleClose}>Userinfo</MenuItem>
+                    </Link>
                 </Menu>
             </Box>
         )
@@ -180,18 +186,6 @@ export default function Nav(props) {
                 sx={{ display: 'flex' }}
             >
                 <AppBar component="nav">
-                    <FormGroup>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={auth}
-                                    onChange={handleChange}
-                                    aria-label="login switch"
-                                />
-                            }
-                            label={auth ? 'Logout' : 'Login'}
-                        />
-                    </FormGroup>
                     <Toolbar>
                         <IconButton
                             color="inherit"
@@ -221,7 +215,7 @@ export default function Nav(props) {
                             ))}
                         </Box>
                         <Box>
-                            {auth ? AccountNotLoggedIn() : AccountLoggedIn()}
+                            {Cookies.get("user_id") ? AccountLoggedIn() : AccountNotLoggedIn()}
                         </Box>
                     </Toolbar >
                 </AppBar >
