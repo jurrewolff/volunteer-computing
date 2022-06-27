@@ -1,5 +1,5 @@
 """Routes for handling incoming API requests."""
-
+from app.models.user import get_user
 from main import app
 from http import HTTPStatus
 from app.util import build_response
@@ -79,3 +79,31 @@ def get_past_projects():
     user_id = request.headers.get("user_id")
     result = results.get_projects_of_user(user_id)
     return json.dumps(result)
+
+
+@app.route("/api/userdata", methods=["GET"])
+@login_required
+def userdata():
+
+    if not request.headers:
+        return build_response(
+            HTTPStatus.BAD_REQUEST, "request is missing request headers"
+        )
+
+    username = request.headers.get("username")
+    if not username:
+        return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
+
+    user_db = get_user(username)
+
+    if not user_db:
+        return build_response(
+            HTTPStatus.NOT_FOUND,
+            "user with username {} does not exist".format(username),
+        )
+
+    response = build_response(
+        HTTPStatus.OK, "fetched data for user {}".format(username), data=user_db
+    )
+
+    return response
