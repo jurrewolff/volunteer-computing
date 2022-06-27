@@ -71,7 +71,7 @@ def single_result_query(query):
 def majority_agrees(project_id, job_id):
     db.cur.execute(
         f"Select result FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
-    all_results = db.cur.fetchall()
+    all_results = [x for (x,) in db.cur.fetchall()]
     c = Counter(all_results)
     try:
         most_common, second_most_common = c.most_common(2)
