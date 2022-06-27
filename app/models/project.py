@@ -49,19 +49,10 @@ def get_new_project_id():
 
 # Returns a list of all project. 1 tuple per project.
 def get_all_projects():
-    projects = []
-    sql = f"SELECT * FROM Project"
+    sql = f"SELECT * FROM Project WHERE done = 0"
     db.cur.execute(sql)
     res = db.cur.fetchall()
-    for x in res:
-        project = {
-            "project_id": x[0],
-            "name": x[1],
-            "description": x[2],
-        }
-        projects.append(project)
-    return projects
-
+    return [{"project_id": x[0], "name": x[1], "description": x[2]} for x in res]
 
 # Returns a list of all project. 1 tuple per project.
 def get_projects_researchers(user_id):
