@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 export default function Results() {
   const [data, setData] = useState([{}]);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const requestOptions = {
@@ -14,13 +16,20 @@ export default function Results() {
       }
     };
 
+    navigate({
+      goTo: '/login',
+      when: true,
+      onPaths: ['/dashboard', '/results'],
+      otherwiseGoTo: '/signUp',
+    })
+
     fetch("/api/results", requestOptions)
       .then(res => res.json())
       .then(data => {
         setData(data)
         console.log(data)
       })
-  }, []);
+  }, [true]);
 
 
   const downloadResultFile = (event, value) => {

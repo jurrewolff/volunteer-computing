@@ -14,6 +14,12 @@ app = Flask(
 
 # Serve React App
 @app.route("/")
+@app.route("/dashboard")
+@app.route("/projects")
+@app.route("/pastprojects")
+@app.route("/upload")
+@app.route("/results")
+@app.route("/userinfo")
 def serve():
     return app.send_static_file("index.html")
 
