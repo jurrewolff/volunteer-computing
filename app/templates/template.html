@@ -8,6 +8,46 @@
   <body>
     Running project #{{name}}!
 
+    <div>
+      <span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>
+    </div>
+
+
+    <script>
+      let hour = Math.floor(time / 3600);
+      let minute = Math.floor((time % 3600) / 60);
+      let second = Math.floor((time % 60));
+      let cron;
+      
+
+      function returnData(input) {
+        return input > 10 ? input : `0${input}`
+      }
+
+      function start() {
+        // pause();
+        cron = setInterval(() => { timer(); }, 1000);
+      }
+
+      function timer() {
+        if ((second++) == 60) {
+          second = 0;
+          minute++;
+        }
+        if (minute == 60) {
+          minute = 0;
+          hour++;
+        }
+
+        document.getElementById('hour').innerText = returnData(hour);
+        document.getElementById('minute').innerText = returnData(minute);
+        document.getElementById('second').innerText = returnData(second);
+      }
+
+      start();
+
+    </script>
+
     <script type="text/javascript" src="/{{name}}.js"></script>
 
     <script type='text/javascript'>
@@ -23,7 +63,7 @@
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
             Module.final += text + "\n";
             Module.reads += 1;
-            if (Module.reads == data.size) request.send('data=' + Module.final + "&job_id={{job}}");
+            if (Module.reads == data.size) request.send('data=' + Module.final + "&job_id={{job}}" + "&time=" + time);
           };
         })()};
       for (let step = 0; step < data.size; step++) {
@@ -46,5 +86,3 @@
     </script>
   </body>
 </html>
-
-
