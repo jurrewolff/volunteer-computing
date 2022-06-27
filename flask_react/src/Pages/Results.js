@@ -23,6 +23,23 @@ export default function Results() {
   }, []);
 
 
+  const downloadResultFile = (event, value) => {
+    console.log(event)
+    console.log(value)
+    fetch('/api/download/' + value)
+        .then(response => {
+            response.blob().then(blob => {
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = 'my_results.txt';
+                a.click();
+            });
+    });
+
+}
+
+
   // Returns all projects displayed in a card per project.
   const readResults = ({ data }) => {
 
@@ -49,7 +66,7 @@ export default function Results() {
           </Card>
         </Col>
         <Col xs={1} sm={1} md={1} lg={1} style={{ marginTop: "3%" }}>
-          <Button>Download</Button>
+          <Button onClick={event => downloadResultFile(event, project.project_id)}>Download</Button>
         </Col>
       </Row>
     );
