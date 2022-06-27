@@ -233,7 +233,6 @@ def datatest(project_id):
     # TODO switch to request instead of params in url
     user_id = session["user_id"]
     if request.method == "POST":
-        job_id = request.form.get("job_id")
         data = request.form.get("data")
         job_id = request.form.get("job_id")
         receive_work(project_id, job_id, user_id, data)
