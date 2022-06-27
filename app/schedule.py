@@ -5,7 +5,7 @@ from collections import Counter
 
 from app import app
 from app.models.database import db
-from app.models.jobs import increment_quorum_size, possible_jobs
+from app.models.jobs import increment_quorum_size, possible_jobs, job_marked_done
 from app.models.results import save_result, get_number_of_results
 from app.models.user import get_trust_level, update_trust_level
 from app.models.project import get_n_open_jobs
@@ -79,6 +79,8 @@ def majority_agrees(project_id, job_id):
 
 
 def receive_work(project_id, job_id, volunteer_id, result):
+    if job_marked_done(project_id, job_id,):
+        return
     save_result(project_id, job_id, volunteer_id, result)
     n_results = get_number_of_results(job_id, project_id)[0]
     random_replication = single_result_query(

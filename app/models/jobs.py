@@ -61,3 +61,13 @@ def possible_jobs(project_id, user_id):
     db.cur.execute(query)
     res = db.cur.fetchall()
     return res
+
+
+def job_marked_done(project_id, job_id):
+    query = f"""
+    SELECT done
+    FROM Jobs
+    WHERE job_id = '{job_id}' AND project_id = '{project_id}'
+    """
+    db.cur.execute(query)
+    return db.cur.fetchone()[0]
