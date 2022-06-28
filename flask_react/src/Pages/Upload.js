@@ -34,8 +34,8 @@ export default function Upload() {
             return navigate('/login')
         }
 
-        if (research_cookie === 0) {
-            console.log("User authorized, redirecting to dashboard")
+        if (research_cookie == 0) {
+            console.log("User unauthorized, redirecting to dashboard")
             return navigate('/dashboard')
         }
     }, [true]);

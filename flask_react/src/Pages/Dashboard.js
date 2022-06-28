@@ -32,12 +32,12 @@ const Dashboard = () => {
   let user_cookie = Cookies.get("user_id")
   const navigate = useNavigate();
 
-  useEffect(() => {
-      if (!user_cookie) {
-          console.log("User not logged in, redirecting to login page")
-          return navigate('/login')
-      }
-  }, [true]);
+  // useEffect(() => {
+  //     if (!user_cookie) {
+  //         console.log("User not logged in, redirecting to login page")
+  //         return navigate('/login')
+  //     }
+  // }, [true]);
 
   return (
 

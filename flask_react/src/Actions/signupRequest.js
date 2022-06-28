@@ -41,6 +41,7 @@ import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import { Routes, Route, useNavigate } from "react-router-dom"
 import DashBoard from "../Pages/Dashboard"
+import { LoginRequest } from '../Actions/loginRequest';
 
 
 
@@ -50,7 +51,15 @@ export const SignupRequest = (props) => {
 
     // In data wordt de responde verzameld
     const [data, setData] = useState([{}])
-    const [clicked, setClicked] = useState(false)
+    const [clicked, setClicked] = useState(false);
+    const [msgUser, setMsgUser] = useState("");
+    const [msgPass, setMsgPass] = useState("");
+    const [userError, setUserError] = useState(false);
+    const [passError, setPassError] = useState(false);
+
+    const [check1, setCheck1] = useState(false)
+    const [check2, setCheck2] = useState(false)
+    const [authenticated, setAuthenticated] = useState(false)
 
     const navigate = useNavigate();
 
@@ -74,7 +83,27 @@ export const SignupRequest = (props) => {
                     setData(result)
                 });
 
-            navigate('/login');
+            LoginRequest(props.uName, props.pass).then(response => {
+                switch (response.code) {
+                    case 200:
+                        setAuthenticated(true)
+                        break;
+                    case 400 || 401:
+                        setMsgPass(response.description)
+                        setPassError(true)
+
+                        setMsgUser("")
+                        setUserError(true)
+                        break;
+                    default:
+                        setMsgPass("Something went wrong, not your fault")
+                        setPassError(true)
+                        break;
+                }
+            }
+            )
+            navigate("/dashboard");
+
             setClicked(false)
         }
 
@@ -91,7 +120,7 @@ export const SignupRequest = (props) => {
                 Sign up
             </Button>
             <Routes>
-                <Route key="/login" element={<DashBoard />} />
+                <Route key="/dashboard" element={<DashBoard />} />
             </Routes>
         </div>
     );

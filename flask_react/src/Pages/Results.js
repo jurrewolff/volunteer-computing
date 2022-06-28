@@ -17,7 +17,7 @@ export default function Results() {
         return navigate('/login')
     }
 
-    if (research_cookie === 0) {
+    if (research_cookie == 0) {
         console.log("User authorized, redirecting to dashboard")
         return navigate('/dashboard')
     }
