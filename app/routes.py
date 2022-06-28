@@ -3,12 +3,14 @@ from app.models.user import get_user
 from main import app
 from http import HTTPStatus
 from app.util import build_response
-from flask import jsonify, request
+from flask import jsonify, request, session
 from flask_login import login_required
 
 import json
 import app.models.project as project
 import app.models.results as results
+import app.models.volunteer as volunteer
+
 
 # TODO - Move existing routes to routes.py
 
