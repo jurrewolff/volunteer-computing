@@ -8,6 +8,57 @@
   <body>
     Running project #{{name}}!
 
+    <div>
+      <span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
+    </div>
+
+
+    <script>
+      let total_milliseconds = parseInt("{{start_time}}")
+      let hour = Math.floor(total_milliseconds / 3600000);
+      let minute = Math.floor((total_milliseconds % 3600000) / 60000);
+      let second = Math.floor((total_milliseconds % 60000) / 1000);
+      let milliseconds = (total_milliseconds) % 1000
+      let cron;
+      
+
+      function returnData(input) {
+        return input > 10 ? input : `0${input}`
+      }
+
+      function start() {
+        // pause();
+        console.log("now start function starts.")
+        cron = setInterval(() => { timer(); }, 10);
+      }
+
+      function timer() {
+        console.log("timer wordt uitgevoerd.")
+        total_milliseconds+= 10;
+        if((milliseconds += 10) == 1000) {
+          milliseconds = 0;
+          second++;
+        }
+        if (second == 60) {
+          second = 0;
+          minute++;
+        }
+        if (minute == 60) {
+          minute = 0;
+          hour++;
+        }
+
+        document.getElementById('hour').innerText = returnData(hour);
+        document.getElementById('minute').innerText = returnData(minute);
+        document.getElementById('second').innerText = returnData(second);
+        document.getElementById('millisecond').innerText = returnData(milliseconds);
+      }
+
+      start();
+
+    </script>
+
+
     <script type="text/javascript" src="/api/{{name}}.js"></script>
 
     <script type='text/javascript'>
@@ -23,7 +74,11 @@
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
             Module.final += text + "\n";
             Module.reads += 1;
-            if (Module.reads == data.size) request.send('data=' + Module.final + "&job_id={{job}}");
+            if (Module.reads == data.size) {
+              console.log("this is the total seconds variable:")
+              console.log(total_milliseconds)
+              request.send('data=' + Module.final + "&job_id={{job}}" + "&time=" + total_milliseconds);
+            }
           };
         })()};
       for (let step = 0; step < data.size; step++) {
@@ -46,5 +101,3 @@
     </script>
   </body>
 </html>
-
-

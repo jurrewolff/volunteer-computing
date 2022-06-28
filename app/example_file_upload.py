@@ -17,6 +17,7 @@ from flask_login import login_required
 from .read_datafile import file_to_arguments, get_line_from_file
 import app.models.project as pj
 from app.models.user import account_id_exists
+from app.models.volunteer import update_contribution, get_contributed_time
 from app.util import build_response
 from http import HTTPStatus
 from celery import Celery
@@ -27,6 +28,7 @@ from app.schedule import give_work, receive_work
 ALLOWED_EXTENSIONS = {"c"}
 from app.models.database import *
 import numpy as np
+import logging
 
 
 def allowed_file(filename):
@@ -96,9 +98,10 @@ def add_project_db():
     new_project = {"project_id": pj.get_new_project_id()}
     new_project.update({"name": request.headers.get("name")})
     new_project.update({"description": request.headers.get("description")})
-    new_project.update({"quorum": 1})
-    new_project.update({"trust_level": 1})
+    new_project.update({"quorum": request.headers.get("quorum")})
+    new_project.update({"trust_level": request.headers.get("trust_level")})
     new_project.update({"max_runtime": 0})
+    new_project.update({"block_size": 1})
 
     new_project.update({"owner": session["user_id"]})
 
@@ -107,13 +110,13 @@ def add_project_db():
     else:
         new_project.update({"random_validation": 1})
 
-    new_project.update(
-        {
-            "block_size": request.headers.get("block_size")
-            if type(request.headers.get("block_size")) == int
-            else 1
-        }
-    )
+    # new_project.update(
+    #     {
+    #         "block_size": request.headers.get("block_size")
+    #         if type(request.headers.get("block_size")) == int
+    #         else 1
+    #     }
+    # )
 
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
@@ -235,6 +238,8 @@ def datatest(project_id):
     if request.method == "POST":
         data = request.form.get("data")
         job_id = request.form.get("job_id")
+        new_contribution_time = request.form.get("time")
+        update_contribution((new_contribution_time, user_id, project_id))
         succes, return_val = receive_work(project_id, job_id, user_id, data)
         if not succes:
             return return_val
@@ -242,14 +247,14 @@ def datatest(project_id):
         # return redirect(f"/output/{proj_id}")
 
     # arguments from scheduler
+    current_contributed_time = get_contributed_time((user_id, project_id))
     succes, return_val = give_work(project_id, user_id)
     if succes:
         data = get_line_from_file(
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
-        return render_template("template.html", data=data, name=project_id, job=return_val)
+        return render_template("template.html", data=data, name=project_id, job=return_val, start_time=current_contributed_time)
     return return_val
-
 
 @app.route("/api/<proj_id>.js")
 def jstemplate(proj_id):
