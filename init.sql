@@ -59,5 +59,5 @@ project_id int,
 contributed_time int,
 PRIMARY KEY (user_id, project_id),
 FOREIGN KEY (user_id) REFERENCES User(user_id),
-FOREIGN KEY (project_id) REFERENCES Project(project_id),
+FOREIGN KEY (project_id) REFERENCES Project(project_id)
 );

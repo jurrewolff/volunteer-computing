@@ -27,6 +27,7 @@ from app.schedule import give_work, receive_work
 ALLOWED_EXTENSIONS = {"c"}
 from app.models.database import *
 import numpy as np
+import logging
 
 
 def allowed_file(filename):
@@ -213,7 +214,9 @@ def datatest(project_id):
         data = request.form.get("data")
         job_id = request.form.get("job_id")
         new_contribution_time = request.form.get("time")
-        update_contribution(new_contribution_time, user_id, project_id)
+        app.logger.warning("\n\nnew contributed time:")
+        app.logger.warning(new_contribution_time)
+        update_contribution((new_contribution_time, user_id, project_id))
         receive_work(project_id, job_id, user_id, data)
         calculate_per(project_id)
         # return redirect(f"/output/{proj_id}")
@@ -221,8 +224,8 @@ def datatest(project_id):
     # arguments from scheduler
     job_id = give_work(project_id, user_id)
     data = get_line_from_file(f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=job_id)
-    current_contributed_time = get_contributed_time(user_id, project_id)
-    return render_template("template.html", data=data, name=project_id, job=job_id, time=current_contributed_time)
+    current_contributed_time = get_contributed_time((user_id, project_id))
+    return render_template("template.html", data=data, name=project_id, job=job_id, start_time=current_contributed_time)
 
 
 @app.route("/<proj_id>.js")

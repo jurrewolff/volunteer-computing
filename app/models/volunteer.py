@@ -5,16 +5,19 @@ from main import app
 from app.models.database import *
 import app.models.user as user
 import app.models.project as project
+import logging
 
 #
-# Val should be of format: (new_contribution, user_id, project_id, )
+# Val should be of format: (new_contribution, user_id, project_id)
 def update_contribution(val):
     if contribution_exists((val[1], val[2])):
-        sql = "UPDATE Volunteer SET contributed_time %s WHERE user_id = %s AND project_id = %s "
+        app.logger.warning("\n\ntest1\n\n")
+        sql = "UPDATE Volunteer SET contributed_time = %s WHERE user_id = %s AND project_id = %s;"
         db.cur.execute(sql, val)
         db.con.commit()
         return True
     else:
+        app.logger.warning("\n\ntest2\n\n")
         insert_volunteer((val[1], val[2], val[0]))
 
     return False
@@ -23,6 +26,7 @@ def update_contribution(val):
 # Val should be of format: (user_id, project_id, contributed_time)
 def insert_volunteer(val):
     if not contribution_exists((val[0], val[1])):
+        app.logger.warning("volunteer is being inserted.")
         sql = "INSERT INTO Volunteer VALUES (%s, %s, %s)"
         db.cur.execute(sql, val)
         db.con.commit()
@@ -32,7 +36,7 @@ def insert_volunteer(val):
 # Returns True if contribution is in table, returns False otherwise.
 # Val should be of format: (user_id, project_id).
 def contribution_exists(val):
-    sql = f"SELECT 1 FROM Result WHERE user_id = '{val[0]}' AND project_id = '{val[1]}'"
+    sql = f"SELECT user_id FROM Volunteer WHERE user_id = '{val[0]}' AND project_id = '{val[1]}'"
     db.cur.execute(sql)
     res = db.cur.fetchone()
     if res == None:
@@ -49,5 +53,7 @@ def get_contributed_time(val):
         sql = f"SELECT contributed_time FROM Volunteer WHERE user_id = '{val[0]}' AND project_id = '{val[1]}'"
         db.cur.execute(sql)
         res = db.cur.fetchone()
-        return res
+        app.logger.warning("\n\nres:")
+        app.logger.warning(res[0])
+        return res[0]
         
