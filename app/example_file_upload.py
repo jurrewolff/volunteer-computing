@@ -227,29 +227,36 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
-@app.route("/api/runproject/<project_id>", methods=("GET", "POST"))
+@app.route("/api/runproject/<project_id>", methods=["GET"])
 @login_required
-def datatest(project_id):
-    # TODO switch to request instead of params in url
-    user_id = session["user_id"]
-    if request.method == "POST":
-        data = request.form.get("data")
-        job_id = request.form.get("job_id")
-        succes, return_val = receive_work(project_id, job_id, user_id, data)
-        if not succes:
-            return return_val
-        calculate_per(project_id)
-        # return redirect(f"/output/{proj_id}")
+def start_running_project(project_id):
+    return render_template("template.html", name=project_id)
 
-    # arguments from scheduler
+
+@app.route("/api/get_job/<project_id>", methods=["GET"])
+@login_required
+def request_job(project_id):
+    user_id = session["user_id"]
     succes, return_val = give_work(project_id, user_id)
     if succes:
         data = get_line_from_file(
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
-        return render_template("template.html", data=data, name=project_id, job=return_val)
+        return jsonify({"job_id":return_val, "data": data})
     return return_val
 
+@app.route("/api/post_result/<project_id>", methods=["POST"])
+@login_required
+def handle_result(project_id):
+    user_id = session["user_id"]
+    data = request.form.get("data")
+    job_id = request.form.get("job_id")
+    succes, return_val = receive_work(project_id, job_id, user_id, data)
+    if not succes:
+        return return_val
+    calculate_per(project_id)
+    return build_response(HTTPStatus.OK, "result handled")
+    
 
 @app.route("/api/<proj_id>.js")
 def jstemplate(proj_id):
