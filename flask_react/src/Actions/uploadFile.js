@@ -4,6 +4,8 @@ import React from 'react'
 import { useNavigate } from "react-router-dom"
 
 
+// TODO netter maken
+
 export const UploadRequest = (props) => {
     const [clicked, setClicked] = useState(false)
     const navigate = useNavigate();

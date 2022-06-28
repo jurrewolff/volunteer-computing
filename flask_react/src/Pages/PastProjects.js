@@ -4,6 +4,10 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
 
+import PermanentDrawerLeft from '../Components/SideMenu';
+import ResponsiveAppBar from '../Components/Navbar'
+import Box from '@mui/material/Box';
+
 
 export default function PastProjects() {
 

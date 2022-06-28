@@ -32,7 +32,7 @@ function JumpPage() {
                 <Route path="/signup/*" element={<SignUp />} />
                 <Route path="/dashBoard/*" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />
-                {/* Either first or second moreInfo endpoint is correct. It 
+                {/* Either first or second moreInfo endpoint is correct. It
                 should be the first one. Remove when done testing.*/}
                 <Route path="/moreInfo/:title" element={<MoreInfo />} />
                 {/* <Route path="/moreInfo/:title/:action" element={<MoreInfo />} /> */}
