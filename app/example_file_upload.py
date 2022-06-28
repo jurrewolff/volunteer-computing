@@ -96,9 +96,10 @@ def add_project_db():
     new_project = {"project_id": pj.get_new_project_id()}
     new_project.update({"name": request.headers.get("name")})
     new_project.update({"description": request.headers.get("description")})
-    new_project.update({"quorum": 1})
-    new_project.update({"trust_level": 1})
+    new_project.update({"quorum": request.headers.get("quorum")})
+    new_project.update({"trust_level": request.headers.get("trust_level")})
     new_project.update({"max_runtime": 0})
+    new_project.update({"block_size": 1})
 
     new_project.update({"owner": session["user_id"]})
 
@@ -107,13 +108,13 @@ def add_project_db():
     else:
         new_project.update({"random_validation": 1})
 
-    new_project.update(
-        {
-            "block_size": request.headers.get("block_size")
-            if type(request.headers.get("block_size")) == int
-            else 1
-        }
-    )
+    # new_project.update(
+    #     {
+    #         "block_size": request.headers.get("block_size")
+    #         if type(request.headers.get("block_size")) == int
+    #         else 1
+    #     }
+    # )
 
     # Check if required information has been retrieved from header.
     if not new_project["name"]:

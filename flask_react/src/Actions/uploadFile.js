@@ -22,8 +22,9 @@ export const UploadRequest = (props) => {
                 headers: {
                     'name': props.name,
                     'description': props.description,
-                    'block_size': props.block_size,
+                    'quorum': props.quorum,
                     'always_check': props.always_check,
+                    'trust_level': props.trust_level
                 },
                 body: formData
             })

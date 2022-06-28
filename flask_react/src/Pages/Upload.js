@@ -9,8 +9,11 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Slider from '@mui/material/Slider';
 import ToggleButton from '@mui/material/ToggleButton';
 import CheckIcon from '@mui/icons-material/Check';
+
+
 
 export default function Upload() {
     const paperStyle = { padding: 20, margin: "20px auto" }
@@ -18,7 +21,17 @@ export default function Upload() {
     const [selected, setSelected] = useState();
     const [name, setName] = useState();
     const [description, setDescription] = useState();
-    const [block_size, setBlocksize] = useState();
+    const [quorum, setQuorum] = useState(1);
+    const [trust_level, setTrustlevel] = useState(0.8);
+
+    const changeTrust = e => {
+        console.log(e.target.value);
+        setTrustlevel(e.target.value);
+    }
+
+    const changeQuorum = e => {
+        setQuorum(e.target.value);
+    }
 
     return (
         <>
@@ -33,6 +46,7 @@ export default function Upload() {
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <Grid >
+                                Title of the project:
                                 <TextField
                                     margin="normal"
                                     required
@@ -43,6 +57,7 @@ export default function Upload() {
                                 />
                             </Grid>
                             <Grid >
+                                Description of the project:
                                 <TextField
                                     margin="normal"
                                     required
@@ -53,17 +68,7 @@ export default function Upload() {
                                 />
                             </Grid>
                             <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="block_size"
-                                    label="Block size"
-                                    variant="outlined"
-                                    onChange={(e) => setBlocksize(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid >
-                                Enable doublechecking all inputs?
+                                Random Validation:
                                 <ToggleButton
                                     value="check"
                                     selected={selected}
@@ -72,10 +77,36 @@ export default function Upload() {
                                     <CheckIcon />
                                 </ToggleButton>
                             </Grid>
+                            <Grid >
+                                Amount of people to validate results:
+                                <Slider
+                                    defaultValue={1}
+                                    step={1}
+                                    // marks={{value: 0, label='Low trust'}, {value: 1, label='High trust'}}
+                                    min={1}
+                                    max={5}
+                                    valueLabelDisplay="auto"
+                                    onChange={changeQuorum}
+                                />
+                            </Grid>
+                            <Grid>
+                                Trust level:
+                                <Slider
+                                    defaultValue={0.8}
+                                    step={0.1}
+                                    // marks={{value: 0, label='Low trust'}, {value: 1, label='High trust'}}
+                                    min={0.1}
+                                    max={1}
+                                    valueLabelDisplay="auto"
+                                    onChange={changeTrust}
+                                />
+                            </Grid>
 
                             <Grid>
                                 <div>
-                                    <input type="file" id="file" />
+                                    Give C File:
+                                    <input type="file" id="file" accept=".c"/>
+                                    Give input File:
                                     <input type="file" id="input" />
                                 </div>
                             </Grid>
@@ -83,8 +114,9 @@ export default function Upload() {
                                 < UploadRequest
                                     name={name}
                                     description={description}
-                                    block_size={block_size}
+                                    quorum={quorum}
                                     always_check={selected}
+                                    trust_level={trust_level}
                                 />
                             </Grid>
                         </Grid>
