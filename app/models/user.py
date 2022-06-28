@@ -81,6 +81,22 @@ def get_user(username):
         }
     return False
 
+# returns a dictionary container the user info. If the user doesn't exists, False is returned.
+def get_all_users(amount=None):
+    if amount:
+        sql = f"SELECT TOP {amount} * FROM User ORDER BY trust_level"
+    else:
+        sql = f"SELECT TOP 10 * FROM User ORDER BY trust_level"
+    db.cur.execute(sql)
+    res = db.cur.fetchone()
+    return {
+        "user_id": res[0],
+        "username": res[1],
+        "score": res[6],
+        "trust_level": res[7],
+        "is_researcher": res[9],
+    }
+
 
 # Returns the lowest id that has not yet been taken.
 def get_new_user_id():
