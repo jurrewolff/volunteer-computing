@@ -85,10 +85,14 @@ def get_project(project_id):
             "project_id": res[0],
             "name": res[1],
             "description": res[2],
-            "owner": res[3],
-            "block_size": res[4],
-            "random_validation": res[5],
-            "max_runtime": res[6],
+            "block_size": res[3],
+            "trust_level": res[4],
+            "owner": res[5],
+            "random_validation": res[6],
+            "max_runtime": res[7],
+            "quorum_size": res[8],
+            "done": res[9],
+            "progress": res[10],
         }
     else:
         return False
