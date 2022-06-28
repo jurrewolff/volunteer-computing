@@ -179,7 +179,7 @@ export default function Login() {
                             </Button>
                         </Grid>
                         <Grid sx={{ pl: 1.5 }}>
-                            <Link href="/signup" variant="body2">
+                            <Link href="/signUp" variant="body2">
                                 {"Don't have an account yet? Signup!"}
                             </Link>
                         </Grid>
