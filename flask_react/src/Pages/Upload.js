@@ -1,7 +1,9 @@
 import React from 'react';
 import './Login.css';
-import { useState } from 'react';
 import { UploadRequest } from '../Actions/uploadFile';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
@@ -20,6 +22,24 @@ export default function Upload() {
     const [description, setDescription] = useState();
     const [block_size, setBlocksize] = useState();
 
+    let user_cookie = Cookies.get("user_id")
+    let research_cookie = Cookies.get("is_researcher")
+
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        if (!user_cookie) {
+            console.log("User not logged in, redirecting to login page")
+            return navigate('/login')
+        }
+
+        if (research_cookie == 0) {
+            console.log("User unauthorized, redirecting to dashboard")
+            return navigate('/dashboard')
+        }
+    }, [true]);
+
     return (
         <>
             <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
@@ -32,7 +52,7 @@ export default function Upload() {
                     <Divider variant="middle" />
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
-							<Grid >
+                            <Grid >
                                 <TextField
                                     margin="normal"
                                     required
@@ -42,7 +62,7 @@ export default function Upload() {
                                     onChange={(e) => setName(e.target.value)}
                                 />
                             </Grid>
-							<Grid >
+                            <Grid >
                                 <TextField
                                     margin="normal"
                                     required
@@ -52,7 +72,7 @@ export default function Upload() {
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </Grid>
-							<Grid >
+                            <Grid >
                                 <TextField
                                     margin="normal"
                                     required
@@ -62,24 +82,24 @@ export default function Upload() {
                                     onChange={(e) => setBlocksize(e.target.value)}
                                 />
                             </Grid>
-							<Grid >
+                            <Grid >
                                 Enable doublechecking all inputs?
                                 <ToggleButton
                                     value="check"
                                     selected={selected}
-                                    onChange={() => {setSelected(!selected)}}
+                                    onChange={() => { setSelected(!selected) }}
                                 >
                                     <CheckIcon />
                                 </ToggleButton>
                             </Grid>
-							
+
                             <Grid>
-							<div>
-								<input type="file" id="file"/>
-								<input type="file" id="input"/>
-							</div>
-							</Grid>
-							<Grid alignitems="center">
+                                <div>
+                                    <input type="file" id="file" />
+                                    <input type="file" id="input" />
+                                </div>
+                            </Grid>
+                            <Grid alignitems="center">
                                 < UploadRequest
                                     name={name}
                                     description={description}

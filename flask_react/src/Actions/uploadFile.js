@@ -4,26 +4,31 @@ import React from 'react'
 import { useNavigate } from "react-router-dom"
 
 
+// TODO netter maken
+
 export const UploadRequest = (props) => {
     const [clicked, setClicked] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
         if (clicked) {
-			const formData = new FormData()
-			const codeFile = document.getElementById('file').files[0]
-			const inputFile = document.getElementById('input').files[0]
-			formData.append('file', codeFile)
-			formData.append('input', inputFile)
-			console.log(codeFile)
-			console.log(inputFile)
-            fetch("/upload", {method: 'POST',
-							  headers: {'name': props.name,
-										'description': props.description,
-										'block_size': props.block_size,
-										'always_check': props.always_check,
-										},
-							  body: formData})
+            const formData = new FormData()
+            const codeFile = document.getElementById('file').files[0]
+            const inputFile = document.getElementById('input').files[0]
+            formData.append('file', codeFile)
+            formData.append('input', inputFile)
+            console.log(codeFile)
+            console.log(inputFile)
+            fetch("/api/upload", {
+                method: 'POST',
+                headers: {
+                    'name': props.name,
+                    'description': props.description,
+                    'block_size': props.block_size,
+                    'always_check': props.always_check,
+                },
+                body: formData
+            })
                 .then((response) => response.json())
                 .then((result) => {
                     console.log({ result })
@@ -32,7 +37,7 @@ export const UploadRequest = (props) => {
             navigate('/dashboard');
             setClicked(false)
         }
-	}, [clicked]);
+    }, [clicked]);
 
     return (
         <div>

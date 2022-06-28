@@ -1,11 +1,3 @@
-/*
- * Maakt het mogelijk om in te loggen.
- * POST request voor login.
- * in var worden de variabelen meegegeven voor de username en ww, is voor nu
- * nog gehardcoded voor testen.
- *
- */
-
 import { useState, useEffect } from 'react'
 import { Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -21,7 +13,7 @@ export const ProjectsRequest = () => {
   const [data, setData] = useState([{}]);
 
   useEffect(() => {
-    fetch("/projects")
+    fetch("/api/projects")
       .then(res => res.json())
       .then(data => {
         setData(data)
@@ -34,8 +26,8 @@ export const ProjectsRequest = () => {
 
     // Function for the responsive button.
     function clickButton() {
-        var url = 'http://localhost:8001/runproject/' + project.project_id;
-        window.open(url, '_tab');
+      var url = 'http://localhost:3601/api/runproject/' + project.project_id;
+      window.open(url, '_tab');
     }
 
     return (

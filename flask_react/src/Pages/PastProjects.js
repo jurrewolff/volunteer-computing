@@ -1,23 +1,33 @@
-
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { ListGroup, Container, Row, Col, Button, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import Cookies from "js-cookie";
+import { Link, useNavigate } from "react-router-dom";
+
+import PermanentDrawerLeft from '../Components/SideMenu';
+import ResponsiveAppBar from '../Components/Navbar'
+import Box from '@mui/material/Box';
 
 
 export default function PastProjects() {
 
     const [data, setData] = useState([{}]);
 
+    let user_cookie = Cookies.get("user_id")
+    const navigate = useNavigate();
+
     useEffect(() => {
+        if (!user_cookie) {
+            console.log("User not logged in, redirecting to login page")
+            return navigate('/login')
+        }
         const requestOptions = {
             method: 'GET',
             headers: {
                 'user_id': Cookies.get("user_id")
             }
         };
-        fetch("/my_projects", requestOptions)
+        fetch("/api/my_projects", requestOptions)
             .then(res => res.json())
             .then(data => {
                 setData(data)
@@ -52,7 +62,6 @@ export default function PastProjects() {
 
         ));
     }
-
 
     return (
         <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>

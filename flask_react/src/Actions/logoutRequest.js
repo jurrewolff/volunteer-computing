@@ -4,7 +4,12 @@
  *
  */
 
+// TODO navigate naar homepage
+// TODO werkend maken
+// UPDATE schoonmaken
+
 import { useState, useEffect } from 'react'
+import { Routes, Route, useNavigate } from "react-router-dom"
 
 import Button from '@mui/material/Button';
 
@@ -12,14 +17,18 @@ export const LogoutRequest = (props) => {
     const [data, setData] = useState([{}])
     const [clicked, setClicked] = useState(false)
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (clicked) {
             const requestOptions = {
                 method: 'GET',
                 headers: {}
             };
-            fetch("/logout", requestOptions)
-                .then((response) => response.json())
+            fetch("/api/logout", requestOptions)
+                .then((response) => {
+                    response.json()
+                })
                 .then((result) => {
                     setData(result)
                 })

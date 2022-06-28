@@ -1,15 +1,17 @@
-/*
- * Voor het registreren van een gebruiker. Werkt nu alleen met mockup database,
- * waarbij alleen username en ww vereist zijn.
- * code 200: is goed, alle andere zijn erros.
- */
+// /*
+//  * Voor het registreren van een gebruiker. Werkt nu alleen met mockup database,
+//  * waarbij alleen username en ww vereist zijn.
+//  * code 200: is goed, alle andere zijn erros.
+//  */
 
 import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import { Routes, Route, useNavigate } from "react-router-dom"
 import DashBoard from "../Pages/Dashboard"
+import { LoginRequest } from '../Actions/loginRequest';
 
 
+// TODO werkend maken
 
 // In props zitten de meegegeven variabelen van SignUp.js,
 // wordt verzameld in <SignupRequest .... />
@@ -17,7 +19,15 @@ export const SignupRequest = (props) => {
 
     // In data wordt de responde verzameld
     const [data, setData] = useState([{}])
-    const [clicked, setClicked] = useState(false)
+    const [clicked, setClicked] = useState(false);
+    const [msgUser, setMsgUser] = useState("");
+    const [msgPass, setMsgPass] = useState("");
+    const [userError, setUserError] = useState(false);
+    const [passError, setPassError] = useState(false);
+
+    const [check1, setCheck1] = useState(false)
+    const [check2, setCheck2] = useState(false)
+    const [authenticated, setAuthenticated] = useState(false)
 
     const navigate = useNavigate();
 
@@ -36,14 +46,32 @@ export const SignupRequest = (props) => {
                     'background': props.background,
                 }
             };
-            fetch("/signup", requestOptions)
-                .then((response) => response.json())
+            fetch("/api/signup", requestOptions)
                 .then((result) => {
                     setData(result)
-                    console.log({ result }) //DELETE
                 });
 
-            navigate('/dashboard');
+            LoginRequest(props.uName, props.pass).then(response => {
+                switch (response.code) {
+                    case 200:
+                        setAuthenticated(true)
+                        break;
+                    case 400 || 401:
+                        setMsgPass(response.description)
+                        setPassError(true)
+
+                        setMsgUser("")
+                        setUserError(true)
+                        break;
+                    default:
+                        setMsgPass("Something went wrong, not your fault")
+                        setPassError(true)
+                        break;
+                }
+            }
+            )
+            navigate("/dashboard");
+
             setClicked(false)
         }
 
@@ -60,167 +88,9 @@ export const SignupRequest = (props) => {
                 Sign up
             </Button>
             <Routes>
-                <Route path="/login" element={<DashBoard />} />
+                <Route key="/dashboard" element={<DashBoard />} />
             </Routes>
         </div>
     );
 }
 
-// checken of alles is ingevuld
-// {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-
-// TEST BENDE WAAR IK MISSCHIEN NOG IETS UIT KAN HALEN!!! //
-
-
-
-// export default SignupRequest;
-
-// import React from 'react';
-// import { useState, useEffect } from 'react'
-
-// export const Login = () => {
-//     const [data, setData] = useState([{}])
-//     const [clicked, setClicked] = useState(false)
-
-//     useEffect(() => {
-//         if (clicked) {
-//             const requestOptions = {
-//                 method: 'POST',
-//                 headers: {
-//                     'username': 'user1',
-//                     "password": "password1"
-//                 }
-//             };
-//             fetch("/login", requestOptions)
-//                 .then((response) => response.json())
-//                 .then((result) => {
-//                     setData(result)
-//                     console.log({ result }) //DELETE
-//                 })
-//             setClicked(false)
-//         }
-//     }, [clicked]);
-
-//     return (
-//         <div>
-//             <button onClick={() => setClicked(true)}>Fetch data</button>
-//             <div>
-//                 <h2>{data.code}</h2>
-//                 <h2>{data.description}</h2>
-//                 <br />
-//             </div>
-//         </div>
-//     );
-// }
-// // export const SignupRequest = () => {
-// //     const [data, setData] = useState([{}])
-// //     const [clicked, setClicked] = useState(false)
-
-// //     // const [pressed, setPressed] = useState(false)
-// //     useEffect(() => {
-// //         if (clicked) {
-// //             const requestOptions = {
-// //                 method: 'POST',
-// //                 headers: {
-// //                     'username': 'user1',
-// //                     "password": "password1"
-// //                 }
-// //             };
-// //             fetch("/login", requestOptions)
-// //                 .then((response) => response.json())
-// //                 .then((result) => {
-// //                     setData(result)
-// //                     console.log({ result }) //DELETE
-// //                 })
-// //             setClicked(false)
-// //         }
-// //     }, [clicked]);
-
-// //     return (
-// //         <div>
-// //             <button onClick={() => setClicked(true)}>Fetch data</button>
-// //             <div>
-// //                 <h2>{data.code}</h2>
-// //                 <h2>{data.description}</h2>
-// //                 <br />
-// //             </div>
-// //         </div>
-// //     );
-// // }
-
-// // export default SignupRequest;
-
-/*
- * Maakt het mogelijk om in te loggen.
- * POST request voor login.
- * in var worden ed variabelen meegegeven voor de username en ww
- */
-/*
- * Maakt het mogelijk om in te loggen.
- * POST request voor login.
- * in var worden ed variabelen meegegeven voor de username en ww
- */
-
-// import { useState, useEffect } from 'react'
-
-// export const Mf = () => {
-//     const [data, setData] = useState([{}])
-//     const [clicked, setClicked] = useState(false)
-
-//     useEffect(() => {
-//         if (clicked) {
-//             const requestOptions = {
-//                 method: 'POST',
-//                 headers: {
-//                     'username': 'user1',
-//                     "password": "password1"
-//                 }
-//             };
-//             fetch("/login", requestOptions)
-//                 .then((response) => response.json())
-//                 .then((result) => {
-//                     setData(result)
-//                     console.log({ result }) //DELETE
-//                 })
-//             setClicked(false)
-//         }
-//     }, [clicked]);
-
-//     return (
-//         <div>
-//             <button onClick={() => setClicked(true)}>Fetch data</button>
-//             <div>
-//                 <h2>{data.code}</h2>
-//                 <h2>{data.description}</h2>
-//                 <br />
-//             </div>
-//         </div>
-//     );
-// }
-
-// GET request
-// export const LogginIn = () => {
-
-//     const [data, setData] = useState([{}])
-//     const [pressed, setPressed] = useState(false)
-
-
-//     useEffect(() => {
-//         if (pressed) {
-//             fetch("/login")
-//                 .then(res => res.json())
-//                 .then(data => {
-//                     setData(data)
-//                     console.log(data)
-//                 })
-//         }
-//     }, [pressed]);
-
-//     return (
-//         <div className="App">
-//             <button onClick={() => setPressed(true)}> login </button>
-//             <p>{data.code}</p>
-//             <p>Druk de knop voor GET request</p>
-//         </div>
-//     );
-// }
