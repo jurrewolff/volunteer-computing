@@ -13,7 +13,7 @@ export function LoginRequest(uname, pass) {
         }
     };
 
-    return (fetch("/login", requestOptions)
+    return (fetch("/api/login", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             return result;

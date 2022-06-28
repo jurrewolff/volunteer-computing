@@ -71,7 +71,7 @@ export default function Nav(props) {
             method: 'GET',
             headers: {}
         };
-        fetch("/logout", requestOptions)
+        fetch("/api/logout", requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 setLogoutStatus(result)
@@ -160,7 +160,12 @@ export default function Nav(props) {
                     <Link to="/dashBoard">
                         <MenuItem onClick={handleClose}>Dashboard</MenuItem>
                     </Link>
-                    <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                    <Link to="/">
+                        <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                    </Link>
+                    <Link to="/userinfo">
+                        <MenuItem onClick={handleClose}>Userinfo</MenuItem>
+                    </Link>
                 </Menu>
             </Box>
         )

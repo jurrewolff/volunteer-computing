@@ -48,7 +48,7 @@ export const SignupRequest = (email, pass, uname, lname, fname, inst,
     console.log(requestOptions)
 
 
-    return (fetch("/signup", requestOptions)
+    return (fetch("/api/signup", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             return result;

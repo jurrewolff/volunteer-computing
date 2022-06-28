@@ -74,7 +74,7 @@ def load_user(username: str) -> User:
     return User.get(username)
 
 
-@app.route("/signup", methods=["POST"])
+@app.route("/api/signup", methods=["POST"])
 def signup():
     """
     Handle signup request; Extract and check presence of request headers,
@@ -151,7 +151,7 @@ def signup():
     return build_response(HTTPStatus.CREATED, "new user is inserted into db")
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login():
     """
     Handle login request; Check request headers, get user from db,
@@ -206,7 +206,7 @@ def login():
     return response
 
 
-@app.route("/logout", methods=["GET"])
+@app.route("/api/logout", methods=["GET"])
 @login_required
 def logout():
     """Handle logout request"""

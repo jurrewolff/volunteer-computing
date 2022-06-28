@@ -5,6 +5,7 @@ class database:
     def __init__(self):
         self.con = self.connection()
         self.cur = self.con.cursor(buffered=True)
+        # TODO: buffered is niet ideaal voor grote tabellen zoals Results geloof ik
 
     def connection(self):
 

@@ -107,6 +107,8 @@ export default function Signup() {
                             break;
                         case 400:
                         case 401:
+                        case 409:
+                        case 500:
                             setMsgPass(response.description)
                             setPassError(true)
                             break;

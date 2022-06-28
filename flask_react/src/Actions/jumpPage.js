@@ -16,6 +16,8 @@ import PastProjects from "../Pages/PastProjects"
 import Logout from "../Pages/Logout"
 import Results from "../Pages/Results"
 import Account from "../Pages/Account"
+import Usage from "../Pages/Usage"
+
 
 function JumpPage() {
     return (
@@ -30,7 +32,11 @@ function JumpPage() {
                 <Route path="/signup/*" element={<SignUp />} />
                 <Route path="/dashBoard/*" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />
-                <Route path="/moreInfo/:title/:action" element={<MoreInfo />} />
+                {/* Either first or second moreInfo endpoint is correct. It
+                should be the first one. Remove when done testing.*/}
+                <Route path="/moreInfo/:title" element={<MoreInfo />} />
+                {/* <Route path="/moreInfo/:title/:action" element={<MoreInfo />} /> */}
+                <Route path="/usage" element={<Usage />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/results/*" element={<Results />} />
                 <Route path="/account" element={<Account />} />
@@ -41,4 +47,3 @@ function JumpPage() {
 }
 
 export default JumpPage;
-

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import { makeStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
@@ -74,7 +74,6 @@ const useStyles = makeStyles({
 
 
 export default function PermanentDrawerLeft() {
-
     let pages;
     let icons;
     let paths;
@@ -104,7 +103,7 @@ export default function PermanentDrawerLeft() {
                     </ListItemIcon>
                     <ListItemText primary={page} sx={{ my: 2, color: 'black', display: 'block' }} />
                 </ListItemButton>
-            </Link>
+            </Link >
         )
     }
 
@@ -117,9 +116,7 @@ export default function PermanentDrawerLeft() {
             >
                 <Toolbar />
                 <Divider />
-                <List
-                    className={classes.root}
-                >
+                <List className={classes.root}>
                     {pages.map((page, index) => (
                         <ListItem key={page}>
                             {makeLink(page, index)}
@@ -128,9 +125,7 @@ export default function PermanentDrawerLeft() {
                     ))}
                 </List>
                 <Divider />
-                <List
-                    className={classes.child}
-                >
+                <List className={classes.child}>
                     <ListItem key={'User Info'} disablePadding>
                         <Link to={"/userinfo"}>
                             <ListItemButton>

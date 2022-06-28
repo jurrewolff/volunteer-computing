@@ -25,7 +25,7 @@ export const LogoutRequest = (props) => {
                 method: 'GET',
                 headers: {}
             };
-            fetch("/logout", requestOptions)
+            fetch("/api/logout", requestOptions)
                 .then((response) => {
                     response.json()
                 })

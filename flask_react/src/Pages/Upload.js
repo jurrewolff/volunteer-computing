@@ -9,17 +9,16 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import ToggleButton from '@mui/material/ToggleButton';
+import CheckIcon from '@mui/icons-material/Check';
 
 export default function Upload() {
     const paperStyle = { padding: 20, margin: "20px auto" }
 
+    const [selected, setSelected] = useState();
     const [name, setName] = useState();
     const [description, setDescription] = useState();
     const [block_size, setBlocksize] = useState();
-    const [random_validation, setValidation] = useState();
-    const [max_runtime, setRuntime] = useState();
-    const [owner, setOwner] = useState();
-    const [qorum, setQorum] = useState();
 
     return (
         <>
@@ -64,45 +63,16 @@ export default function Upload() {
                                 />
                             </Grid>
                             <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="owner"
-                                    label="Owner?"
-                                    variant="outlined"
-                                    onChange={(e) => setOwner(e.target.value)}
-                                />
+                                Enable doublechecking all inputs?
+                                <ToggleButton
+                                    value="check"
+                                    selected={selected}
+                                    onChange={() => { setSelected(!selected) }}
+                                >
+                                    <CheckIcon />
+                                </ToggleButton>
                             </Grid>
-                            <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="random_validation"
-                                    label="Random validation?"
-                                    variant="outlined"
-                                    onChange={(e) => setValidation(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="max_runtime"
-                                    label="Max runtime?"
-                                    variant="outlined"
-                                    onChange={(e) => setRuntime(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid >
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    id="qorum"
-                                    label="Qorum?"
-                                    variant="outlined"
-                                    onChange={(e) => setQorum(e.target.value)}
-                                />
-                            </Grid>
+
                             <Grid>
                                 <div>
                                     <input type="file" id="file" />
@@ -111,9 +81,10 @@ export default function Upload() {
                             </Grid>
                             <Grid alignitems="center">
                                 < UploadRequest
-                                    name={name} description={description} block_size={block_size}
-                                    owner={owner} random_validation={random_validation}
-                                    max_runtime={max_runtime} qorum={qorum}
+                                    name={name}
+                                    description={description}
+                                    block_size={block_size}
+                                    always_check={selected}
                                 />
                             </Grid>
                         </Grid>

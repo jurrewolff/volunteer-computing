@@ -7,19 +7,13 @@
   </head>
   <body>
     Running project #{{name}}!
-    <script type="text/javascript">
-      document.write('<a href="/output/{{name}}">Check Results!</a>');
-     </script>
 
-    <script type="text/javascript" src="/{{name}}.js"></script>
+    <script type="text/javascript" src="/api/{{name}}.js"></script>
 
     <script type='text/javascript'>
       var request = new XMLHttpRequest();
-      request.open('POST', '/runproject/{{name}}', true);
+      request.open('POST', '/api/runproject/{{name}}', true);
       request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      request.onreadystatechange = function() {
-          // do something
-      };
       var data = {{ data | tojson }};
       var Module = {
         final: '',
@@ -29,14 +23,26 @@
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
             Module.final += text + "\n";
             Module.reads += 1;
-            if (Module.reads == data.size) request.send('data=' + Module.final);
+            if (Module.reads == data.size) request.send('data=' + Module.final + "&job_id={{job}}");
           };
         })()};
       for (let step = 0; step < data.size; step++) {
           // Runs 5 times, with values of step 0 through 4.
-          var to_execute = data.arguments[step].split(" ");
-          execute_C_file(to_execute, Module.print, data.lines[step]);
+          var to_execute = data.arguments.split(" ");
+          execute_C_file(to_execute, Module.print);
       };
+    </script>
+
+    <script>
+      function listCookies() {
+          var theCookies = document.cookie.split(';');
+          var aString = '';
+          for (var i = 1 ; i <= theCookies.length; i++) {
+              aString += i + ' ' + theCookies[i-1] + "\n";
+          }
+          return aString;
+      }
+      console.log(listCookies());
     </script>
   </body>
 </html>

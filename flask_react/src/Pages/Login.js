@@ -39,8 +39,6 @@ export default function Login() {
     useEffect(() => {
         if (!userError && !passError && check1 && check2) {
             LoginRequest(uname, pass).then(response => {
-                console.log(response.code)
-
                 switch (response.code) {
                     case 200:
                         setAuthenticated(true)

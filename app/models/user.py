@@ -1,6 +1,7 @@
 from itertools import count, filterfalse
 
 from app.models.database import *
+from app.models.results import get_volunteer
 
 
 def print_users():  # For testing purpuses.
@@ -87,3 +88,17 @@ def get_new_user_id():
     db.cur.execute(sql)
     ids_taken = [x[0] for x in db.cur.fetchall()]
     return next(filterfalse(set(ids_taken).__contains__, count(1)))
+
+
+def get_trust_level(job_id, project_id):
+    user_id = get_volunteer(job_id, project_id)[0]
+    query = f"SELECT (SELECT trust_level FROM User WHERE  user_id = '{user_id}'),(SELECT trust_level FROM Project WHERE  project_id = '{project_id}') FROM DUAL"
+    db.cur.execute(query)
+    res = db.cur.fetchone()
+    return res
+
+
+def update_trust_level(user_id, update_rule):
+    query = f"UPDATE User SET trust_level = {update_rule} WHERE user_id = '{user_id}';"
+    db.cur.execute(query)
+    db.con.commit()
