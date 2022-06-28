@@ -4,8 +4,11 @@ import random
 from collections import Counter
 
 from app import app
+from app.util import build_response
+from http import HTTPStatus
+
 from app.models.database import db
-from app.models.jobs import increment_quorum_size, possible_jobs, job_marked_done
+from app.models.jobs import increment_quorum_size, possible_jobs, job_marked_done, submitted_already_for_job
 from app.models.results import save_result, get_number_of_results
 from app.models.user import get_trust_level, update_trust_level
 from app.models.project import get_n_open_jobs
@@ -87,9 +90,14 @@ def majority_agrees(project_id, job_id):
 def receive_work(project_id, job_id, volunteer_id, result):
     """
     Receives a result. When enough results have been collected for a job it will be marked as done.
+    :returns: a bool indicating the succes and possibly an associated error.
     """
-    if job_marked_done(project_id, job_id,):
-        return
+    if job_marked_done(project_id, job_id):
+        return False, build_response(HTTPStatus.BAD_REQUEST, "This jobs has already been completed.")
+    if submitted_already_for_job(project_id, job_id, volunteer_id):
+        return False, build_response(HTTPStatus.BAD_REQUEST, "User has already submitted a result for this jobs.")
+
+
     save_result(project_id, job_id, volunteer_id, result)
     n_results = get_number_of_results(job_id, project_id)[0]
     random_replication = single_result_query(
@@ -102,32 +110,34 @@ def receive_work(project_id, job_id, volunteer_id, result):
         if not trust:
             increment_quorum_size(project_id, job_id)
             # the quorum size has been increased by one, so we wait for someone to replicate it.
-            return
+            return True, None
         # quorum_size 1 and we trust the result so we are done
         if quorum_size == 1:
             job_done(project_id, job_id, result)
-            return
-
+            return True, None
         else:
             # quorum not yet reached, we wait for someone to replicate the result.
-            pass
+            return True, None
     if n_results == quorum_size:
         majority_result = majority_agrees(project_id, job_id)
         if majority_result != False:
             job_done(project_id, job_id, majority_result)
-            return
+            return True, None
         else:
             increment_quorum_size(project_id, job_id)
-            return
-    return
+            return True, None
+    return True, None
 
 
 def give_work(project_id, user_id):
     """
     Gives work. Picks a random job from all open jobs where this user has not yet submitted a result.
     """
-    job_id, project_id = random.choice(possible_jobs(project_id, user_id))
-    return job_id
+    possible = possible_jobs(project_id, user_id)
+    if len(possible) == 0:
+        return False, build_response(HTTPStatus.BAD_REQUEST, "No jobs available for this user.")
+    job_id, _ = random.choice(possible)
+    return True, job_id
 
 
 def fill_db():
