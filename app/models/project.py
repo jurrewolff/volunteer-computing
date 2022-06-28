@@ -130,6 +130,8 @@ def get_projects_from_user(user_id):
                 "project_id": x[0],
                 "name": x[1],
                 "description": x[2],
+                "done": x[9],
+                "progress": x[10],
             }
             projects.append(project)
         return projects
