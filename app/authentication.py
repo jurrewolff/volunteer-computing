@@ -226,3 +226,8 @@ def logout():
     data.delete_cookie("is_researcher")
 
     return data
+
+
+@app.route("/dashboard", methods=["GET", "POST"])
+def leaderboard():
+    return User.get_all_users()
