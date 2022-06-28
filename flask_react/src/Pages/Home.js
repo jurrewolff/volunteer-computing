@@ -39,8 +39,10 @@ export default function Home() {
     const linkVars = window.location.pathname.split("/").slice(2)
     const ids = []
 
-    // let user_cookie = Cookies.get("user_id")
-    // const navigate = useNavigate();
+    let user_cookie = Cookies.get("user_id")
+    const navigate = useNavigate();
+
+
 
 
     // useEffect(() => {
@@ -96,6 +98,7 @@ export default function Home() {
                             cursus magna, vel sce
                         </Typography>
                         <Link
+
                             to="./SignUp"
                             onClick={clickButton}>
                             <Button variant="contained">Signup now</Button>

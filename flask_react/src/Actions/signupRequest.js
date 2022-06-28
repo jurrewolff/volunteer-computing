@@ -36,7 +36,7 @@ export const SignupRequest = (props) => {
             const requestOptions = {
                 method: 'POST',
                 headers: {
-                    'username': props.uName,
+                    'username': props.username,
                     'password': props.pass,
                     'email': props.eMail,
                     'firstname': props.fName,
@@ -51,7 +51,7 @@ export const SignupRequest = (props) => {
                     setData(result)
                 });
 
-            LoginRequest(props.uName, props.pass).then(response => {
+            LoginRequest(props.username, props.pass).then(response => {
                 switch (response.code) {
                     case 200:
                         setAuthenticated(true)
@@ -70,7 +70,7 @@ export const SignupRequest = (props) => {
                 }
             }
             )
-            navigate("/dashboard");
+            navigate("/");
 
             setClicked(false)
         }
@@ -88,7 +88,7 @@ export const SignupRequest = (props) => {
                 Sign up
             </Button>
             <Routes>
-                <Route key="/dashboard" element={<DashBoard />} />
+                <Route key="/" element={<DashBoard />} />
             </Routes>
         </div>
     );
