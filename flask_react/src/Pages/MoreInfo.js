@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"
+import { Row, Col } from "react-bootstrap";
 
 export default function MoreInfo() {
 
@@ -49,17 +50,31 @@ export default function MoreInfo() {
 
             </Card>
 
-
-            <Button variant="primary" size="lg" style={{ marginRight: "20px" }} onClick={goBack}>
-                Back
-            </Button>
-
-
             {/* The text and color of the button and the link are dependent on the url of the page */}
-            <Button
-                onClick={clickButton}>
-                Start Computing
-            </Button>
+
+            <Row>
+                {project.done == "0" ?
+                    <div>
+                        <Button
+                            variant="success" size="lg"
+                            onClick={clickButton}>
+                            Start Computing
+                        </Button>
+                    </div>
+                    :
+                    <div>
+                        <p>The project is finished!</p>
+                    </div>
+                }
+            </Row>
+            <Row>
+                <div>
+                    <Button variant="secondary" size="lg" style={{ marginTop: "20px" }} onClick={goBack}>
+                        Back
+                    </Button>
+
+                </div>
+            </Row>
 
         </Container>
     );
