@@ -7,6 +7,9 @@ import Cookies from "js-cookie";
 import { ProjectsRequest } from '../Actions/projectsRequest'
 import { LoginRequest } from '../Actions/loginRequest'
 
+import PermanentDrawerLeft from '../Components/SideMenu';
+import ResponsiveAppBar from '../Components/Navbar'
+
 export default function Projects() {
 
     let user_cookie = Cookies.get("user_id")

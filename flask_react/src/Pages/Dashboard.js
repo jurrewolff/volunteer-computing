@@ -1,8 +1,6 @@
 import React from 'react'; // niet per se nodig nu, toekomst wss wel
 import './Dashboard.css';
 
-import PermanentDrawerLeft from '../Components/SideMenu';
-
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { useState, useEffect } from 'react';
@@ -17,15 +15,9 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import { theme } from '../Components/Theme'
 
 import { createTheme } from '@mui/material/styles'
+import PermanentDrawerLeft from '../Components/SideMenu';
 import ResponsiveAppBar from '../Components/Navbar'
-import Footer from '../Components/Footer'
 
-import JumpPage from "../Actions/jumpPage"
-
-const MyComponent = () => {
-  const theme = useTheme();
-  return <JumpPage bgcolor={theme.palette.background.default} width={100} height={100} />;
-};
 
 const Dashboard = () => {
 
@@ -45,11 +37,7 @@ const Dashboard = () => {
       <>
         <ResponsiveAppBar />
         <PermanentDrawerLeft />
-        <MyComponent />
-        {/* Andere features */}
         <Box>
-          {/* <ResponsiveAppBar />
-      <PermanentDrawerLeft /> */}
           <Box
             border="dashed"
             component="main"
@@ -70,5 +58,8 @@ const Dashboard = () => {
 
   );
 };
+
+// data.delete_cookie("name")
+// data.delete_cookie("user_id")
 
 export default Dashboard;

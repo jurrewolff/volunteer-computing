@@ -30,6 +30,8 @@ const styles = {
     }
 };
 
+// const navItems = ['About', 'Scientist', 'Volunteer', 'Product'];
+
 export default function Home() {
     const [clicked, setClicked] = useState(false);
 
@@ -55,7 +57,7 @@ export default function Home() {
     }
 
     return (<>
-        <Nav />
+        <Nav home={true} />
         <Grid
             justifyContent="center"
             alignItems="center"
@@ -73,7 +75,9 @@ export default function Home() {
                 <Grid item xs={8} sx={{ pb: 5 }}>
                     <Box sx={{ pr: 20, pl: 10 }}>
                         <Toolbar />
-                        <Typography variant="h3" gutterBottom component="div">
+                        <Typography
+                            id="Top" variant="h3" gutterBottom component="div"
+                        >
                             Connecting scientists with computing resources with
                             volunteer computing
                         </Typography>
@@ -107,12 +111,12 @@ export default function Home() {
                 </Grid>
 
             </Grid>
-            <Grid id="scientist">
+            <Grid>
                 <Paper style={styles.paperContainer}>
                     <Box component="main" sx={{ pl: 10, pr: 10, pb: 10 }}>
                         <Toolbar />
 
-                        <Typography variant="h4" gutterBottom component="div">
+                        <Typography id="About" variant="h4" gutterBottom component="div">
                             About
                         </Typography>
 
@@ -173,7 +177,6 @@ export default function Home() {
             </Grid>
             <Grid
                 container
-                id="volunteer"
                 rowSpacing={1}
                 columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 justifyContent="center"
@@ -183,8 +186,8 @@ export default function Home() {
                 <Grid item xs={8} sx={{}}>
                     <Box sx={{ pr: 5, pl: 10 }}>
 
-                        <Typography variant="h4" gutterBottom component="div">
-                            Volunteer
+                        <Typography id="Scientist" variant="h4" gutterBottom component="div">
+                            Scientist
                         </Typography>
 
                         <Typography>
@@ -237,7 +240,7 @@ export default function Home() {
                 <Grid item xs={8} sx={{}}>
                     <Box sx={{ pl: 5, pr: 10 }}>
 
-                        <Typography align="right" variant="h4" gutterBottom component="div">
+                        <Typography id="Volunteer" align="right" variant="h4" gutterBottom component="div">
                             Volunteer
                         </Typography>
 
@@ -267,11 +270,11 @@ export default function Home() {
                     </Box>
                 </Grid>
             </Grid>
-            <Grid id="product">
+            <Grid>
                 <Paper style={styles.paperContainer}>
                     <Box sx={{ pr: 10, pl: 10, pb: 10, pt: 5 }}>
 
-                        <Typography variant="h4" gutterBottom component="div">
+                        <Typography id="Product" variant="h4" gutterBottom component="div">
                             Product
                         </Typography>
 

@@ -107,9 +107,10 @@ def signup():
         not new_user["username"]
         or not new_user["password"]
         or not new_user["email"]
+        and (new_user["is_researcher"] == "0"
         or not new_user["firstname"]
         or not new_user["lastname"]
-        or not new_user["is_researcher"]
+        or not new_user["is_researcher"])
     ):
         return build_response(
             HTTPStatus.BAD_REQUEST, "request is missing required headers"

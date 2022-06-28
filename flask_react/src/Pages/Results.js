@@ -13,8 +13,8 @@ export default function Results() {
 
   useEffect(() => {
     if (!user_cookie) {
-        console.log("User not logged in, redirecting to login page")
-        return navigate('/login')
+      console.log("User not logged in, redirecting to login page")
+      return navigate('/login')
     }
 
     if (research_cookie == 0) {
@@ -42,17 +42,17 @@ export default function Results() {
     console.log(event)
     console.log(value)
     fetch('/api/download/' + value)
-        .then(response => {
-            response.blob().then(blob => {
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement('a');
-                a.href = url;
-                a.download = 'my_results.txt';
-                a.click();
-            });
-    });
+      .then(response => {
+        response.blob().then(blob => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement('a');
+          a.href = url;
+          a.download = 'my_results.txt';
+          a.click();
+        });
+      });
 
-}
+  }
 
 
   // Returns all projects displayed in a card per project.
