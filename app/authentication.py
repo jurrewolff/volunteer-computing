@@ -230,4 +230,4 @@ def logout():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def leaderboard():
-    return User.get_all_users()
+    return user.get_all_users()
