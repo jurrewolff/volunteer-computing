@@ -239,6 +239,7 @@ export default function Signup() {
                                 <Grid>
                                     <Grid>
                                         <SignupRequest
+                                        // onClick={() => handleSignup()}          //// Nog checks op signup zetten!
                                         username={uname}
                                         pass={pass}
                                         eMail={email}
