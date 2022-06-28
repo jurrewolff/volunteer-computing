@@ -5,7 +5,7 @@
  */
 
 import Cookies from 'js-cookie';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../Components/Footer';
 import Nav from '../Components/HomePageNav';
@@ -17,6 +17,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Routes, Route, useNavigate } from "react-router-dom"
 
 
 const styles = {
@@ -35,6 +36,17 @@ export default function Home() {
     //DELETE ??
     const linkVars = window.location.pathname.split("/").slice(2)
     const ids = []
+
+    // let user_cookie = Cookies.get("user_id")
+    // const navigate = useNavigate();
+
+
+    // useEffect(() => {
+    //     if (user_cookie) {
+    //     console.log("User logged in, redirecting to dashboard")
+    //     return navigate('/dashboard')
+    //     }
+    // }, [true]);
 
     // Function for the responsive button.
     // Ik snap niet waarom deze hier moet staan

@@ -2,13 +2,21 @@ import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Card } from "react-bootstrap";
 import Cookies from "js-cookie";
+import { Link, useNavigate } from "react-router-dom";
 
 
 export default function PastProjects() {
 
     const [data, setData] = useState([{}]);
 
+    let user_cookie = Cookies.get("user_id")
+    const navigate = useNavigate();
+
     useEffect(() => {
+        if (!user_cookie) {
+            console.log("User not logged in, redirecting to login page")
+            return navigate('/login')
+        }
         const requestOptions = {
             method: 'GET',
             headers: {

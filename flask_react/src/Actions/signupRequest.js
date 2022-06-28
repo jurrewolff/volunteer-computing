@@ -74,7 +74,7 @@ export const SignupRequest = (props) => {
                     setData(result)
                 });
 
-            navigate('/dashboard');
+            navigate('/login');
             setClicked(false)
         }
 

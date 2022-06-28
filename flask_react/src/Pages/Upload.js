@@ -1,7 +1,9 @@
 import React from 'react';
 import './Login.css';
-import { useState } from 'react';
 import { UploadRequest } from '../Actions/uploadFile';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
@@ -19,6 +21,24 @@ export default function Upload() {
     const [name, setName] = useState();
     const [description, setDescription] = useState();
     const [block_size, setBlocksize] = useState();
+
+    let user_cookie = Cookies.get("user_id")
+    let research_cookie = Cookies.get("is_researcher")
+
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        if (!user_cookie) {
+            console.log("User not logged in, redirecting to login page")
+            return navigate('/login')
+        }
+
+        if (research_cookie === 0) {
+            console.log("User authorized, redirecting to dashboard")
+            return navigate('/dashboard')
+        }
+    }, [true]);
 
     return (
         <>

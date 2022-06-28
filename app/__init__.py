@@ -20,6 +20,8 @@ app = Flask(
 @app.route("/upload")
 @app.route("/results")
 @app.route("/userinfo")
+@app.route("/signUp")
+@app.route("/login")
 def serve():
     return app.send_static_file("index.html")
 
