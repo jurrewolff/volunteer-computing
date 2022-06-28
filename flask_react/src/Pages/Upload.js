@@ -1,7 +1,9 @@
 import React from 'react';
 import './Login.css';
-import { useState } from 'react';
 import { UploadRequest } from '../Actions/uploadFile';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
@@ -32,6 +34,24 @@ export default function Upload() {
     const changeQuorum = e => {
         setQuorum(e.target.value);
     }
+
+    let user_cookie = Cookies.get("user_id")
+    let research_cookie = Cookies.get("is_researcher")
+
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        if (!user_cookie) {
+            console.log("User not logged in, redirecting to login page")
+            return navigate('/login')
+        }
+
+        if (research_cookie == 0) {
+            console.log("User unauthorized, redirecting to dashboard")
+            return navigate('/dashboard')
+        }
+    }, [true]);
 
     return (
         <>

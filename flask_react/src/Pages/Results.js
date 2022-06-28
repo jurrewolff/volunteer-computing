@@ -1,18 +1,25 @@
-import { useState, useEffect } from 'react'
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 export default function Results() {
   const [data, setData] = useState([{}]);
   const navigate = useNavigate();
+
   let user_cookie = Cookies.get("user_id")
+  let research_cookie = Cookies.get("is_researcher")
 
 
   useEffect(() => {
     if (!user_cookie) {
-      console.log("User not logged in, results page restricted")
+      console.log("User not logged in, redirecting to login page")
       return navigate('/login')
+    }
+
+    if (research_cookie == 0) {
+        console.log("User authorized, redirecting to dashboard")
+        return navigate('/dashboard')
     }
 
     const requestOptions = {
@@ -35,17 +42,17 @@ export default function Results() {
     console.log(event)
     console.log(value)
     fetch('/api/download/' + value)
-        .then(response => {
-            response.blob().then(blob => {
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement('a');
-                a.href = url;
-                a.download = 'my_results.txt';
-                a.click();
-            });
-    });
+      .then(response => {
+        response.blob().then(blob => {
+          let url = window.URL.createObjectURL(blob);
+          let a = document.createElement('a');
+          a.href = url;
+          a.download = 'my_results.txt';
+          a.click();
+        });
+      });
 
-}
+  }
 
 
   // Returns all projects displayed in a card per project.

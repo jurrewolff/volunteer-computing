@@ -107,9 +107,10 @@ def signup():
         not new_user["username"]
         or not new_user["password"]
         or not new_user["email"]
+        and (new_user["is_researcher"] == "0"
         or not new_user["firstname"]
         or not new_user["lastname"]
-        or not new_user["is_researcher"]
+        or not new_user["is_researcher"])
     ):
         return build_response(
             HTTPStatus.BAD_REQUEST, "request is missing required headers"
@@ -137,7 +138,7 @@ def signup():
             f"user with username {new_user['username']} already exists",
         )
 
-    # Hash password
+    # Hash password.
     pw_bytes = new_user["password"].encode("utf-8")
     new_user["password"] = bcrypt.hashpw(pw_bytes, bcrypt.gensalt())
 
@@ -151,19 +152,20 @@ def signup():
 
 
 @app.route("/api/login", methods=["POST"])
-def login():
+def login(username=None, password=None):
     """
     Handle login request; Check request headers, get user from db,
     authenticate user and send appropriate response.
     """
-    if not request.headers:
+    if (not request.headers and not username and not password):
         return build_response(
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
         )
 
     # get and check required info from headers.
-    username = request.headers.get("username")
-    password = request.headers.get("password")
+    if (not username or not password):
+        username = request.headers.get("username")
+        password = request.headers.get("password")
 
 
     app.logger.warning(f"user: {username}, pass: {password}")
@@ -205,7 +207,7 @@ def login():
     return response
 
 
-@app.route("/api/logout", methods=["GET"])
+@app.route("/api/logout", methods=["GET", "POST"])
 @login_required
 def logout():
     """Handle logout request"""

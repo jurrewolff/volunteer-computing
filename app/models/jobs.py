@@ -63,6 +63,17 @@ def possible_jobs(project_id, user_id):
     return res
 
 
+def submitted_already_for_job(project_id, job_id, user_id):
+    query = f"""
+    SELECT '{user_id}' IN (
+        SELECT volunteer
+        FROM Result
+        WHERE job_id = '{job_id}' AND project_id = '{project_id}'
+    )
+    """
+    db.cur.execute(query)
+    return db.cur.fetchone()[0]
+
 def job_marked_done(project_id, job_id):
     query = f"""
     SELECT done
