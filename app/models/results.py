@@ -69,4 +69,4 @@ def get_number_of_results(job_id, project_id):
     query = f"SELECT COUNT(*) FROM Result WHERE job_id ='{job_id}' AND project_id = '{project_id}';"
     db.cur.execute(query)
     res = db.cur.fetchone()
-    return res
+    return res    
