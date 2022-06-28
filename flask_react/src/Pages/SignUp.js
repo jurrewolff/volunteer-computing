@@ -147,7 +147,7 @@ export default function Signup() {
                                     {
                                         <TextField
                                             required={isScientist}
-                                            disabled={!isScientist}
+                                            disabled={isScientist == '0'}
                                             margin="normal"
                                             variant="outlined"
                                             label={"First name"}
@@ -162,7 +162,7 @@ export default function Signup() {
                                     {
                                         <TextField
                                             required={isScientist}
-                                            disabled={!isScientist}
+                                            disabled={isScientist == '0'}
                                             margin="normal"
                                             variant="outlined"
                                             label="Last name"
@@ -178,7 +178,7 @@ export default function Signup() {
                                     {
                                         <TextField
                                             margin="normal"
-                                            disabled={!isScientist}
+                                            disabled={isScientist == '0'}
                                             variant="outlined"
                                             label="Institution"
                                             onChange={(e) => setInst(e.target.value)}
@@ -190,7 +190,7 @@ export default function Signup() {
                                     {
                                         <TextField
                                             margin="normal"
-                                            disabled={!isScientist}
+                                            disabled={isScientist == '0'}
                                             variant="outlined"
                                             label="Background"
                                             onChange={(e) => setBackground(e.target.value)}
@@ -213,18 +213,6 @@ export default function Signup() {
                                 <Grid >
                                     <TextField
                                         required
-                                        margin="normal"
-                                        variant="outlined"
-                                        error={emailError}
-                                        helperText={emailError ? 'E-mail is required' : ' '}
-                                        label="E-mail"
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        sx={{ mb: -1.5 }}
-                                    />
-                                </Grid>
-                                <Grid >
-                                    <TextField
-                                        required
                                         type="password"
                                         id="password"
                                         margin="normal"
@@ -236,9 +224,22 @@ export default function Signup() {
                                         sx={{ mb: -1.5 }}
                                     />
                                 </Grid>
+                                <Grid >
+                                    <TextField
+                                        required
+                                        margin="normal"
+                                        variant="outlined"
+                                        error={emailError}
+                                        helperText={emailError ? 'E-mail is required' : ' '}
+                                        label="E-mail"
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        sx={{ mb: -1.5 }}
+                                    />
+                                </Grid>
                                 <Grid>
                                     <Grid>
                                         <SignupRequest
+                                        // onClick={() => handleSignup()}          //// Nog checks op signup zetten!
                                         username={uname}
                                         pass={pass}
                                         eMail={email}
