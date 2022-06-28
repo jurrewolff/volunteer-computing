@@ -4,10 +4,10 @@
  *
  */
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
-import { LogoutRequest } from '../Actions/logoutRequest';
+// import { LogoutRequest } from '../Actions/logoutRequest';
 import Cookies from 'js-cookie'
 
 
@@ -28,6 +28,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { textFieldClasses } from '@mui/material';
 
 //TODO
 const drawerWidth = 240;
@@ -37,9 +38,9 @@ const navItems = ['About', 'Scientist', 'Volunteer', 'Product'];
  * TODO
  */
 
-const handleLogout = () => {
-    LogoutRequest();
-};
+// const handleLogout = () => {
+//     LogoutRequest();
+// };
 
 
 export default function Nav(props) {
@@ -48,11 +49,11 @@ export default function Nav(props) {
     const [mobileOpen, setMobileOpen] = useState(false);
 
     // if (Cookies.get("user_id") != "")
-
-    // const [auth, setAuth] = useState(true);
+    const [auth, setAuth] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [user_cookie, setUser_cookie] = useState();
 
-    const [logOutStatus, setLogoutStatus] = useState("");
+    let cookie = Cookies.get("user_id")
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -67,14 +68,20 @@ export default function Nav(props) {
     };
 
     const handleLogOut = () => {
+        console.log("request!")
+
         const requestOptions = {
             method: 'GET',
-            headers: {}
+            headers: {
+                'user_id': user_cookie
+            }
         };
-        fetch("/api/logout", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                setLogoutStatus(result)
+
+        fetch("/api/results", requestOptions)
+            .then(res => res.json())
+            .then(data => {
+                // setData(data)
+                console.log(data)
             })
     }
 
@@ -86,6 +93,24 @@ export default function Nav(props) {
             navigate("/")
         }
     }
+
+    useEffect(() => {
+        // console.log(cookie)
+        // setUser_cookie(cookie)
+
+        // console.log(user_cookie)
+        // console.log("!")
+
+        if (cookie === "") {
+            setAuth(false)
+            // console.log("ez", auth)
+        }
+        else {
+            setAuth(true)
+            // console.log("pz", auth)
+        }
+
+    }, [])
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -216,8 +241,8 @@ export default function Nav(props) {
                             ))}
                         </Box>
                         <Box>
-                            {Cookies.get("user_id") != "" ?
-                                AccountNotLoggedIn() : AccountLoggedIn()}
+                            {auth ?
+                                AccountLoggedIn() : AccountNotLoggedIn()}
                         </Box>
                     </Toolbar >
                 </AppBar >
