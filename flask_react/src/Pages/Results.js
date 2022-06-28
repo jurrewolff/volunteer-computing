@@ -10,17 +10,17 @@ export default function Results() {
 
 
   useEffect(() => {
-    const requestOptions = {
-      method: 'GET',
-      headers: {
-        'user_id': Cookies.get("user_id")
-      }
-    };
-
     if (!user_cookie) {
       console.log("User not logged in, results page restricted")
       return navigate('/login')
     }
+
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'user_id': user_cookie
+      }
+    };
 
     fetch("/api/results", requestOptions)
       .then(res => res.json())
