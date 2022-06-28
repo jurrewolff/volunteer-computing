@@ -84,23 +84,23 @@ def get_user(username):
 # Returns an array of dictionary containers with the user info.
 def get_all_users(amount=None):
     if amount:
-        sql = f"SELECT * FROM User ORDER BY trust_level DESC"
+        sql = f"SELECT * FROM User ORDER BY trust_level DESC LIMIT {amount}"
     else:
-        sql = f"SELECT * FROM User ORDER BY trust_level DESC"
+        sql = f"SELECT * FROM User ORDER BY trust_level DESC LIMIT 10"
 
     db.cur.execute(sql)
-    projects = []
+    users = []
     res = db.cur.fetchall()
     for x in res:
-        project = {
+        user = {
             "user_id": x[0],
             "username": x[1],
             "score": x[6],
             "trust_level": x[7],
             "is_researcher": x[9],
         }
-        projects.append(project)
-    return projects
+        users.append(user)
+    return users
 
 
 

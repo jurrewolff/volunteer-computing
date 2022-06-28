@@ -7,7 +7,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import ListGroup from 'react-bootstrap/ListGroup';
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Badge } from "react-bootstrap";
+import Grid from '@mui/material/Grid';
+import Slider from '@mui/material/Slider';
 
 
 // TODO FIXEN!!!
@@ -26,6 +28,11 @@ const Dashboard = () => {
   let user_cookie = Cookies.get("user_id")
   const navigate = useNavigate();
   const [data, setData] = useState([{}]);
+  const [amount, setAmount] = useState(10);
+
+  const changeAmount = e => {
+    setAmount(e.target.value);
+}
 
   useEffect(() => {
         if (!user_cookie) {
@@ -33,12 +40,19 @@ const Dashboard = () => {
             return navigate('/login')
         }
 
-        fetch("/api/dashboard")
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'amount': amount
+            }
+        };
+
+        fetch("/api/dashboard", requestOptions)
             .then(res => res.json())
             .then(data => {
                 setData(data)
         })
-  }, [true]);
+  }, [amount]);
 
   const tets = [11, 12, 21, 22]
 
@@ -60,29 +74,49 @@ const Dashboard = () => {
                 }}
             >
                 <Container maxWidth="lg" sx={{}}>
-                <h1>This will be the user dashboard page with cute figures and info.</h1>
+                <h1>Top researchers and volunteers based on trust level</h1>
                 </Container>
 
                 {console.log(data)}
                 {console.log(data[0].user_id)}
 
+
+                <Grid
+                justify="center"
+                style={{
+                        width: "500px",
+                        }}>
+                <Grid >
+                    Amount of users shown:
+                    <Slider
+                        defaultValue={10}
+                        step={5}
+                        min={5}
+                        max={50}
+                        valueLabelDisplay="auto"
+                        onChange={changeAmount}
+                    />
+                </Grid>
                 <Row>
                     <Col>
                         <ListGroup as="ol" numbered>
                             {data.map((best_user) =>
-                                <ListGroup.Item key={best_user.user_id} as="li">{best_user.username}</ListGroup.Item>
+                                <ListGroup.Item key={best_user.user_id} as="li">{best_user.username}
+                                <Badge bg="primary" pill>{best_user.trust_level}</Badge>
+                                </ListGroup.Item>
+
                             )}
                         </ListGroup>
                     </Col>
-                    <Col>
+                    {/* <Col>
                         <ListGroup as="ol" numbered>
                             {tets.map((project) =>
                                 <ListGroup.Item key={project + "2"} as="li">{project}</ListGroup.Item>
                             )}
                         </ListGroup>
-                    </Col>
+                    </Col> */}
                 </Row>
-
+                </Grid>
 
             </Box>
         </Box>
