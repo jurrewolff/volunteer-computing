@@ -17,7 +17,7 @@ def print_users():  # For testing purpuses.
 # Returns false if user_id or username allready exists.
 def insert_user(dic):
     if not account_id_exists(dic["user_id"]) and not username_exists(dic["username"]):
-        sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         val = (
             dic["user_id"],
             dic["username"],
@@ -30,6 +30,7 @@ def insert_user(dic):
             dic["institution"],
             dic["is_researcher"],
             dic["background"],
+            0
         )
 
         db.cur.execute(sql, val)
