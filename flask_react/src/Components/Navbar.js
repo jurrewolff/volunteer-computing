@@ -198,9 +198,10 @@ const ResponsiveAppBar = () => {
                 </Link>
               </MenuItem>
               <Box>
-                <MenuItem key={'Logout'} onClick={handleLogout}>
+                {/* <MenuItem key={'Logout'} onClick={handleLogout}>
                   <Typography textAlign="center">{'Logout'}</Typography>
-                </MenuItem>
+                </MenuItem> */}
+                <LogoutRequest/>
               </Box>
             </Menu>
           </Box>

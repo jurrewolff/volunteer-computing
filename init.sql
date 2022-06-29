@@ -12,6 +12,7 @@ trust_level FlOAT,
 institution varchar(255),
 upload_rights BOOL,
 background varchar(255),
+runtime int,
 UNIQUE (username, email),
 PRIMARY KEY(user_id)
 );
@@ -25,7 +26,7 @@ block_size int,
 trust_level float(24),
 owner int,
 random_validation BOOL,
-max_runtime int,
+runtime int,
 quorum_size int,
 done BOOL DEFAULT 0,
 progress int DEFAULt 0,
@@ -51,4 +52,14 @@ PRIMARY KEY (job_id, project_id, volunteer),
 FOREIGN KEY (job_id) REFERENCES Jobs(job_id),
 FOREIGN KEY (project_id) REFERENCES Project(project_id),
 FOREIGN KEY (volunteer) REFERENCES User(user_id)
+);
+
+
+CREATE TABLE app.Volunteer (
+user_id int,
+project_id int,
+contributed_time int,
+PRIMARY KEY (user_id, project_id),
+FOREIGN KEY (user_id) REFERENCES User(user_id),
+FOREIGN KEY (project_id) REFERENCES Project(project_id)
 );

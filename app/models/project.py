@@ -17,7 +17,7 @@ def project_exists(project_id):
 
 
 # Inserts a project into the 'project' table.
-# val should be of format: (id, name, description, block_size, owner, random_validation, max_runtime).
+# val should be of format: (id, name, description, block_size, owner, random_validation, runtime).
 
 
 def insert_project(dic):
@@ -31,7 +31,7 @@ def insert_project(dic):
             dic["trust_level"],
             dic["owner"],
             dic["random_validation"],
-            dic["max_runtime"],
+            dic["runtime"],
             dic["quorum"],
             0,
             0,
@@ -60,6 +60,24 @@ def get_all_projects():
 
 # Returns a list of all project. 1 tuple per project.
 
+def get_project_time(project_id):
+    sql = f"SELECT contributed_time FROM Volunteer WHERE project_id = '{project_id}'"
+    db.cur.execute(sql)
+    res = db.cur.fetchall()
+    contributed_time = 0
+    for time in res:
+        contributed_time += time[0]
+    return contributed_time
+
+
+def update_project_time(project_id, time=-1):
+    if time == -1:
+        time = get_project_time(project_id)
+    query = f"UPDATE Project SET runtime = '{time}' WHERE project_id = '{project_id}';"
+    db.cur.execute(query)
+    db.con.commit()
+
+
 
 def get_projects_researchers(user_id):
     projects = []
@@ -85,10 +103,14 @@ def get_project(project_id):
             "project_id": res[0],
             "name": res[1],
             "description": res[2],
-            "owner": res[3],
-            "block_size": res[4],
-            "random_validation": res[5],
-            "max_runtime": res[6],
+            "block_size": res[3],
+            "trust_level": res[4],
+            "owner": res[5],
+            "random_validation": res[6],
+            "runtime": res[7],
+            "quorum_size": res[8],
+            "done": res[9],
+            "progress": res[10],
         }
     else:
         return False
@@ -130,7 +152,10 @@ def get_projects_from_user(user_id):
                 "project_id": x[0],
                 "name": x[1],
                 "description": x[2],
+                "done": x[9],
+                "progress": x[10],
             }
+            update_project_time(x[0])
             projects.append(project)
         return projects
     else:

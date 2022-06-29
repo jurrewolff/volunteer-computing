@@ -81,7 +81,11 @@ export default function Results() {
           </Card>
         </Col>
         <Col xs={1} sm={1} md={1} lg={1} style={{ marginTop: "3%" }}>
-          <Button onClick={event => downloadResultFile(event, project.project_id)}>Download</Button>
+            {project.done === 1?
+                <Button onClick={event => downloadResultFile(event, project.project_id)}>Download</Button>
+                : <p>Progress: {project.progress}%</p>
+            }
+
         </Col>
       </Row>
     );
