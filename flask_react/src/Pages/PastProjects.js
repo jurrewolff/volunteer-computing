@@ -1,3 +1,9 @@
+/* PAST PROJECTS PAGE
+ * Shows all the projects that the user has helped computing. For every
+ * project the projectname, projectdiscription and time computed will be
+ * shown. It will also show whether the data computed by the user was correct.
+ */
+
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Card } from "react-bootstrap";
@@ -10,9 +16,7 @@ import Box from '@mui/material/Box';
 
 
 export default function PastProjects() {
-
     const [data, setData] = useState([{}]);
-
     let user_cookie = Cookies.get("user_id")
     const navigate = useNavigate();
 
@@ -21,12 +25,15 @@ export default function PastProjects() {
             console.log("User not logged in, redirecting to login page")
             return navigate('/login')
         }
+
         const requestOptions = {
             method: 'GET',
             headers: {
                 'user_id': Cookies.get("user_id")
             }
         };
+
+        // Retrieves all projects that the user has helped with.
         fetch("/api/my_projects", requestOptions)
             .then(res => res.json())
             .then(data => {
@@ -36,13 +43,13 @@ export default function PastProjects() {
 
 
     const ProjectsList = (data) => {
-        // If no projects exist. This is returned.
+        // If no projects exist, this is returned.
         if (data.length === 0) {
             return <h1>You have not yet contributed to any projects.</h1>
         }
 
-        return data.map((project, index) => (
-
+        // Creates a card for every project in data.
+        return data.map((project) => (
             <Card key={"past" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginLeft: "5%", marginRight: "100%" }}>
                 <Row>
                     <Col>
@@ -59,7 +66,6 @@ export default function PastProjects() {
                     </Col>
                 </Row>
             </Card>
-
         ));
     }
 
