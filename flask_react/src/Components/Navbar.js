@@ -82,7 +82,7 @@ const ResponsiveAppBar = (props) => {
       .then((result) => {
           setLogoutStatus(result)
       })
-      
+
   };
 
   const Items = ['About', 'Scientist', 'Volunteer'];
@@ -104,7 +104,7 @@ const ResponsiveAppBar = (props) => {
               sx={{ color: 'white', textAlign: 'left' }}
             >
               {page}
-              {toggleToElement(element)} 
+              {toggleToElement(element)}
             </Button>
           </Link>
           </MenuItem>
@@ -124,7 +124,7 @@ const ResponsiveAppBar = (props) => {
         <MenuItem key={'Signup'} onClick={handleCloseUserMenu}>
         <Link to="/signup" style={{ textDecoration: 'none' }}>
           <Typography textAlign="center">{'Sign up'}</Typography>
-        </Link>        
+        </Link>
         </MenuItem>
       </Box>
     </>
@@ -146,7 +146,7 @@ const ResponsiveAppBar = (props) => {
         </MenuItem>
         <Box>
           <MenuItem key={'Logout'} onClick={handleLogOut}>
-            <Link to="/" style={{ textDecoration: 'none ' }}>
+            <Link to="/redirect" style={{ textDecoration: 'none ' }}>
               <Typography textAlign="center">{'Logout'}</Typography>
             </Link>
           </MenuItem>
@@ -179,7 +179,7 @@ const ResponsiveAppBar = (props) => {
                   color: '#00315c',
                 },
               textDecoration: 'none',
-              
+
             }}
           >
             CompuTeam

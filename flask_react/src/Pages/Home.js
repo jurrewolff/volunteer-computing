@@ -58,7 +58,7 @@ export default function Home() {
             <Link to="./SignUp" onClick={clickButton}>
                 <Button variant="contained" sx={{ bgcolor: '#f44336', textDecoration: 'none' }}>SIGN UP NOW</Button>
             </Link>
-        )
+        );
     };
 
     const LoggedIn = () => {
