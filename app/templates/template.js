@@ -1,4 +1,4 @@
-function execute_C_file(input, c_out) {
+function execute_C_file(input, c_out, project_id) {
 
 // The Module object: Our interface to the outside world. We import
 // and export values on it. There are various ways Module can be used:
@@ -1512,7 +1512,7 @@ function createExportWrapper(name, fixedasm) {
 }
 
 var wasmBinaryFile;
-  wasmBinaryFile = '/api/{{name}}.wasm';
+  wasmBinaryFile ='get_wasm/'+ project_id+'.wasm';
   if (!isDataURI(wasmBinaryFile)) {
     wasmBinaryFile = locateFile(wasmBinaryFile);
   }

@@ -7,7 +7,6 @@
   </head>
   <body>
     Running project #{{name}}!
-
     <div>
       <span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
     </div>
@@ -57,47 +56,27 @@
       start();
 
     </script>
+    <!-- <script type="text/javascript" src="/api/{{name}}.js"></script> -->
 
-
-    <script type="text/javascript" src="/api/{{name}}.js"></script>
-
-    <script type='text/javascript'>
-      var request = new XMLHttpRequest();
-      request.open('POST', '/api/runproject/{{name}}', true);
-      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      var data = {{ data | tojson }};
-      var Module = {
-        final: '',
-        reads: 0,
-        print: (function() {
-            return function(text) {
-            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-            Module.final += text + "\n";
-            Module.reads += 1;
-            if (Module.reads == data.size) {
-              console.log("this is the total seconds variable:")
-              console.log(total_milliseconds)
-              request.send('data=' + Module.final + "&job_id={{job}}" + "&time=" + total_milliseconds);
-            }
-          };
-        })()};
-      for (let step = 0; step < data.size; step++) {
-          // Runs 5 times, with values of step 0 through 4.
-          var to_execute = data.arguments.split(" ");
-          execute_C_file(to_execute, Module.print);
-      };
-    </script>
-
-    <script>
-      function listCookies() {
-          var theCookies = document.cookie.split(';');
-          var aString = '';
-          for (var i = 1 ; i <= theCookies.length; i++) {
-              aString += i + ' ' + theCookies[i-1] + "\n";
-          }
-          return aString;
+<script type='text/javascript'>
+      if (window.Worker) {
+        const myWorker = new Worker('/api/get_worker/worker.js');
+      myWorker.postMessage('{{name}}');
+      var worker_done = false
+      myWorker.onmessage = function(e) {
+        result =  e.data;
+        console.log('Message received from worker: ' + result);
+        if (result != "No jobs") {
+          myWorker.postMessage('{{name}}');
+        } else {
+          console.log('no more jobs, stopping exec.')
+        }
       }
-      console.log(listCookies());
+       } else {
+        console.log('Your browser doesn\'t support web workers.');
+      }
     </script>
   </body>
 </html>
+
+

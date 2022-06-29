@@ -4,24 +4,17 @@ import './Dashboard.css';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Row, Col, Badge } from "react-bootstrap";
 import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
 import {DropdownButton, Dropdown } from 'react-bootstrap';
-
-
-// TODO FIXEN!!!
-// import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import useTheme from '@mui/material/styles/useTheme'
 import { ThemeProvider } from '@material-ui/core/styles'
-import { theme } from '../Components/Theme'
-
-import { createTheme } from '@mui/material/styles'
+import { theme } from '../Components/Theme';
 import PermanentDrawerLeft from '../Components/SideMenu';
-import ResponsiveAppBar from '../Components/Navbar'
+import ResponsiveAppBar from '../Components/Navbar';
 
 
 const Dashboard = () => {
@@ -37,8 +30,6 @@ const Dashboard = () => {
 };
 
 const renderSwitch = (best_user, param) => {
-    console.log("render switch" + best_user)
-    console.log("render switch" + param)
     switch(param) {
         case 'trust_level':
             return (best_user.trust_level);
@@ -49,7 +40,7 @@ const renderSwitch = (best_user, param) => {
         default:
             return (best_user.trust_level);
     }
-  }
+  };
 
   const renderOrdering = (param) => {
     switch(param) {
@@ -62,7 +53,7 @@ const renderSwitch = (best_user, param) => {
         default:
             return ('Trust level');
     }
-  }
+  };
 
 
   useEffect(() => {
@@ -70,9 +61,6 @@ const renderSwitch = (best_user, param) => {
             console.log("User not logged in, redirecting to login page")
             return navigate('/login')
         }
-        console.log(amount)
-        console.log(order_by)
-
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -80,7 +68,6 @@ const renderSwitch = (best_user, param) => {
                 'order_by': order_by
             }
         };
-
         fetch("/api/dashboard", requestOptions)
             .then(res => res.json())
             .then(data => {
@@ -96,7 +83,7 @@ const renderSwitch = (best_user, param) => {
         <PermanentDrawerLeft />
         <Box>
             <Box
-                border="dashed"
+                // border="dashed"
                 component="main"
                 sx={{
                 pl: 30,
@@ -105,53 +92,43 @@ const renderSwitch = (best_user, param) => {
                 overflow: 'auto',
                 }}
             >
-                <Container maxWidth="lg" sx={{}}>
-                <h1>Top researchers and volunteers based on trust level</h1>
-                </Container>
-
-                {console.log(data)}
-
                 <Grid
-                justify="center"
-                style={{
-                        width: "500px",
-                        }}>
+                    justify="center"
+                    style={{
+                            width: "50vw",
+                            marginLeft: "15vw"
+                            }}>
                 <Grid >
-                    Amount of users shown:
-                    <Slider
-                        defaultValue={10}
-                        step={5}
-                        min={5}
-                        max={50}
-                        valueLabelDisplay="auto"
-                        onChange={changeAmount}
-                    />
+                <Container maxWidth="lg" sx={{}}>
+                    <h1>Top researchers and volunteers</h1>
+                </Container>
+                Amount of users shown:
+                <Slider
+                    defaultValue={10}
+                    step={5}
+                    min={5}
+                    max={50}
+                    valueLabelDisplay="auto"
+                    onChange={changeAmount}
+                />
                 </Grid>
-
-
                 <Grid direction='row' container spacing={1}>
-
-                <Grid container item sm={6}>
-                <DropdownButton id='id' title='Order by:'>
-                    <Dropdown.Item ><div onClick={() => setOrderBy('trust_level')}>Trust level</div></Dropdown.Item>
-                    <Dropdown.Item ><div onClick={() => setOrderBy('score')}>Score</div></Dropdown.Item>
-                    <Dropdown.Item ><div onClick={() => setOrderBy('runtime')}>Runtime</div></Dropdown.Item>
-                </DropdownButton>
+                    <Grid container item sm={6}>
+                        <DropdownButton id='id' title='Order by:'>
+                            <Dropdown.Item ><div onClick={() => setOrderBy('trust_level')}>Trust level</div></Dropdown.Item>
+                            <Dropdown.Item ><div onClick={() => setOrderBy('score')}>Score</div></Dropdown.Item>
+                            <Dropdown.Item ><div onClick={() => setOrderBy('runtime')}>Runtime</div></Dropdown.Item>
+                        </DropdownButton>
+                    </Grid>
+                    <Grid container item sm={6}>
+                        {renderOrdering(order_by)}
+                    </Grid>
                 </Grid>
-
-                <Grid container item sm={6}>{renderOrdering(order_by)}</Grid>
-
-                </Grid>
-
-
-
                 <Row>
                     <Col>
                         <ListGroup as="ol" numbered>
                             {data.map((best_user) =>
                                 <ListGroup.Item key={best_user.user_id} as="li">{best_user.username}
-                                {console.log("Listgroup" + best_user)}
-                                {console.log("Listgroup" + order_by)}
                                 <Badge bg="primary" style={{margin: "10px"}} pill>{renderSwitch(best_user, order_by)}</Badge>
                                 </ListGroup.Item>
 
@@ -160,7 +137,6 @@ const renderSwitch = (best_user, param) => {
                     </Col>
                 </Row>
                 </Grid>
-
             </Box>
         </Box>
       </>
@@ -168,8 +144,5 @@ const renderSwitch = (best_user, param) => {
 
   );
 };
-
-// data.delete_cookie("name")
-// data.delete_cookie("user_id")
 
 export default Dashboard;

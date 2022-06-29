@@ -121,13 +121,11 @@ def userdata():
 @app.route("/api/dashboard", methods=["GET"])
 @login_required
 def leaderboard():
-    if not request.headers:
+    amount = request.headers.get("amount")
+    order_by = request.headers.get("order_by")
+    if not amount or not order_by:
         amount = 10
         order_by = 'trust_level'
-    else:
-        amount = request.headers.get("amount")
-        order_by = request.headers.get("order_by")
-
 
     best_users = user.get_all_users(amount, order_by)
     return json.dumps(best_users)
