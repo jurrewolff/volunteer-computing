@@ -21,6 +21,7 @@ export const LogoutRequest = (props) => {
 
     useEffect(() => {
         if (clicked) {
+            console.log("clicked the logout button")
             const requestOptions = {
                 method: 'GET',
                 headers: {}
@@ -32,8 +33,8 @@ export const LogoutRequest = (props) => {
                 .then((result) => {
                     setData(result)
                 })
-
-            setClicked(false)
+            navigate("/");
+            setClicked(false);
         }
     }, [clicked]);
 

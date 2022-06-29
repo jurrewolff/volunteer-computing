@@ -27,6 +27,7 @@ import subprocess
 from app.authentication import *
 from app.schedule import give_work, receive_work
 import math
+from pathlib import Path
 
 ALLOWED_EXTENSIONS = {"c"}
 from app.models.database import *
@@ -49,8 +50,18 @@ def send_output(proj_id):
 
 @app.route("/api/download/<proj_id>")
 def dl_output(proj_id):
+    base_dir = os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")
+    to_check = base_dir+ "/download"
+    path = Path(to_check)
+    if path.is_file() == False:
+        f = open(base_dir + "/download", "w+")
+        test = subprocess.run(['sort','-k1','-n', base_dir + "/output"], capture_output=True, text=True)
+        r = test.stdout.split("\n")
+        for line in r[:-1]:
+            s = line.split(" ", 1)
+            f.write(s[1] + "\n")
     return send_from_directory(
-        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "output"
+        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "download"
     )  # cached for a week
 
 
@@ -101,9 +112,10 @@ def add_project_db():
     new_project = {"project_id": pj.get_new_project_id()}
     new_project.update({"name": request.headers.get("name")})
     new_project.update({"description": request.headers.get("description")})
-    new_project.update({"quorum": 1})
-    new_project.update({"trust_level": 1})
-    new_project.update({"max_runtime": 0})
+    new_project.update({"quorum": request.headers.get("quorum")})
+    new_project.update({"trust_level": request.headers.get("trust_level")})
+    new_project.update({"runtime": 0})
+    new_project.update({"block_size": 1})
 
     new_project.update({"owner": session["user_id"]})
 
@@ -112,13 +124,13 @@ def add_project_db():
     else:
         new_project.update({"random_validation": 1})
 
-    new_project.update(
-        {
-            "block_size": request.headers.get("block_size")
-            if type(request.headers.get("block_size")) == int
-            else 1
-        }
-    )
+    # new_project.update(
+    #     {
+    #         "block_size": request.headers.get("block_size")
+    #         if type(request.headers.get("block_size")) == int
+    #         else 1
+    #     }
+    # )
 
     # Check if required information has been retrieved from header.
     if not new_project["name"]:
@@ -232,6 +244,38 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
+
+def get_user_time_from_scretch(user_id):
+    """
+    Use Volunteer table
+    """
+    sql = f"SELECT contributed_time FROM Volunteer WHERE user_id = '{user_id}'"
+    db.cur.execute(sql)
+    res = db.cur.fetchall()
+    contributed_time = 0
+    for time in res:
+        contributed_time += time[0]
+    return contributed_time
+
+
+def update_user_time(user_id, time=-1):
+    if time == -1:
+        time = get_project_time(project_id)
+    query = f"UPDATE User SET runtime = '{time}' WHERE user_id = '{user_id}';"
+    db.cur.execute(query)
+    db.con.commit()
+
+
+
+def update_total_time_contributed(new_contribution_time, user_id):
+    query = f"SELECT runtime FROM User WHERE user_id = '{user_id}'"
+    db.cur.execute(query)
+    res = db.cur.fetchone()
+    time = res[0]
+    app.logger.warning(str(time) + "\n\n\n" + str(res) + "\n\n\n" + str(new_contribution_time))
+    new_time = int(new_contribution_time) + int(time)
+    update_user_time(user_id, new_time)
+
 @app.route("/api/runproject/<project_id>", methods=("GET", "POST"))
 @login_required
 def datatest(project_id):
@@ -240,6 +284,10 @@ def datatest(project_id):
     if request.method == "POST":
         data = request.form.get("data")
         job_id = request.form.get("job_id")
+        start_time = retrieve_time((job_id, user_id))
+        end_time = math.floor(time.time_ns() / 1000000)
+        app.logger.warning(start_time)
+        app.logger.warning(end_time)
         addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id))
         allready_contributed_time = get_contributed_time((user_id, project_id))
         new_contribution_time = allready_contributed_time + addition_time_contributed
@@ -247,6 +295,7 @@ def datatest(project_id):
         app.logger.warning(allready_contributed_time)
         app.logger.warning(new_contribution_time)
         update_contribution((new_contribution_time, user_id, project_id))
+        update_total_time_contributed(new_contribution_time, user_id)
         succes, return_val = receive_work(project_id, job_id, user_id, data)
         if not succes:
             return return_val
@@ -260,7 +309,7 @@ def datatest(project_id):
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
         current_contributed_time = get_contributed_time((user_id, project_id))
-        app.logger.warning("now insert timer is called")
+        app.logger.warning("in succes: job_id = " + str(return_val))
         insert_timer((return_val, user_id))
         return render_template("template.html", data=data, name=project_id, job=return_val, start_time=current_contributed_time)
     return return_val

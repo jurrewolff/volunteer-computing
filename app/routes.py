@@ -10,6 +10,7 @@ import json
 import app.models.project as project
 import app.models.results as results
 import app.models.volunteer as volunteer
+import app.models.user as user
 
 
 # TODO - Move existing routes to routes.py
@@ -115,3 +116,18 @@ def userdata():
     )
 
     return response
+
+
+@app.route("/api/dashboard", methods=["GET"])
+@login_required
+def leaderboard():
+    if not request.headers:
+        amount = 10
+        order_by = 'trust_level'
+    else:
+        amount = request.headers.get("amount")
+        order_by = request.headers.get("order_by")
+
+
+    best_users = user.get_all_users(amount, order_by)
+    return json.dumps(best_users)

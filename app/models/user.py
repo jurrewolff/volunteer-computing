@@ -17,7 +17,7 @@ def print_users():  # For testing purpuses.
 # Returns false if user_id or username allready exists.
 def insert_user(dic):
     if not account_id_exists(dic["user_id"]) and not username_exists(dic["username"]):
-        sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         val = (
             dic["user_id"],
             dic["username"],
@@ -30,6 +30,7 @@ def insert_user(dic):
             dic["institution"],
             dic["is_researcher"],
             dic["background"],
+            0
         )
 
         db.cur.execute(sql, val)
@@ -80,6 +81,28 @@ def get_user(username):
             "background": res[10],
         }
     return False
+
+# Returns an array of dictionary containers with the user info.
+def get_all_users(amount=None, order_by='trust_level'):
+    if amount:
+        sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT {amount}"
+    else:
+        sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT 10"
+
+    db.cur.execute(sql)
+    users = []
+    res = db.cur.fetchall()
+    for x in res:
+        user = {
+            "user_id": x[0],
+            "username": x[1],
+            "score": x[6],
+            "trust_level": x[7],
+            "is_researcher": x[9],
+        }
+        users.append(user)
+    return users
+
 
 
 # Returns the lowest id that has not yet been taken.
