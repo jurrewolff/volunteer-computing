@@ -24,6 +24,7 @@ from celery import Celery
 import subprocess
 from app.authentication import *
 from app.schedule import give_work, receive_work
+from pathlib import Path
 
 ALLOWED_EXTENSIONS = {"c"}
 from app.models.database import *
@@ -46,8 +47,18 @@ def send_output(proj_id):
 
 @app.route("/api/download/<proj_id>")
 def dl_output(proj_id):
+    base_dir = os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")
+    to_check = base_dir+ "/download"
+    path = Path(to_check)
+    if path.is_file() == False:
+        f = open(base_dir + "/download", "w+")
+        test = subprocess.run(['sort','-k1','-n', base_dir + "/output"], capture_output=True, text=True)
+        r = test.stdout.split("\n")
+        for line in r[:-1]:
+            s = line.split(" ", 1)
+            f.write(s[1] + "\n")
     return send_from_directory(
-        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "output"
+        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "download"
     )  # cached for a week
 
 
