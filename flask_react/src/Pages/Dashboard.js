@@ -34,7 +34,35 @@ const Dashboard = () => {
 
   const changeAmount = e => {
     setAmount(e.target.value);
-}
+};
+
+const renderSwitch = (best_user, param) => {
+    console.log("render switch" + best_user)
+    console.log("render switch" + param)
+    switch(param) {
+        case 'trust_level':
+            return (best_user.trust_level);
+        case 'score':
+            return (best_user.score);
+        case 'runtime':
+            return (best_user.runtime);
+        default:
+            return (best_user.trust_level);
+    }
+  }
+
+  const renderOrdering = (param) => {
+    switch(param) {
+        case 'trust_level':
+            return ('Trust level');
+        case 'score':
+            return ('Score');
+        case 'runtime':
+            return ('Runtime');
+        default:
+            return ('Trust level');
+    }
+  }
 
 
   useEffect(() => {
@@ -82,8 +110,6 @@ const Dashboard = () => {
                 </Container>
 
                 {console.log(data)}
-                {console.log(data[0].user_id)}
-
 
                 <Grid
                 justify="center"
@@ -101,30 +127,37 @@ const Dashboard = () => {
                         onChange={changeAmount}
                     />
                 </Grid>
-                <Grid>
-                <DropdownButton id='id' title='Order by something'>
+
+
+                <Grid direction='row' container spacing={1}>
+
+                <Grid container item sm={6}>
+                <DropdownButton id='id' title='Order by:'>
                     <Dropdown.Item ><div onClick={() => setOrderBy('trust_level')}>Trust level</div></Dropdown.Item>
                     <Dropdown.Item ><div onClick={() => setOrderBy('score')}>Score</div></Dropdown.Item>
+                    <Dropdown.Item ><div onClick={() => setOrderBy('runtime')}>Runtime</div></Dropdown.Item>
                 </DropdownButton>
                 </Grid>
+
+                <Grid container item sm={6}>{renderOrdering(order_by)}</Grid>
+
+                </Grid>
+
+
+
                 <Row>
                     <Col>
                         <ListGroup as="ol" numbered>
                             {data.map((best_user) =>
                                 <ListGroup.Item key={best_user.user_id} as="li">{best_user.username}
-                                <Badge bg="primary" pill>{best_user.trust_level}</Badge>
+                                {console.log("Listgroup" + best_user)}
+                                {console.log("Listgroup" + order_by)}
+                                <Badge bg="primary" style={{margin: "10px"}} pill>{renderSwitch(best_user, order_by)}</Badge>
                                 </ListGroup.Item>
 
                             )}
                         </ListGroup>
                     </Col>
-                    {/* <Col>
-                        <ListGroup as="ol" numbered>
-                            {tets.map((project) =>
-                                <ListGroup.Item key={project + "2"} as="li">{project}</ListGroup.Item>
-                            )}
-                        </ListGroup>
-                    </Col> */}
                 </Row>
                 </Grid>
 
