@@ -3,10 +3,7 @@
  * GET request voor logout.
  *
  */
-
-// TODO navigate naar homepage
-// TODO werkend maken
-// UPDATE schoonmaken
+/////////////////DEZE PAGINA MAG WEEEEEEEEEEEEEEEEEEEEEEEG!/////////////////////////////////////
 
 import { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate } from "react-router-dom"
@@ -33,7 +30,7 @@ export const LogoutRequest = (props) => {
                 .then((result) => {
                     setData(result)
                 })
-            navigate("/");
+            navigate("/redirect");
             setClicked(false);
         }
     }, [clicked]);

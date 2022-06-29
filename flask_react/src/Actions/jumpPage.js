@@ -17,6 +17,7 @@ import Logout from "../Pages/Logout"
 import Results from "../Pages/Results"
 import Account from "../Pages/Account"
 import Usage from "../Pages/Usage"
+import Redirect from "../Pages/Redirect"
 
 
 function JumpPage() {
@@ -40,6 +41,7 @@ function JumpPage() {
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/results/*" element={<Results />} />
                 <Route path="/account" element={<Account />} />
+                <Route path="/redirect" element={<Redirect />} />
                 <Route path="*" element={<NoPage />} />
             </Routes>
         </div>

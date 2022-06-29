@@ -47,7 +47,7 @@ export default function Home() {
             <Link to="./SignUp" onClick={clickButton}>
                 <Button variant="contained">SIGN UP NOW</Button>
             </Link>
-        )
+        );
     };
 
     const LoggedIn = () => {
