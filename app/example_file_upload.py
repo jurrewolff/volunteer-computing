@@ -14,6 +14,7 @@ Celery Function: https://flask.palletsprojects.com/en/2.1.x/patterns/celery/
 import os
 import shutil
 from urllib import response
+
 from app import app
 from flask import (
     flash,
@@ -32,12 +33,14 @@ from .read_datafile import file_to_arguments, get_line_from_file
 import app.models.project as pj
 from app.models.user import account_id_exists
 from app.models.volunteer import update_contribution, get_contributed_time
+from app.models.timer import insert_timer, retrieve_time
 from app.util import build_response
 from http import HTTPStatus
 from celery import Celery
 import subprocess
 from app.authentication import *
 from app.schedule import give_work, receive_work
+import math
 from pathlib import Path
 from app.models.database import *
 import numpy as np
@@ -121,7 +124,7 @@ def upload_file():
                 os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
                 file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
                 input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
-                create_jobs(proj_id)
+                create_jobs(proj_id, request.headers.get("quorum"))
                 task = compile.delay(proj_id)
             return response
     return
@@ -316,7 +319,7 @@ def update_user_time(user_id, time=-1):
     Use user table to update total runtime.
     """
     if time == -1:
-        time = get_project_time(project_id)
+        time = get_user_time_from_scretch(user_id)
     query = f"UPDATE User SET runtime = '{time}' WHERE user_id = '{user_id}';"
     db.cur.execute(query)
     db.con.commit()
@@ -332,7 +335,6 @@ def update_total_time_contributed(new_contribution_time, user_id):
     db.cur.execute(query)
     res = db.cur.fetchone()
     time = res[0]
-    app.logger.warning(str(time) + "\n\n\n" + str(res) + "\n\n\n" + str(new_contribution_time))
     new_time = int(new_contribution_time) + int(time)
     update_user_time(user_id, new_time)
 
@@ -380,6 +382,7 @@ def request_job(project_id):
         data = get_line_from_file(
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
+        insert_timer((return_val, user_id))
         return jsonify({"job_id":return_val, "data": data})
     return return_val
 
@@ -389,6 +392,11 @@ def handle_result(project_id):
     user_id = session["user_id"]
     data = request.form.get("data")
     job_id = request.form.get("job_id")
+    addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id))
+    allready_contributed_time = get_contributed_time((user_id, project_id))
+    new_contribution_time = allready_contributed_time + addition_time_contributed
+    update_contribution((new_contribution_time, user_id, project_id))
+    update_total_time_contributed(addition_time_contributed, user_id)
     succes, return_val = receive_work(project_id, job_id, user_id, data)
     if not succes:
         return return_val

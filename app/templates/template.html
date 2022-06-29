@@ -13,11 +13,10 @@
 
 
     <script>
-      let total_milliseconds = parseInt("{{start_time}}")
-      let hour = Math.floor(total_milliseconds / 3600000);
-      let minute = Math.floor((total_milliseconds % 3600000) / 60000);
-      let second = Math.floor((total_milliseconds % 60000) / 1000);
-      let milliseconds = (total_milliseconds) % 1000
+      let hour = 0;
+      let minute = 0;
+      let second = 0;
+      let milliseconds = 0;
       let cron;
       
 
@@ -26,14 +25,12 @@
       }
 
       function start() {
-        // pause();
         console.log("now start function starts.")
         cron = setInterval(() => { timer(); }, 10);
       }
 
       function timer() {
         console.log("timer wordt uitgevoerd.")
-        total_milliseconds+= 10;
         if((milliseconds += 10) == 1000) {
           milliseconds = 0;
           second++;
