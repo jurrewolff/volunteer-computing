@@ -344,7 +344,6 @@ def datatest(project_id):
     Description:
     Function which send the jobs to....
     """
-    # TODO switch to request instead of params in url
     user_id = session["user_id"]
     if request.method == "POST":
         data = request.form.get("data")
@@ -360,9 +359,15 @@ def datatest(project_id):
 
     # arguments from scheduler
     current_contributed_time = get_contributed_time((user_id, project_id))
+
+
 @app.route("/api/runproject/<project_id>", methods=["GET"])
 @login_required
 def start_running_project(project_id):
+    """
+    Description:
+    Running Project
+    """
     return render_template("template.html", name=project_id)
 
 
