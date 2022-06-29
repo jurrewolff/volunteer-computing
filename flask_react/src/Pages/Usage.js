@@ -7,7 +7,7 @@ const Usage = () => {
   return (
     <>
     <PermanentDrawerLeft />
-    <div>
+    <div style={{ width: "80%", height: "100px", marginTop: "5%", marginBottom: "3%", marginLeft: "100px" }}>
       <h1>Specifications for researcher usage</h1>
       <ul>
         <li> You must provide a file of C source code with a main(). </li>

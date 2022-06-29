@@ -42,6 +42,23 @@ export default function Home() {
     const navigate = useNavigate();
 
 
+    const NotLoggedIn = () => {
+        return (
+            <Link to="./SignUp" onClick={clickButton}>
+                <Button variant="contained">SIGN UP NOW</Button>
+            </Link>
+        )
+    };
+
+    const LoggedIn = () => {
+        return (
+            <Link to="./dashboard" onClick={clickButton}>
+                <Button variant="contained">GO TO DASHBOARD</Button>
+            </Link>
+        )
+    };
+
+
 
 
     // useEffect(() => {
@@ -50,6 +67,7 @@ export default function Home() {
     //     return navigate('/dashboard')
     //     }
     // }, [true]);
+
 
     // Function for the responsive button.
     // Ik snap niet waarom deze hier moet staan
@@ -95,12 +113,13 @@ export default function Home() {
                             porta ac consectetur ac, vestibulum at eros. Praesent commodo
                             cursus magna, vel sce
                         </Typography>
-                        <Link
+                        {Cookies.get("user_id") ? LoggedIn() : NotLoggedIn()}
 
+                        {/* <Link
                             to="./SignUp"
                             onClick={clickButton}>
                             <Button variant="contained">Signup now</Button>
-                        </Link>
+                        </Link> */}
                     </Box>
                 </Grid>
                 <Grid item xs={4}>

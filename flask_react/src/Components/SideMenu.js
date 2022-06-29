@@ -130,7 +130,7 @@ export default function PermanentDrawerLeft() {
                 <Divider />
                 <List className={classes.child}>
                     <ListItem key={'User Info'} disablePadding>
-                        <Link to={"/userinfo"} style={{ textDecoration: 'none' }}>
+                        <Link to={"/usage"} style={{ textDecoration: 'none' }}>
                             <ListItemButton>
                                 <ListItemIcon>
                                     <QuestionMarkIcon />

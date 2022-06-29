@@ -9,7 +9,6 @@ import Button from '@mui/material/Button';
 
 import { useEffect, useState } from 'react'
 import PermanentDrawerLeft from '../Components/SideMenu';
-import ResponsiveAppBar from '../Components/Navbar'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { theme } from '../Components/Theme'
 
@@ -69,8 +68,6 @@ export default function Account() {
 
     return (
         <ThemeProvider theme={theme}>
-
-            <ResponsiveAppBar />
             <PermanentDrawerLeft />
             <Grid
                 container

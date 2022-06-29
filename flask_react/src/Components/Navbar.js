@@ -76,12 +76,13 @@ const ResponsiveAppBar = (props) => {
     const requestOptions = {
       method: 'GET',
       headers: {}
-    };
-    fetch("/api/logout", requestOptions)
+  };
+  fetch("/api/logout", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setLogoutStatus(result)
+          setLogoutStatus(result)
       })
+      
   };
 
   const Items = ['About', 'Scientist', 'Volunteer'];
@@ -158,7 +159,9 @@ const AccountLoggedIn = () => {
       </MenuItem>
       <Box>
         <MenuItem key={'Logout'} onClick={handleLogOut}>
+        <Link to="/" style={{ textDecoration: 'none '}}>
           <Typography textAlign="center">{'Logout'}</Typography>
+          </Link>
         </MenuItem>
       </Box>
     </>
@@ -278,7 +281,6 @@ const AccountLoggedIn = () => {
                   <Typography textAlign="center">{'Logout'}</Typography>
                 </MenuItem> */}
                 {/* TODO: wat doet logout request hier? */}
-                <LogoutRequest/>
                 {Cookies.get("user_id") ? AccountLoggedIn() : AccountNotLoggedIn()}
               </Box>
             </Menu>

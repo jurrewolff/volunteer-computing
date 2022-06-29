@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"
 import { Row, Col } from "react-bootstrap";
+import PermanentDrawerLeft from '../Components/SideMenu';
+
 
 export default function MoreInfo() {
 
@@ -38,8 +40,9 @@ export default function MoreInfo() {
     }
 
     return (
+        <>
+        <PermanentDrawerLeft />
         <Container key={"more" + linkVars[0]} className="text-center" style={{ marginLeft: "5%", marginRight: "5%", marginTop: "5%" }}>
-
             <Card style={{ margin: "5%" }} >
                 <h1 style={{ margin: "2%" }}>{project.name}</h1>
                 <div>
@@ -75,7 +78,7 @@ export default function MoreInfo() {
 
                 </div>
             </Row>
-
         </Container>
+        </>
     );
 };
