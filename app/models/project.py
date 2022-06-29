@@ -17,7 +17,7 @@ def project_exists(project_id):
 
 
 # Inserts a project into the 'project' table.
-# val should be of format: (id, name, description, block_size, owner, random_validation, max_runtime).
+# val should be of format: (id, name, description, block_size, owner, random_validation, runtime).
 
 
 def insert_project(dic):
@@ -31,7 +31,7 @@ def insert_project(dic):
             dic["trust_level"],
             dic["owner"],
             dic["random_validation"],
-            dic["max_runtime"],
+            dic["runtime"],
             dic["quorum"],
             0,
             0,
@@ -73,7 +73,9 @@ def get_project_time(project_id):
 def update_project_time(project_id, time=-1):
     if time == -1:
         time = get_project_time(project_id)
-    pass
+    query = f"UPDATE Project SET runtime = '{time}' WHERE project_id = '{project_id}';"
+    db.cur.execute(query)
+    db.con.commit()
 
 
 
@@ -105,7 +107,7 @@ def get_project(project_id):
             "trust_level": res[4],
             "owner": res[5],
             "random_validation": res[6],
-            "max_runtime": res[7],
+            "runtime": res[7],
             "quorum_size": res[8],
             "done": res[9],
             "progress": res[10],
@@ -153,8 +155,7 @@ def get_projects_from_user(user_id):
                 "done": x[9],
                 "progress": x[10],
             }
-            app.logger.warning(x[0])
-            get_project_time(x[0])
+            update_project_time(x[0])
             projects.append(project)
         return projects
     else:
