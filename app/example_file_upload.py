@@ -12,6 +12,7 @@ from flask import (
     send_from_directory,
     render_template,
     session,
+    Response,
 )
 import time
 from flask_login import login_required
@@ -260,7 +261,7 @@ def get_user_time_from_scretch(user_id):
 
 def update_user_time(user_id, time=-1):
     if time == -1:
-        time = get_project_time(project_id)
+        time = get_user_time_from_scretch(user_id)
     query = f"UPDATE User SET runtime = '{time}' WHERE user_id = '{user_id}';"
     db.cur.execute(query)
     db.con.commit()
@@ -272,57 +273,63 @@ def update_total_time_contributed(new_contribution_time, user_id):
     db.cur.execute(query)
     res = db.cur.fetchone()
     time = res[0]
-    app.logger.warning(str(time) + "\n\n\n" + str(res) + "\n\n\n" + str(new_contribution_time))
     new_time = int(new_contribution_time) + int(time)
     update_user_time(user_id, new_time)
 
-@app.route("/api/runproject/<project_id>", methods=("GET", "POST"))
+@app.route("/api/runproject/<project_id>", methods=["GET"])
 @login_required
-def datatest(project_id):
-    # TODO switch to request instead of params in url
-    user_id = session["user_id"]
-    if request.method == "POST":
-        data = request.form.get("data")
-        job_id = request.form.get("job_id")
-        start_time = retrieve_time((job_id, user_id))
-        end_time = math.floor(time.time_ns() / 1000000)
-        app.logger.warning(start_time)
-        app.logger.warning(end_time)
-        addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id))
-        allready_contributed_time = get_contributed_time((user_id, project_id))
-        new_contribution_time = allready_contributed_time + addition_time_contributed
-        app.logger.warning(addition_time_contributed)
-        app.logger.warning(allready_contributed_time)
-        app.logger.warning(new_contribution_time)
-        update_contribution((new_contribution_time, user_id, project_id))
-        update_total_time_contributed(new_contribution_time, user_id)
-        succes, return_val = receive_work(project_id, job_id, user_id, data)
-        if not succes:
-            return return_val
-        calculate_per(project_id)
-        # return redirect(f"/output/{proj_id}")
+def start_running_project(project_id):
+    return render_template("template.html", name=project_id)
 
-    # arguments from scheduler
+
+@app.route("/api/get_job/<project_id>", methods=["GET"])
+@login_required
+def request_job(project_id):
+    user_id = session["user_id"]
     succes, return_val = give_work(project_id, user_id)
     if succes:
         data = get_line_from_file(
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
-        current_contributed_time = get_contributed_time((user_id, project_id))
-        app.logger.warning("in succes: job_id = " + str(return_val))
         insert_timer((return_val, user_id))
-        return render_template("template.html", data=data, name=project_id, job=return_val, start_time=current_contributed_time)
+        return jsonify({"job_id":return_val, "data": data})
     return return_val
 
-@app.route("/api/<proj_id>.js")
-def jstemplate(proj_id):
-    return render_template("template.js", name=proj_id)
+@app.route("/api/post_result/<project_id>", methods=["POST"])
+@login_required
+def handle_result(project_id):
+    user_id = session["user_id"]
+    data = request.form.get("data")
+    job_id = request.form.get("job_id")
+    addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id))
+    allready_contributed_time = get_contributed_time((user_id, project_id))
+    new_contribution_time = allready_contributed_time + addition_time_contributed
+    update_contribution((new_contribution_time, user_id, project_id))
+    update_total_time_contributed(addition_time_contributed, user_id)
+    succes, return_val = receive_work(project_id, job_id, user_id, data)
+    if not succes:
+        return return_val
+    calculate_per(project_id)
+    return build_response(HTTPStatus.OK, "result handled")
+    
+
+@app.route("/api/get_template/template.js")
+def jstemplate():
+    with open('app/templates/template.js', 'r') as content_file:
+        content = content_file.read()
+        return Response(content, mimetype="text/javascript")
+    # return render_template("template.js", name=proj_id)
 
 
-@app.route("/api/<proj_id>.wasm")
+
+@app.route("/api/get_worker/worker.js")
+def serve_worker():
+    with open('app/templates/worker.js', 'r') as content_file:
+        content = content_file.read()
+        return Response(content, mimetype="text/javascript")
+
+@app.route("/api/get_worker/get_wasm/<proj_id>.wasm")
 def serve_wasm(proj_id):
-    return send_from_directory(
-        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"),
-        "main.wasm",
-        cache_timeout=604800,
-    )  # cached for a week
+    with open(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.wasm"), 'rb') as content_file:
+        content = content_file.read()
+        return Response(content, mimetype="application/wasm")
