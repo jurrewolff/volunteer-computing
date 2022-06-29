@@ -1,4 +1,4 @@
-import React from 'react'; // niet per se nodig nu, toekomst wss wel
+import React from 'react';
 import './Dashboard.css';
 
 import Box from '@mui/material/Box';

@@ -1,6 +1,6 @@
 /*
  * Maakt het mogelijk om tussen webpagina's te switchen.
- * Is sneller dat http request, webpagina wordt nml niet telkens herladen
+ * Is sneller dan http request, webpagina wordt nml niet telkens herladen
  */
 
 import { Routes, Route } from "react-router-dom"
