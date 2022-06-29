@@ -9,8 +9,6 @@ from app.models.database import *
 # Adds an entry to the Result table.
 # Val should be of format: (user_id, project_id, block_count)
 # Returns False if given user or project doesn't exists, returns True otherwise.
-
-
 def insert_result(val):
     if user.account_id_exists(val[0]) and project.check_project_exists(val[1]) and not result_exists((val[0], val[1])):
         sql = "INSERT INTO Result VALUES (%s, %s, %s)"
@@ -21,8 +19,6 @@ def insert_result(val):
 
 # Returns True if result is in table, returns False otherwise.
 # Val should be of format: (user_id, project_id).
-
-
 def result_exists(val):
     sql = f"SELECT 1 FROM Result WHERE user_id = '{val[0]}' AND project_id = '{val[1]}'"
     db.cur.execute(sql)

@@ -1,6 +1,7 @@
 import os
 import shutil
 from urllib import response
+
 from app import app
 from flask import (
     flash,
@@ -18,12 +19,14 @@ from .read_datafile import file_to_arguments, get_line_from_file
 import app.models.project as pj
 from app.models.user import account_id_exists
 from app.models.volunteer import update_contribution, get_contributed_time
+from app.models.timer import insert_timer, retrieve_time
 from app.util import build_response
 from http import HTTPStatus
 from celery import Celery
 import subprocess
 from app.authentication import *
 from app.schedule import give_work, receive_work
+import math
 
 ALLOWED_EXTENSIONS = {"c"}
 from app.models.database import *
@@ -237,7 +240,12 @@ def datatest(project_id):
     if request.method == "POST":
         data = request.form.get("data")
         job_id = request.form.get("job_id")
-        new_contribution_time = request.form.get("time")
+        addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id))
+        allready_contributed_time = get_contributed_time((user_id, project_id))
+        new_contribution_time = allready_contributed_time + addition_time_contributed
+        app.logger.warning(addition_time_contributed)
+        app.logger.warning(allready_contributed_time)
+        app.logger.warning(new_contribution_time)
         update_contribution((new_contribution_time, user_id, project_id))
         succes, return_val = receive_work(project_id, job_id, user_id, data)
         if not succes:
@@ -246,12 +254,14 @@ def datatest(project_id):
         # return redirect(f"/output/{proj_id}")
 
     # arguments from scheduler
-    current_contributed_time = get_contributed_time((user_id, project_id))
     succes, return_val = give_work(project_id, user_id)
     if succes:
         data = get_line_from_file(
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
+        current_contributed_time = get_contributed_time((user_id, project_id))
+        app.logger.warning("now insert timer is called")
+        insert_timer((return_val, user_id))
         return render_template("template.html", data=data, name=project_id, job=return_val, start_time=current_contributed_time)
     return return_val
 
