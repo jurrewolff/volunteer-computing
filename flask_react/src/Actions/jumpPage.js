@@ -1,30 +1,39 @@
 /*
- * Maakt het mogelijk om tussen webpagina's te switchen.
- * Is sneller dat http request, webpagina wordt nml niet telkens herladen
+ * NAVBAR FUNCTIONALITY PAGE.
+ * Functionality that enables other functions to 'jump' to other pages.
+ * This is not visible on the website. This way of implemenating the jump
+ * functionaility, leads to quiker rendering of the pages.
  */
 
-import { Routes, Route } from "react-router-dom"
-import Home from "../Pages/Home"
-import Upload from "../Pages/Upload"
-import Login from "../Pages/Login"
-import NoPage from "../Pages/NoPage"
-import SignUp from "../Pages/SignUp"
-import DashBoard from "../Pages/Dashboard"
-import Projects from "../Pages/Projects"
-import MoreInfo from "../Pages/MoreInfo"
-import PastProjects from "../Pages/PastProjects"
-import Logout from "../Pages/Logout"
-import Results from "../Pages/Results"
-import Account from "../Pages/Account"
-import Usage from "../Pages/Usage"
+// Funcionality import
+import { Routes, Route } from "react-router-dom";
 
+// Page imports for defining the routes
+import Home from "../Pages/Home";
+import Usage from "../Pages/Usage";
+import Login from "../Pages/Login";
+import Upload from "../Pages/Upload";
+import NoPage from "../Pages/NoPage";
+import SignUp from "../Pages/SignUp";
+import Logout from "../Pages/Logout";
+import Account from "../Pages/Account";
+import Results from "../Pages/Results";
+import Projects from "../Pages/Projects";
+import MoreInfo from "../Pages/MoreInfo";
+import DashBoard from "../Pages/Dashboard";
+import PastProjects from "../Pages/PastProjects";
 
+/*
+ * Routes to each page are defined.
+ * '*' after each path ensures that pages within that path are also included in
+ * the page jump functionality.
+ * The '*' accepts all paths that are not defined below and will lead the user
+ * to the NoPage page.
+ */
 function JumpPage() {
     return (
         <div>
             <Routes>
-                {/* <Route path="/" element={<DashBoard />} />
-                <Route path="/login" element={<Login />} /> */}
                 <Route path="/" element={<Home />} />
                 <Route path="/login/*" element={<Login />} />
                 <Route path="/upload/*" element={<Upload />} />
@@ -32,10 +41,7 @@ function JumpPage() {
                 <Route path="/signup/*" element={<SignUp />} />
                 <Route path="/dashBoard/*" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />
-                {/* Either first or second moreInfo endpoint is correct. It
-                should be the first one. Remove when done testing.*/}
                 <Route path="/moreInfo/:title" element={<MoreInfo />} />
-                {/* <Route path="/moreInfo/:title/:action" element={<MoreInfo />} /> */}
                 <Route path="/usage" element={<Usage />} />
                 <Route path="/pastProjects" element={<PastProjects />} />
                 <Route path="/results/*" element={<Results />} />
