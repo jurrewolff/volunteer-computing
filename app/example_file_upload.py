@@ -339,28 +339,28 @@ def update_total_time_contributed(new_contribution_time, user_id):
     update_user_time(user_id, new_time)
 
 
-@app.route("/api/runproject/<project_id>", methods=("GET", "POST"))
-@login_required
-def datatest(project_id):
-    """
-    Description:
-    Function which send the jobs to....
-    """
-    user_id = session["user_id"]
-    if request.method == "POST":
-        data = request.form.get("data")
-        job_id = request.form.get("job_id")
-        # new_contribution_time = request.form.get("time")
-        # update_contribution((new_contribution_time, user_id, project_id))
-        # update_total_time_contributed(new_contribution_time, user_id)
-        succes, return_val = receive_work(project_id, job_id, user_id, data)
-        if not succes:
-            return return_val
-        calculate_per(project_id)
-        # return redirect(f"/output/{proj_id}")
+# @app.route("/api/runproject/<project_id>", methods=("GET", "POST"))
+# @login_required
+# def datatest(project_id):
+#     """
+#     Description:
+#     Function which send the jobs to....
+#     """
+#     user_id = session["user_id"]
+#     if request.method == "POST":
+#         data = request.form.get("data")
+#         job_id = request.form.get("job_id")
+#         # new_contribution_time = request.form.get("time")
+#         # update_contribution((new_contribution_time, user_id, project_id))
+#         # update_total_time_contributed(new_contribution_time, user_id)
+#         succes, return_val = receive_work(project_id, job_id, user_id, data)
+#         if not succes:
+#             return return_val
+#         calculate_per(project_id)
+#         # return redirect(f"/output/{proj_id}")
 
-    # arguments from scheduler
-    current_contributed_time = get_contributed_time((user_id, project_id))
+#     # arguments from scheduler
+#     current_contributed_time = get_contributed_time((user_id, project_id))
 
 
 @app.route("/api/runproject/<project_id>", methods=["GET"])
