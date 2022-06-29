@@ -35,6 +35,28 @@ export default function Upload() {
         setQuorum(e.target.value);
     }
 
+    const markers_slider_trust = [
+        {
+        value: 0.1,
+        label: 'Low',
+        },
+        {
+        value: 1,
+        label: 'high',
+        },
+    ];
+
+    const markers_slider_quorum = [
+        {
+        value: 1,
+        label: '1',
+        },
+        {
+        value: 5,
+        label: '5',
+        },
+    ];
+
     let user_cookie = Cookies.get("user_id")
     let research_cookie = Cookies.get("is_researcher")
 
@@ -102,7 +124,7 @@ export default function Upload() {
                                 <Slider
                                     defaultValue={1}
                                     step={1}
-                                    // marks={{value: 0, label='Low trust'}, {value: 1, label='High trust'}}
+                                    marks={markers_slider_quorum}
                                     min={1}
                                     max={5}
                                     valueLabelDisplay="auto"
@@ -114,7 +136,7 @@ export default function Upload() {
                                 <Slider
                                     defaultValue={0.8}
                                     step={0.1}
-                                    // marks={{value: 0, label='Low trust'}, {value: 1, label='High trust'}}
+                                    marks={markers_slider_trust}
                                     min={0.1}
                                     max={1}
                                     valueLabelDisplay="auto"
