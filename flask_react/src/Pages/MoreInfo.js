@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Button, Card } from "react-bootstrap";
+import { Container, Button, Card } from '@mui/material';
 import { useNavigate } from "react-router-dom"
 import { Row, Col } from "react-bootstrap";
 import PermanentDrawerLeft from '../Components/SideMenu';

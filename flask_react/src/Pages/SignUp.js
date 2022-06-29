@@ -125,7 +125,6 @@ export default function Signup() {
 
     return (
         <>
-            <Nav page="login" />
             <Box
                 display="flex"
                 justifyContent="center"

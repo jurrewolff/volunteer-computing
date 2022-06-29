@@ -92,24 +92,6 @@ const ResponsiveAppBar = (props) => {
     scroll.scrollToTop()
 }
 
-  // const makeLink = (page, link) => {
-  //   return (
-  //     <>
-  //       <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-  //         <Link to={link}>
-  //           <Button
-  //             // key={page}
-  //             // onClick={handleCloseNavMenu}
-  //             sx={{ my: 2, color: 'white', display: 'block' }}
-  //           >
-  //             {page}
-  //           </Button>
-  //         </Link>
-  //       </Box >
-  //     </>
-  //   )
-  // };
-
   // TODO: Lleyton fix scroll
   const makeLink = (page, link, element) => {
     return (
@@ -149,24 +131,29 @@ const ResponsiveAppBar = (props) => {
     )
 };
 
-const AccountLoggedIn = () => {
-  return (
-    <>
-      <MenuItem key={'Account'} onClick={handleCloseUserMenu}>
-        <Link to="/account" style={{ textDecoration: 'none' }}>
-          <Typography textAlign="center">{'Account'}</Typography>
-        </Link>
-      </MenuItem>
-      <Box>
-        <MenuItem key={'Logout'} onClick={handleLogOut}>
-        <Link to="/" style={{ textDecoration: 'none '}}>
-          <Typography textAlign="center">{'Logout'}</Typography>
+  const AccountLoggedIn = () => {
+    return (
+      <>
+        <MenuItem key={'Dashboard'} onClick={handleCloseUserMenu}>
+          <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+            <Typography textAlign="center">{'Dashboard'}</Typography>
           </Link>
         </MenuItem>
-      </Box>
-    </>
+        <MenuItem key={'Account'} onClick={handleCloseUserMenu}>
+          <Link to="/account" style={{ textDecoration: 'none' }}>
+            <Typography textAlign="center">{'Account'}</Typography>
+          </Link>
+        </MenuItem>
+        <Box>
+          <MenuItem key={'Logout'} onClick={handleLogOut}>
+            <Link to="/" style={{ textDecoration: 'none ' }}>
+              <Typography textAlign="center">{'Logout'}</Typography>
+            </Link>
+          </MenuItem>
+        </Box>
+      </>
     )
-};
+  };
 
 
 
