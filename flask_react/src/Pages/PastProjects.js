@@ -8,6 +8,8 @@ import PermanentDrawerLeft from '../Components/SideMenu';
 import ResponsiveAppBar from '../Components/Navbar'
 import Box from '@mui/material/Box';
 
+import PermanentDrawerLeft from '../Components/SideMenu';
+
 
 export default function PastProjects() {
 
@@ -43,7 +45,7 @@ export default function PastProjects() {
 
         return data.map((project, index) => (
 
-            <Card key={"past" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginLeft: "5%", marginRight: "100%" }}>
+            <Card key={"past" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginLeft: "5%", marginRight: "5%" }}>
                 <Row>
                     <Col>
                         <h1 style={{ margin: "30px" }}>{project.name}</h1>
@@ -64,8 +66,11 @@ export default function PastProjects() {
     }
 
     return (
-        <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
-            {ProjectsList(data)}
-        </Container>
+        <>
+            <PermanentDrawerLeft />
+            <Container className="text-center" style={{ marginLeft: "250", marginRight: "5%" }}>
+                {ProjectsList(data)}
+            </Container>
+        </>
     );
 };

@@ -8,7 +8,10 @@ import JumpPage from "./Actions/jumpPage"
 function App() {
 
   return (
+    <>
+    <ResponsiveAppBar />
     <JumpPage />
+    </>
   )
 }
 

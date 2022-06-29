@@ -14,6 +14,8 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import { theme } from '../Components/Theme'
 
 import Cookies from 'js-cookie'
+import PermanentDrawerLeft from '../Components/SideMenu';
+
 
 
 export default function Account() {

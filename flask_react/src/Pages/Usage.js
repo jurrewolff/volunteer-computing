@@ -1,7 +1,12 @@
 import React from 'react'; // niet per se nodig nu, toekomst wss wel
 
+import PermanentDrawerLeft from '../Components/SideMenu';
+
+
 const Usage = () => {
   return (
+    <>
+    <PermanentDrawerLeft />
     <div>
       <h1>Specifications for researcher usage</h1>
       <ul>
@@ -14,6 +19,7 @@ const Usage = () => {
         <li> The C standard library is supported, other libraries aren't. </li>
       </ul>
     </div>
+    </>
   );
 };
   

@@ -5,6 +5,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
+import PermanentDrawerLeft from '../Components/SideMenu';
+
+
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
@@ -55,6 +58,7 @@ export default function Upload() {
 
     return (
         <>
+                <PermanentDrawerLeft />
             <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                 <Paper elevation={10} style={paperStyle}
                     sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>

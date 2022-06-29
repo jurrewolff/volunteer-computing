@@ -8,7 +8,8 @@ import { ProjectsRequest } from '../Actions/projectsRequest'
 import { LoginRequest } from '../Actions/loginRequest'
 
 import PermanentDrawerLeft from '../Components/SideMenu';
-import ResponsiveAppBar from '../Components/Navbar'
+
+
 
 export default function Projects() {
 
@@ -23,10 +24,12 @@ export default function Projects() {
     }, [true]);
 
     return (
-
-        <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
+        <>
+        <PermanentDrawerLeft />
+        <Container className="text-center" style={{ marginLeft: 240, marginRight: "5%" }}>
             < ProjectsRequest />
         </Container>
+        </>
 
     );
 };

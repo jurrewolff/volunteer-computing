@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
+import PermanentDrawerLeft from '../Components/SideMenu';
+
+
 export default function Results() {
   const [data, setData] = useState([{}]);
   const navigate = useNavigate();
@@ -92,8 +95,11 @@ export default function Results() {
   }
 
   return (
+    <>
+    <PermanentDrawerLeft />
     <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
       {readResults({ data })}
     </Container>
+    </>
   );
 };
