@@ -8,9 +8,6 @@ import PermanentDrawerLeft from '../Components/SideMenu';
 import ResponsiveAppBar from '../Components/Navbar'
 import Box from '@mui/material/Box';
 
-import PermanentDrawerLeft from '../Components/SideMenu';
-
-
 export default function PastProjects() {
 
     const [data, setData] = useState([{}]);

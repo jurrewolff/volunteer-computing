@@ -8,7 +8,6 @@ import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../Components/Footer';
-import Nav from '../Components/HomePageNav';
 
 
 import Box from '@mui/material/Box';
@@ -59,7 +58,6 @@ export default function Home() {
     }
 
     return (<>
-        <Nav home={true} />
         <Grid
             justifyContent="center"
             alignItems="center"

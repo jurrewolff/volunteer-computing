@@ -2,7 +2,7 @@ import * as React from 'react';
 import Cookies from 'js-cookie'
 import { Link } from "react-router-dom"
 import { Link as scrollLink, animateScroll as scroll } from 'react-scroll';
-
+import { LogoutRequest } from '../Actions/logoutRequest';
 
 import { makeStyles } from '@mui/styles';
 import AppBar from '@mui/material/AppBar';

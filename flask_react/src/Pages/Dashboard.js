@@ -15,23 +15,17 @@ import {DropdownButton, Dropdown } from 'react-bootstrap';
 
 // TODO FIXEN!!!
 // import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import useTheme from '@mui/material/styles/useTheme'
-import PermanentDrawerLeft from '../Components/SideMenu';
 import Footer from '../Components/Footer'
 import JumpPage from "../Actions/jumpPage"
 import Iconify from '../Components/iconify';
 
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import { ThemeProvider } from '@material-ui/core/styles'
 import { theme } from '../Components/Theme'
 import { createTheme, useTheme } from '@mui/material/styles'
 
-import { createTheme } from '@mui/material/styles'
-import PermanentDrawerLeft from '../Components/SideMenu';
 import ResponsiveAppBar from '../Components/Navbar'
-
+import PermanentDrawerLeft from '../Components/SideMenu'
 
 
 const MyComponent = () => {
