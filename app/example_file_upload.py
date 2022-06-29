@@ -90,7 +90,7 @@ def upload_file():
                 os.mkdir(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"))
                 file.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.c"))
                 input.save(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/input"))
-                create_jobs(proj_id)
+                create_jobs(proj_id, request.headers.get("quorum"))
                 task = compile.delay(proj_id)
             return response
     return
