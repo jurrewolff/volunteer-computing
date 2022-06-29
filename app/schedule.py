@@ -135,7 +135,7 @@ def give_work(project_id, user_id):
     """
     possible = possible_jobs(project_id, user_id)
     if len(possible) == 0:
-        return False, build_response(HTTPStatus.BAD_REQUEST, "No jobs available for this user.")
+        return False, build_response(HTTPStatus.IM_A_TEAPOT, "No jobs available for this user.")
     job_id, _ = random.choice(possible)
     return True, job_id
 
