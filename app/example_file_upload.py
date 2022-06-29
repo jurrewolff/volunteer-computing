@@ -100,7 +100,7 @@ def add_project_db():
     new_project.update({"description": request.headers.get("description")})
     new_project.update({"quorum": request.headers.get("quorum")})
     new_project.update({"trust_level": request.headers.get("trust_level")})
-    new_project.update({"max_runtime": 0})
+    new_project.update({"runtime": 0})
     new_project.update({"block_size": 1})
 
     new_project.update({"owner": session["user_id"]})
@@ -230,6 +230,38 @@ def taskstatus(task_id):
     return jsonify(response)
 
 
+
+def get_user_time_from_scretch(user_id):
+    """
+    Use Volunteer table
+    """
+    sql = f"SELECT contributed_time FROM Volunteer WHERE user_id = '{user_id}'"
+    db.cur.execute(sql)
+    res = db.cur.fetchall()
+    contributed_time = 0
+    for time in res:
+        contributed_time += time[0]
+    return contributed_time
+
+
+def update_user_time(user_id, time=-1):
+    if time == -1:
+        time = get_project_time(project_id)
+    query = f"UPDATE User SET runtime = '{time}' WHERE user_id = '{user_id}';"
+    db.cur.execute(query)
+    db.con.commit()
+
+
+
+def update_total_time_contributed(new_contribution_time, user_id):
+    query = f"SELECT runtime FROM User WHERE user_id = '{user_id}'"
+    db.cur.execute(query)
+    res = db.cur.fetchone()
+    time = res[0]
+    app.logger.warning(str(time) + "\n\n\n" + str(res) + "\n\n\n" + str(new_contribution_time))
+    new_time = int(new_contribution_time) + int(time)
+    update_user_time(user_id, new_time)
+
 @app.route("/api/runproject/<project_id>", methods=("GET", "POST"))
 @login_required
 def datatest(project_id):
@@ -240,6 +272,7 @@ def datatest(project_id):
         job_id = request.form.get("job_id")
         new_contribution_time = request.form.get("time")
         update_contribution((new_contribution_time, user_id, project_id))
+        update_total_time_contributed(new_contribution_time, user_id)
         succes, return_val = receive_work(project_id, job_id, user_id, data)
         if not succes:
             return return_val

@@ -10,6 +10,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { Row, Col, Badge } from "react-bootstrap";
 import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
+import {DropdownButton, Dropdown } from 'react-bootstrap';
 
 
 // TODO FIXEN!!!
@@ -29,21 +30,26 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([{}]);
   const [amount, setAmount] = useState(10);
+  const [order_by, setOrderBy] = useState("trust_level");
 
   const changeAmount = e => {
     setAmount(e.target.value);
 }
+
 
   useEffect(() => {
         if (!user_cookie) {
             console.log("User not logged in, redirecting to login page")
             return navigate('/login')
         }
+        console.log(amount)
+        console.log(order_by)
 
         const requestOptions = {
             method: 'GET',
             headers: {
-                'amount': amount
+                'amount': amount,
+                'order_by': order_by
             }
         };
 
@@ -52,9 +58,7 @@ const Dashboard = () => {
             .then(data => {
                 setData(data)
         })
-  }, [amount]);
-
-  const tets = [11, 12, 21, 22]
+  }, [amount, order_by]);
 
   return (
 
@@ -96,6 +100,12 @@ const Dashboard = () => {
                         valueLabelDisplay="auto"
                         onChange={changeAmount}
                     />
+                </Grid>
+                <Grid>
+                <DropdownButton id='id' title='Order by something'>
+                    <Dropdown.Item ><div onClick={() => setOrderBy('trust_level')}>Trust level</div></Dropdown.Item>
+                    <Dropdown.Item ><div onClick={() => setOrderBy('score')}>Score</div></Dropdown.Item>
+                </DropdownButton>
                 </Grid>
                 <Row>
                     <Col>
