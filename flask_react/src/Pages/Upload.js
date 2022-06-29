@@ -63,7 +63,7 @@ export default function Upload() {
                         Upload your project here
                     </Typography>
                     <Divider variant="middle" />
-                    <Grid container spacing={3}>
+                    <Grid container justifyContent="center" spacing={3}>
                         <Grid item xs={6}>
                             <Grid >
                                 Title of the project:
@@ -124,13 +124,13 @@ export default function Upload() {
 
                             <Grid>
                                 <div>
-                                    Give C File:
+                                    Upload .c file:
                                     <input type="file" id="file" accept=".c"/>
-                                    Give input File:
+                                    Upload input file:
                                     <input type="file" id="input" />
                                 </div>
                             </Grid>
-                            <Grid alignitems="center">
+                            <Grid container justifyContent="center">
                                 < UploadRequest
                                     name={name}
                                     description={description}
