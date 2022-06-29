@@ -60,6 +60,22 @@ def get_all_projects():
 
 # Returns a list of all project. 1 tuple per project.
 
+def get_project_time(project_id):
+    sql = f"SELECT contributed_time FROM Volunteer WHERE project_id = '{project_id}'"
+    db.cur.execute(sql)
+    res = db.cur.fetchall()
+    contributed_time = 0
+    for time in res:
+        contributed_time += time[0]
+    return contributed_time
+
+
+def update_project_time(project_id, time=-1):
+    if time == -1:
+        time = get_project_time(project_id)
+    pass
+
+
 
 def get_projects_researchers(user_id):
     projects = []
@@ -137,6 +153,8 @@ def get_projects_from_user(user_id):
                 "done": x[9],
                 "progress": x[10],
             }
+            app.logger.warning(x[0])
+            get_project_time(x[0])
             projects.append(project)
         return projects
     else:
