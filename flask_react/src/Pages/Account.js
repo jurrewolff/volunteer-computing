@@ -1,24 +1,6 @@
-import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
-import Switch from '@mui/material/Switch';
-import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
-import { visuallyHidden } from '@mui/utils';
-import { alpha } from '@mui/material/styles';
-import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import TableContainer from '@mui/material/TableContainer';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import TablePagination from '@mui/material/TablePagination';
 import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -30,7 +12,6 @@ import PermanentDrawerLeft from '../Components/SideMenu';
 import ResponsiveAppBar from '../Components/Navbar'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { theme } from '../Components/Theme'
-
 
 import Cookies from 'js-cookie'
 
@@ -54,6 +35,8 @@ export default function Account() {
 
     const [isScientist, setIsScientist] = useState(true);
 
+    const [user, setUser] = useState({});
+
     useEffect(() => {
         if (Cookies.get("is_researcher") === "1") {
             setIsScientist(true);
@@ -67,6 +50,22 @@ export default function Account() {
         setEmail(Cookies.get("email"))
     }, [])
 
+
+
+    useEffect(() => {
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'username': Cookies.get("name"),
+            }
+        };
+
+        fetch("/api/userdata", requestOptions)
+            .then(res => res.json())
+            .then(result => {
+                setUser(result.data)
+            })
+    }, []);
 
     return (
         <ThemeProvider theme={theme}>
@@ -119,9 +118,10 @@ export default function Account() {
                                                 disabled
                                                 fullWidth
                                                 id="fname"
-                                                label="First name"
-                                                value={fname}
+                                                label="first name"
+                                                value={user.first_name}
                                                 variant="outlined"
+                                                InputLabelProps={{ shrink: true }}
                                             />
                                         }
                                     </Grid>
@@ -132,8 +132,9 @@ export default function Account() {
                                                 fullWidth
                                                 id="lname"
                                                 label="Last name"
-                                                value={lname}
+                                                value={user.last_name}
                                                 variant="outlined"
+                                                InputLabelProps={{ shrink: true }}
                                             />}
                                     </Grid>
                                     <Grid item>
@@ -141,8 +142,9 @@ export default function Account() {
                                             fullWidth
                                             id="Username"
                                             label="Username"
-                                            value={uname}
+                                            value={user.username}
                                             variant="outlined"
+                                            InputLabelProps={{ shrink: true }}
                                         />
                                     </Grid>
                                     <Grid item>
@@ -150,8 +152,9 @@ export default function Account() {
                                             fullWidth
                                             id="email"
                                             label="E-mail"
-                                            value={email}
+                                            value={user.email}
                                             variant="outlined"
+                                            InputLabelProps={{ shrink: true }}
                                         />
                                     </Grid>
                                 </Grid>
