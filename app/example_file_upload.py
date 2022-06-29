@@ -11,6 +11,7 @@ from flask import (
     send_from_directory,
     render_template,
     session,
+    Response,
 )
 import time
 from flask_login import login_required
@@ -258,15 +259,34 @@ def handle_result(project_id):
     return build_response(HTTPStatus.OK, "result handled")
     
 
-@app.route("/api/<proj_id>.js")
-def jstemplate(proj_id):
-    return render_template("template.js", name=proj_id)
+@app.route("/api/get_template/template.js")
+def jstemplate():
+    with open('app/templates/template.js', 'r') as content_file:
+        content = content_file.read()
+        return Response(content, mimetype="text/javascript")
+    # return render_template("template.js", name=proj_id)
+
+# def get_file(filename):  # pragma: no cover
+#     try:
+#         src = os.path.join("app/templates", filename)
+#         # Figure out how flask returns static files
+#         # Tried:
+#         # - render_template
+#         # - send_file
+#         # This should not be so non-obvious
+#         return os.open(src, os.O_RDONLY).read()
+#     except IOError as exc:
+#         return str(exc)
 
 
-@app.route("/api/<proj_id>.wasm")
+@app.route("/api/get_worker/worker.js")
+def serve_worker():
+    with open('app/templates/worker.js', 'r') as content_file:
+        content = content_file.read()
+        return Response(content, mimetype="text/javascript")
+
+@app.route("/api/get_worker/get_wasm/<proj_id>.wasm")
 def serve_wasm(proj_id):
-    return send_from_directory(
-        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"),
-        "main.wasm",
-        cache_timeout=604800,
-    )  # cached for a week
+    with open(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.wasm"), 'rb') as content_file:
+        content = content_file.read()
+        return Response(content, mimetype="application/wasm")

@@ -8,29 +8,69 @@
   <body>
     Running project #{{name}}!
 
-    <script type="text/javascript" src="/api/{{name}}.js"></script>
 
     <script type='text/javascript'>
-      var request = new XMLHttpRequest();
-      request.open('POST', '/api/runproject/{{name}}', true);
-      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      var data = {{ data | tojson }};
-      var Module = {
-        final: '',
-        reads: 0,
-        print: (function() {
-            return function(text) {
-            if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-            Module.final += text + "\n";
-            Module.reads += 1;
-            if (Module.reads == data.size) request.send('data=' + Module.final + "&job_id={{job}}");
-          };
-        })()};
-      for (let step = 0; step < data.size; step++) {
-          // Runs 5 times, with values of step 0 through 4.
-          var to_execute = data.arguments.split(" ");
-          execute_C_file(to_execute, Module.print);
-      };
+      if (window.Worker) {
+        // var getUrl = window.location;
+        // var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+        const myWorker = new Worker('/api/get_worker/worker.js');
+      myWorker.postMessage('{{name}}');
+      var worker_done = false
+      myWorker.onmessage = function(e) {
+        result =  e.data;
+        console.log('Message received from worker: ' + result);
+        if (result != "No jobs") {
+          myWorker.postMessage('{{name}}');
+        } else {
+          console.log('no more jobs, stopping exec.')
+        }
+      }
+       } else {
+        console.log('Your browser doesn\'t support web workers.');
+      }
+      // i =0
+      // while (i <1 && worker_done) {
+      //   myWorker.postMessage('{{name}}');
+      // }
+      
+      //   const myWorker = new Worker("/api/get_worker/worker.js");
+
+      //   // first.onchange = function() {
+      //     myWorker.postMessage([1,1]);
+      //     // console.log('Message posted to worker');
+      //   // }
+
+      //   // second.onchange = function() {
+      //   //   myWorker.postMessage([first.value, second.value]);
+      //   //   console.log('Message posted to worker');
+      //   // }
+
+      //   myWorker.onmessage = function(e) {
+      //     result.textContent = e.data;
+      //     console.log('Message received from worker');
+      //   }
+      // } else {
+      //   console.log('Your browser doesn\'t support web workers.');
+      // }
+    
+
+      // var do_break = false
+      // i = 0;
+      // // while (!do_break && i<5) {
+      //   myWorker.port.postMessage('{{name}})');
+      //   console.log('Message posted to worker');
+        
+      //   myWorker.port.onmessage = function(e) {
+      //   result2.textContent = e.data;
+      //   console.log('Message received from worker');
+      // }
+
+      //   get_and_run_job();
+      //   console.log("break = " + do_break)
+      //   setTimeout(function(){ 
+      //     i++;
+      //   }, 1000);
+      // }
     </script>
 
     <script>
