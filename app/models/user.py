@@ -82,11 +82,11 @@ def get_user(username):
     return False
 
 # Returns an array of dictionary containers with the user info.
-def get_all_users(amount=None):
+def get_all_users(amount=None, order_by='trust_level'):
     if amount:
-        sql = f"SELECT * FROM User ORDER BY trust_level DESC LIMIT {amount}"
+        sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT {amount}"
     else:
-        sql = f"SELECT * FROM User ORDER BY trust_level DESC LIMIT 10"
+        sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT 10"
 
     db.cur.execute(sql)
     users = []
