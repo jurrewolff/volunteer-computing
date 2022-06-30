@@ -70,6 +70,16 @@ const renderSwitch = (best_user, param) => {
     }
   };
 
+  const markers_slider_dashboard = [
+        {
+        value: 5,
+        label: '5',
+        },
+        {
+        value: 50,
+        label: '50',
+        },
+    ];
 
   useEffect(() => {
         if (!user_cookie) {
@@ -124,6 +134,7 @@ const renderSwitch = (best_user, param) => {
                     step={5}
                     min={5}
                     max={50}
+                    marks={markers_slider_dashboard}
                     valueLabelDisplay="auto"
                     onChange={changeAmount}
                 />
