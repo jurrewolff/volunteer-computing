@@ -92,7 +92,7 @@ def dl_output(proj_id):
             s = line.split(" ", 1)
             f.write(s[1] + "\n")
     return send_from_directory(
-        base_dir, "download", as_attachment=True
+        base_dir, "download", as_attachment=True, cache_timeout=0
     )  # cached for a week
 
 
