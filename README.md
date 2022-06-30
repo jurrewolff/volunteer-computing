@@ -22,12 +22,12 @@ Front-end: React, CSS
 Backend-end: Python, EMCC
 
 ## Authors
-Paul Ganzevoort
-Olivier Guntenaar
-Jeffrey Kragten
-Paul Kwakernaak
-Ruben Lanjouw
-Tessa van Lobbrecht
-Tommaso Trooster
-Jurre Wolff
-Lleyton Wynter
+Paul Ganzevoort  
+Jeffrey Kragten   
+Paul Kwakernaak  
+Ruben Lanjouw  
+Tessa van Lobbrecht  
+Tommaso Trooster  
+Jurre Wolff  
+Lleyton Wynter  
+Jan Deen  
