@@ -90,7 +90,7 @@ export default function Results() {
 
             {/* Creates a card for every project in data. */}
             {data.map((project) =>
-                <Row key={"result" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginBottom: "3%", marginLeft: "200px" }}>
+                <Row key={"result" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginBottom: "3%", marginLeft: "100px" }}>
                     <Col>
                         <Card style={{ backgroundColor: '#7BD2EC' }}>
                             <Row>
@@ -101,7 +101,7 @@ export default function Results() {
                                     <Link to={"/moreInfo/" + project.project_id}>More info</Link>
                                 </Col>
                                 <Col style={{ margin: "3%" }}>
-                                    Time run: 12:10:59
+                                    <h3>{project.runtime}</h3>
                                 </Col>
                             </Row>
                         </Card>

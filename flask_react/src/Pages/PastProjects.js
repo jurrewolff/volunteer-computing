@@ -77,22 +77,19 @@ export default function PastProjects() {
             </Row>
 
             {data.map((project) => (
-                <Card key={"past" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginLeft: "5%", marginRight: "100%" }}>
-                    <Row>
-                        <Col>
-                            <h1 style={{ margin: "30px" }}>{project.name}</h1>
-                        </Col>
-                        <Col>
-                            <Card.Text style={{ margin: "5%" }}>{project.description}</Card.Text>
-                        </Col>
-                        <Col>
-                            <Card.Text style={{ margin: "5%" }}>12:10:59</Card.Text>
-                        </Col>
-                        <Col>
-                            <Card.Text style={{ margin: "5%" }}>Correct</Card.Text>
-                        </Col>
-                    </Row>
-                </Card>
+            <Card key={"past" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginLeft: "5%", marginRight: "100%" }}>
+                <Row>
+                    <Col>
+                        <h1 style={{ margin: "30px" }}>{project.name}</h1>
+                    </Col>
+                    <Col>
+                        <Card.Text style={{ margin: "5%" }}>{project.description}</Card.Text>
+                    </Col>
+                    <Col>
+                        <Card.Text style={{ margin: "5%" }}>{project.contributed_time} seconds contributed to project</Card.Text>
+                    </Col>
+                </Row>
+            </Card>
             ))}
         </Container>)
     }
