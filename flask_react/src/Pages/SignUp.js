@@ -97,31 +97,14 @@ export default function Signup() {
     }
 
     useEffect(() => {
-        if (!fnameError && !unameError && !emailError && !lnameError &&
-            !passError && check1 && check2 && check3 && check4 && check5) {
-            SignupRequest(email, pass, uname, lname, fname, inst,
-                background, isScientist).then(response => {
-                    switch (response.code) {
-                        case 201:
-                            setAuthenticated(true)
-                            break;
-                        case 400:
-                        case 401:
-                        case 409:
-                        case 500:
-                            setMsgPass(response.description)
-                            setPassError(true)
-                            break;
-                        default:
-                            setMsgPass("Something went wrong, not your fault")
-                            setPassError(true)
-                            break;
-                    }
-                }
-                );
+        if (uname !== "" && email !== "" && pass !== "" && fname !== ""
+            && lname !== "" && inst !== "" && isScientist === '1') {
+            setAuthenticated(true)
         }
-    }, [fnameError, unameError, emailError, passError, lnameError, check1,
-        check2, check3, check4, check5]);
+        if (uname !== "" && email !== "" && pass !== "" && isScientist === '0') {
+            setAuthenticated(true)
+        }}, [uname, email, fname, pass, lname, inst, isScientist]);
+
 
     return (
         <>
@@ -229,7 +212,7 @@ export default function Signup() {
                                         margin="normal"
                                         variant="outlined"
                                         error={emailError}
-                                        helperText={emailError ? 'E-mail is required' : ' '}
+                                        helperText={!emailError ? 'E-mail is required' : ' '}
                                         label="E-mail"
                                         onChange={(e) => setEmail(e.target.value)}
                                         sx={{ mb: -1.5 }}
@@ -238,7 +221,6 @@ export default function Signup() {
                                 <Grid>
                                     <Grid>
                                         <SignupRequest
-                                        // onClick={() => handleSignup()}          //// Nog checks op signup zetten!
                                         username={uname}
                                         pass={pass}
                                         eMail={email}
@@ -247,13 +229,8 @@ export default function Signup() {
                                         inst={inst}
                                         isResearcher={isScientist}
                                         background={background}
+                                        authenticated={authenticated}
                                         />
-
-                                            {/* variant="contained"
-                                            onClick={() => handleSignup()}
-                                            sx={{ mt: 3, mb: 2, ml: 1 }}>
-                                            Sign up
-                                        </Button> */}
                                         <Button
                                             variant="contained"
                                             onClick={() => navigate(-1)}
@@ -326,7 +303,6 @@ export default function Signup() {
                             </Grid>
                         </Grid>
                     </Paper>
-                    {authenticated && navigate("/dashboard")}
                 </Container>
             </Box>
         </>

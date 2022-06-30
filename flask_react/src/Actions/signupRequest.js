@@ -22,7 +22,7 @@ export const SignupRequest = (props) => {
 
     // In data wordt de responde verzameld
     const [data, setData] = useState([{}])
-    const [clicked, setClicked] = useState(false);
+    const [clickedsignup, setClicked] = useState(false);
     const [msgUser, setMsgUser] = useState("");
     const [msgPass, setMsgPass] = useState("");
     const [userError, setUserError] = useState(false);
@@ -35,52 +35,53 @@ export const SignupRequest = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (clicked) {
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'username': props.username,
-                    'password': props.pass,
-                    'email': props.eMail,
-                    'firstname': props.fName,
-                    'lastname': props.lName,
-                    'institution': props.inst,
-                    'is_researcher': props.isResearcher,
-                    'background': props.background,
-                }
-            };
-            fetch("/api/signup", requestOptions)
-                .then((result) => {
-                    setData(result)
-                });
+        if (clickedsignup) {
+            if (props.authenticated) {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'username': props.username,
+                        'password': props.pass,
+                        'email': props.eMail,
+                        'firstname': props.fName,
+                        'lastname': props.lName,
+                        'institution': props.inst,
+                        'is_researcher': props.isResearcher,
+                        'background': props.background,
+                    }
+                };
+                fetch("/api/signup", requestOptions)
+                    .then((result) => {
+                        setData(result)
+                    });
 
-            LoginRequest(props.username, props.pass).then(response => {
-                switch (response.code) {
-                    case 200:
-                        setAuthenticated(true)
-                        break;
-                    case 400 || 401:
-                        setMsgPass(response.description)
-                        setPassError(true)
+                LoginRequest(props.username, props.pass).then(response => {
+                    switch (response.code) {
+                        case 200:
+                            setAuthenticated(true)
+                            break;
+                        case 400 || 401:
+                            setMsgPass(response.description)
+                            setPassError(true)
 
-                        setMsgUser("")
-                        setUserError(true)
-                        break;
-                    default:
-                        setMsgPass("Something went wrong, not your fault")
-                        setPassError(true)
-                        break;
+                            setMsgUser("")
+                            setUserError(true)
+                            break;
+                        default:
+                            setMsgPass("Something went wrong, not your fault")
+                            setPassError(true)
+                            break;
+                    }
                 }
+                )
+                navigate("/redirect");
             }
-            )
-            navigate("/redirect");
-
             setClicked(false)
         }
 
         // const username = result.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clicked, props.fName, props.pass]);
+    }, [clickedsignup, props.authenticated]);
 
     return (
         <div>
