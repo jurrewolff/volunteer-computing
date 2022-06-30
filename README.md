@@ -11,8 +11,8 @@ Compunity is a distributed computing platform, enabling multiple people to work 
 The application database can be managed using "phpmyadmin". This service is accessible through a web-interface at port
 3602 of the server IP-address. The website itself is reached at port 3601. 
 
-'bash npm_build.sh' can be used to rebuild the react into the static folder.  
-'bash start.sh' can be used to start the website.  
+`bash npm_build.sh` can be used to rebuild the react into the static folder.  
+`bash start.sh` can be used to start the website.  
 
 ## License
 
