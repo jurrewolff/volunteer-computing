@@ -99,6 +99,7 @@ def get_all_users(amount=None, order_by='trust_level'):
             "score": x[6],
             "trust_level": x[7],
             "is_researcher": x[9],
+            "runtime": x[11]
         }
         users.append(user)
     return users
