@@ -136,17 +136,14 @@ export default function Home() {
                         </Typography>
 
                         <Typography>
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentums. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            isus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
+                            We are a group of students of the University of Amsterdam that wanted
+                            to help scientific research. We thought long and hard how to achieve this
+                            and came to the conclusion that we could help researchers with finding
+                            computing power. Research needs a lot of computing power nowadays, but not
+                            all researchers have access to a super computer to aid in their calculations.
+                            This is what we from CompuTeam want to solve. We want to provide a platform
+                            for researchers to connect with volunteers who want to help their research. And
+                            in this way, help scientific research.
 
                         </Typography>
                     </Box>
@@ -164,31 +161,23 @@ export default function Home() {
                     <Box sx={{ pr: 5, pl: 10 }}>
 
                         <Typography id="Scientist" variant="h4" gutterBottom component="div">
-                            Scientist
+                            Researcher
                         </Typography>
 
                         <Typography>
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            isus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam.
-                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                            Praesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam. Morbi
-                            leo risus, porta ac consectetur ac, vestibulum at eros. P
-                            raesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras justo
+                            Researchers are able to upload programs that take too much time
+                            to compute them themselfs. Those programs will than be shown on our
+                            website where volunteers can choose to run those programs.
+                            The researchers can see the progress of their programs and download
+                            the results when a program is done. Researchers need to provide additional
+                            information about themselfs and must be verified before uploading
+                            programs. This is done in order to protect our volunteers from running
+                            malicious code. <br></br>
+                            In addition to those extra privileges, researchers also have all the
+                            functionalities of volunteers. Researchers that used this site in the past
+                            can thus help with projects of other researchers as a way to give back to
+                            the community.
+
                         </Typography>
                     </Box>
                 </Grid>
@@ -222,27 +211,10 @@ export default function Home() {
                         </Typography>
 
                         <Typography>
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            isus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam.
-                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                            Praesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam. Morbi
-                            leo risus, porta ac consectetur ac, vestibulum at eros. P
-                            raesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras justo
+                            Volunteers can help scientific research by lending their computing power. They can choose
+                            from a wide scala of projects to pick the one that speak to them the most. They can also
+                            see the projects they worked on in the past and the amount of time they invested in each
+                            project. There is also a leaderboard to show of your contributions to the world!
                         </Typography>
                     </Box>
                 </Grid>

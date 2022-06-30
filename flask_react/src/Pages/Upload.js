@@ -17,6 +17,7 @@ import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
 import ToggleButton from '@mui/material/ToggleButton';
 import CheckIcon from '@mui/icons-material/Check';
+import { stepClasses } from '@mui/material';
 
 
 
@@ -28,6 +29,9 @@ export default function Upload() {
     const [description, setDescription] = useState();
     const [quorum, setQuorum] = useState(1);
     const [trust_level, setTrustlevel] = useState(0.8);
+    const [valid_upload, setValidUpload] = useState(false);
+    const [C, setC] = useState(false);
+    const [file, setFile] = useState(false);
 
     const changeTrust = e => {
         console.log(e.target.value);
@@ -65,6 +69,13 @@ export default function Upload() {
 
     const navigate = useNavigate();
 
+    function changeC() {
+        setC(true)
+    }
+
+    function changeFile() {
+        setFile(true)
+    }
 
     useEffect(() => {
         if (!user_cookie) {
@@ -76,7 +87,10 @@ export default function Upload() {
             console.log("User unauthorized, redirecting to dashboard")
             return navigate('/dashboard')
         }
-    }, [true]);
+        if (name !== "" && description !== "" && C && file) {
+            setValidUpload(true)
+        }
+    }, [name, description, C, file]);
 
     return (
         <>
@@ -151,9 +165,9 @@ export default function Upload() {
                             <Grid>
                                 <div>
                                     Upload .c file:
-                                    <input type="file" id="file" accept=".c"/>
+                                    <input type="file" id="file" accept=".c" onChange={changeC}/>
                                     Upload input file:
-                                    <input type="file" id="input" />
+                                    <input type="file" id="input" onChange={changeFile}/>
                                 </div>
                             </Grid>
                             <Grid container justifyContent="center">
@@ -163,6 +177,7 @@ export default function Upload() {
                                     quorum={quorum}
                                     always_check={selected}
                                     trust_level={trust_level}
+                                    valid_upload={valid_upload}
                                 />
                             </Grid>
                         </Grid>

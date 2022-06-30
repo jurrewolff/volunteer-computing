@@ -12,33 +12,32 @@ export const UploadRequest = (props) => {
 
     useEffect(() => {
         if (clicked) {
-            const formData = new FormData()
-            const codeFile = document.getElementById('file').files[0]
-            const inputFile = document.getElementById('input').files[0]
-            formData.append('file', codeFile)
-            formData.append('input', inputFile)
-            console.log(codeFile)
-            console.log(inputFile)
-            fetch("/api/upload", {
-                method: 'POST',
-                headers: {
-                    'name': props.name,
-                    'description': props.description,
-                    'quorum': props.quorum,
-                    'always_check': props.always_check,
-                    'trust_level': props.trust_level
-                },
-                body: formData
-            })
-                .then((response) => response.json())
-                .then((result) => {
-                    console.log({ result })
-                });
-
-            navigate('/dashboard');
-            setClicked(false)
+            if (props.valid_upload) {
+                const formData = new FormData()
+                const codeFile = document.getElementById('file').files[0]
+                const inputFile = document.getElementById('input').files[0]
+                formData.append('file', codeFile)
+                formData.append('input', inputFile)
+                fetch("/api/upload", {
+                    method: 'POST',
+                    headers: {
+                        'name': props.name,
+                        'description': props.description,
+                        'quorum': props.quorum,
+                        'always_check': props.always_check,
+                        'trust_level': props.trust_level
+                    },
+                    body: formData
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log({ result })
+                    });
+                navigate('/dashboard');
+            }
+            setClicked(false);
         }
-    }, [clicked]);
+    }, [clicked, props.valid_upload]);
 
     return (
         <div>
