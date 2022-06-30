@@ -57,21 +57,6 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# SEEMS NOT USED
-@app.route("/api/output/<proj_id>")
-@login_required
-def send_output(proj_id):
-    """
-    Description:
-    Send file output file to client. Directly linked with db.
-    """
-    with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output") as f:
-        return render_template("content.html", text=f.read(), proj_id=proj_id)
-    return send_from_directory(
-        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "output"
-    )  # cached for a week
-
-
 @app.route("/api/download/<proj_id>")
 @login_required
 def dl_output(proj_id):
@@ -215,10 +200,6 @@ def make_celery(app):
     return celery
 
 
-# WAS DEZE DAN FF KIJKEN HIERO TODO
-celery = make_celery(app)
-
-# @celery.task(name="create_jobs")
 def create_jobs(project_id, quorum=1):
     """
     Description:
@@ -233,22 +214,6 @@ def create_jobs(project_id, quorum=1):
         for i, line in enumerate(f):
             # TODO decide if we want to store the input in the db
             insert_job((i, project_id, quorum, False), project_id)
-
-
-@celery.task(name="compile")
-def compile(proj_id):
-    """
-    Description:
-    Compilation of C-file to .Wasm file. Done by EMCC.
-    """
-    os.system(
-        f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -s EXIT_RUNTIME -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js"
-    )
-    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.js')}")
-    # we don't need to store .c files
-    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
-    # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
-    return "done"
 
 
 def change_prog_percentage(project_id, per):
@@ -276,28 +241,6 @@ def calculate_per(project_id):
     done = np.count_nonzero(np.array(done_or_not) == 1)
     perc = int(done / len(done_or_not) * 100)
     change_prog_percentage(project_id, perc)
-
-
-# NOT USED???????
-@app.route("/api/taskstatus/<task_id>")
-@login_required
-def taskstatus(task_id):
-    """
-    Description:
-    To see taskstatus, debug function.
-    """
-    task = compile.AsyncResult(task_id)
-    if task.state == "PENDING":
-        time.sleep(1)
-        # time.sleep(config.SERVER_SLEEP)
-        response = {
-            "queue_state": task.state,
-            "status": "Process is ongoing...",
-            "status_update": url_for("taskstatus", task_id=task.id),
-        }
-    else:
-        response = {"queue_state": task.state, "result": task.wait()}
-    return jsonify(response)
 
 
 def get_user_time_from_scretch(user_id):
@@ -437,3 +380,61 @@ def serve_wasm(proj_id):
     ) as content_file:
         content = content_file.read()
         return Response(content, mimetype="application/wasm")
+
+
+# Setup celery
+celery = make_celery(app)
+
+
+@celery.task(name="compile")
+def compile(proj_id):
+    """
+    Description:
+    Compilation of C-file to .Wasm file. Done by EMCC.
+    """
+    os.system(
+        f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -s EXIT_RUNTIME -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js"
+    )
+    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.js')}")
+    # we don't need to store .c files
+    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
+    # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
+    return "done"
+
+
+# Debug Function
+# @app.route("/api/taskstatus/<task_id>")
+# @login_required
+def taskstatus(task_id):
+    """
+    Description:
+    To see taskstatus, debug function.
+    """
+    task = compile.AsyncResult(task_id)
+    if task.state == "PENDING":
+        time.sleep(1)
+        # time.sleep(config.SERVER_SLEEP)
+        response = {
+            "queue_state": task.state,
+            "status": "Process is ongoing...",
+            "status_update": url_for("taskstatus", task_id=task.id),
+        }
+    else:
+        response = {"queue_state": task.state, "result": task.wait()}
+    return jsonify(response)
+
+
+# Debug Function
+# @app.route("/api/output/<proj_id>")
+# @login_required
+def send_output(proj_id):
+    """
+    Description:
+    Send file output file to client. Directly linked with db.
+    """
+    with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output") as f:
+        return render_template("content.html", text=f.read(), proj_id=proj_id)
+    return send_from_directory(
+        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "output"
+    )  # cached for a week
+

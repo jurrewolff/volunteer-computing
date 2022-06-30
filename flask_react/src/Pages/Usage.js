@@ -82,7 +82,7 @@ const Usage = () => {
                         <Typography
                             variant="h3" gutterBottom component="div"
                         >
-                        Field Explaination
+                        Field Explanation
                         </Typography>
                         <Typography sx={{ pb: 3 }} >
                           {/* <ul> */}
