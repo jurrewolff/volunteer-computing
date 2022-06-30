@@ -33,7 +33,7 @@ export default function MoreInfo() {
 
     // Function for the responsive button.
     function clickButton() {
-        var url = 'http://localhost:3601/api/runproject/' + linkVars[0];
+        var url = 'http://146.190.25.75:3601/api/runproject/' + linkVars[0];
         window.open(url, '_tab');
     }
 
