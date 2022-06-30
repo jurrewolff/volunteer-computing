@@ -63,11 +63,11 @@ export default function PastProjects() {
 
         // Creates a card for every project in data.
         return (<Container>
-            <Row style={{ width:"80%"}}>
+            <Row style={{ width: "80%", marginLeft: "150px" }}>
                 <Col style={{ margin: "3%" }}>
                     <h3>Project name:</h3>
                 </Col>
-                <Col style={{ margin: "3%", marginLeft:"5%", marginRight:"5%"}}>
+                <Col style={{ margin: "3%", marginLeft: "5%", marginRight: "5%" }}>
                     <h3>Project description:</h3>
                 </Col>
                 <Col style={{ margin: "3%" }}>
@@ -77,36 +77,29 @@ export default function PastProjects() {
             </Row>
 
             {data.map((project) => (
-            <Card key={"past" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginLeft: "5%", marginRight: "100%" }}>
-                <Row>
-                    <Col>
-                        <h1 style={{ margin: "30px" }}>{project.name}</h1>
-                    </Col>
-                    <Col>
-                        <Card.Text style={{ margin: "5%" }}>{project.description}</Card.Text>
-                    </Col>
-                    <Col>
-                        <Card.Text style={{ margin: "5%" }}>{project.contributed_time} seconds contributed to project</Card.Text>
-                    </Col>
-                </Row>
-            </Card>
+                <Card key={"past" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginLeft: "5%", marginRight: "100%" }}>
+                    <Row>
+                        <Col>
+                            <h1 style={{ margin: "30px" }}>{project.name}</h1>
+                        </Col>
+                        <Col>
+                            <Card.Text style={{ margin: "5%" }}>{project.description}</Card.Text>
+                        </Col>
+                        <Col>
+                            <Card.Text style={{ margin: "5%" }}>{project.contributed_time} seconds contributed to project</Card.Text>
+                        </Col>
+                    </Row>
+                </Card>
             ))}
         </Container>)
     }
 
     return (
-        // <>
-        //     <PermanentDrawerLeft />
-        //     <Container className="text-center" style={{ marginLeft: "250", marginRight: "5%" }}>
-        //         {ProjectsList(data)}
-        //     </Container>
-        // </>
         <ThemeProvider theme={theme}>
             <>
                 <PermanentDrawerLeft />
                 <Box>
                     <Box
-                        border="dashed"
                         component="main"
                         sx={{
                             pl: 30,

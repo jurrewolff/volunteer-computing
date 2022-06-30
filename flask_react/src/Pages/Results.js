@@ -9,6 +9,10 @@ import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { Box } from '@mui/material';
+import { ThemeProvider } from '@material-ui/core/styles'
+import { theme } from '../Components/Theme'
+
 
 import PermanentDrawerLeft from '../Components/SideMenu';
 
@@ -75,7 +79,7 @@ export default function Results() {
 
 
         return (<Container>
-            <Row style={{ width:"80%", marginLeft: "200px" }}>
+            <Row style={{ width:"80%", marginLeft: "150px" }}>
                 <Col style={{ margin: "3%" }}>
                     <h3>Project name:</h3>
                 </Col>
@@ -119,11 +123,25 @@ export default function Results() {
     }
 
     return (
-        <>
-            <PermanentDrawerLeft />
-            <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
-                {readResults({ data })}
-            </Container>
-        </>
+        <ThemeProvider theme={theme}>
+            <>
+                <PermanentDrawerLeft />
+                <Box>
+                    <Box
+                        component="main"
+                        sx={{
+                            pl: 30,
+                            flexGrow: 1,
+                            height: '100vh',
+                            overflow: 'auto',
+                        }}
+                    >
+                        <Container className="text-center" style={{ marginLeft: "250", marginRight: "5%" }}>
+                            {readResults({ data })}
+                        </Container>
+                    </Box>
+                </Box>
+            </>
+        </ThemeProvider>
     );
 };
