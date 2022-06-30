@@ -1,25 +1,32 @@
-/* HOMEPAGE
- *
- *
- *
+/*
+ * HOMEPAGE.
+ * This is the landing page of the website.
+ * Here the information about the solution out product provides is displayed,
+ * aswell as a short 'about us' section, explanation of the scientist and
+ * volunteer roll and a broader description of the product.
+ * The navbar functionality is called from the homepagenav page.
+ * The id's for each element are used in the navbar page for scrolling.
  */
 
-import Cookies from 'js-cookie';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// Package and functionality imports
 import Footer from '../Components/Footer';
+import Cookies from 'js-cookie';
 
-
+// Material ui imports
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Routes, Route, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Image from '../Images/back2.jpg';
 
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
+
+// Defines the used style throughout the homepage
 const styles = {
     base: {
         backgroundImage: `url(${Image})`,
@@ -27,7 +34,7 @@ const styles = {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover'
-        
+
     },
     // #dce775
     // #ffffa6
@@ -40,18 +47,8 @@ const styles = {
     }
 };
 
-// const navItems = ['About', 'Scientist', 'Volunteer', 'Product'];
-
 export default function Home() {
     const [clicked, setClicked] = useState(false);
-
-    //DELETE ??
-    const linkVars = window.location.pathname.split("/").slice(2)
-    const ids = []
-
-    let user_cookie = Cookies.get("user_id")
-    const navigate = useNavigate();
-
 
     const NotLoggedIn = () => {
         return (
@@ -69,19 +66,6 @@ export default function Home() {
         )
     };
 
-
-
-
-    // useEffect(() => {
-    //     if (user_cookie) {
-    //     console.log("User logged in, redirecting to dashboard")
-    //     return navigate('/dashboard')
-    //     }
-    // }, [true]);
-
-
-    // Function for the responsive button.
-    // Ik snap niet waarom deze hier moet staan
     function clickButton() {
         setClicked(!clicked)
     }

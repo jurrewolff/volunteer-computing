@@ -1,25 +1,18 @@
-// /*
-//  * Voor het registreren van een gebruiker. Werkt nu alleen met mockup database,
-//  * waarbij alleen username en ww vereist zijn.
-//  * code 200: is goed, alle andere zijn erros.
-//  */
+/*
+ * SIGNUPREQUEST PAGE.
+ * Handles the signup request to the backed via a http POST request.
+ * Also immediately signs in a user via the loginrequest function.
+ */
 
+// Package and functionality imports
 import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import { Routes, Route, useNavigate } from "react-router-dom"
 import DashBoard from "../Pages/Dashboard"
 import { LoginRequest } from '../Actions/loginRequest';
-import Cookies from 'js-cookie';
 
-
-
-
-// TODO werkend maken
-
-// In props zitten de meegegeven variabelen van SignUp.js,
-// wordt verzameld in <SignupRequest .... />
+// Props contain the textfield data provided by the signup page
 export const SignupRequest = (props) => {
-
     // In data wordt de responde verzameld
     const [data, setData] = useState([{}])
     const [clicked, setClicked] = useState(false);
@@ -28,12 +21,13 @@ export const SignupRequest = (props) => {
     const [userError, setUserError] = useState(false);
     const [passError, setPassError] = useState(false);
 
-    const [check1, setCheck1] = useState(false)
-    const [check2, setCheck2] = useState(false)
     const [authenticated, setAuthenticated] = useState(false)
-
     const navigate = useNavigate();
 
+    /*
+     * Handles the signup http POST request when the button is clicked,
+     * there is no error handling, except for the login request.
+     */
     useEffect(() => {
         if (clicked) {
             const requestOptions = {
@@ -49,6 +43,7 @@ export const SignupRequest = (props) => {
                     'background': props.background,
                 }
             };
+
             fetch("/api/signup", requestOptions)
                 .then((result) => {
                     setData(result)
@@ -73,15 +68,15 @@ export const SignupRequest = (props) => {
                 }
             }
             )
-            navigate("/redirect");
 
+            // Navigate to homepage
+            navigate("/redirect");
             setClicked(false)
         }
 
-        // const username = result.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clicked, props.fName, props.pass]);
+    }, [clicked]);
 
+    // Button functionality is returned to the signup page
     return (
         <div>
             <Button
