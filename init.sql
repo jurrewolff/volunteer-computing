@@ -67,8 +67,9 @@ FOREIGN KEY (project_id) REFERENCES Project(project_id)
 CREATE TABLE app.Timer (
 job_id int,
 user_id int,
+project_id int,
 start_time BIGINT,
-PRIMARY KEY (job_id, user_id),
+PRIMARY KEY (job_id, user_id, project_id),
 FOREIGN KEY (job_id) REFERENCES Jobs(job_id),
 FOREIGN KEY (user_id) REFERENCES User(user_id)
 );

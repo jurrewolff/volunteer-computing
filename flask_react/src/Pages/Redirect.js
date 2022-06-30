@@ -10,11 +10,9 @@ export default function Redirect() {
 
     useEffect(() => {
         async function makeRequest() {
-            console.log('before');
 
             await delay(1000);
 
-            console.log('after');
             navigate('/');
         }
 
