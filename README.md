@@ -18,7 +18,7 @@ The application database can be managed using "phpmyadmin". This service is acce
 
 ## Overview
 
-Front-end: React, CSS
+Front-end: React, CSS  
 Backend-end: Python, EMCC
 
 ## Authors
