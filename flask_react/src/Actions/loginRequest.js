@@ -1,7 +1,8 @@
 /*
- * Maakt het mogelijk om in te loggen.
- * POST request voor login.
- * Als argumenten worden de username en wachtwoord meegegeven.
+ * LOGINREQUEST PAGE.
+ * Handles the login request to the backed via a http POST request.
+ * Data is send to the backend and the backend response is handles in the
+ * login page, so that errors can be displayed accordingly to the user.
  */
 
 export function LoginRequest(uname, pass) {

@@ -10,6 +10,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
+import PermanentDrawerLeft from '../Components/SideMenu';
+
+
 export default function Results() {
     const [data, setData] = useState([{}]);
     const navigate = useNavigate();
@@ -83,12 +86,8 @@ export default function Results() {
                                 <Link to={"/moreInfo/" + project.project_id}>More info</Link>
                             </Col>
                             <Col style={{ margin: "3%" }}>
-                                Time run: 12:10:59
+                                <h3>{project.runtime}</h3>
                             </Col>
-                            <Col style={{ margin: "3%" }}>
-                                Correct
-                            </Col>
-
                         </Row>
                     </Card>
                 </Col>
@@ -104,8 +103,11 @@ export default function Results() {
     }
 
     return (
-        <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
-            {readResults({ data })}
-        </Container>
+        <>
+            <PermanentDrawerLeft />
+            <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
+                {readResults({ data })}
+            </Container>
+        </>
     );
 };

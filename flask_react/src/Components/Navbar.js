@@ -1,9 +1,10 @@
 import * as React from 'react';
-
-import { makeStyles } from '@mui/styles';
+import Cookies from 'js-cookie'
+import { Link } from "react-router-dom"
+import { Link as scrollLink, animateScroll as scroll } from 'react-scroll';
 import { LogoutRequest } from '../Actions/logoutRequest';
 
-
+import { makeStyles } from '@mui/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,13 +18,10 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from "react-router-dom"
+
 
 // TODO cleanup
 // TODO: Account page maken!
-const pages = ['Home'];
-const settings = ['Account', 'Logout'];
-
 
 // style={{ backgroundColor: 'yellow' }}
 
@@ -33,19 +31,31 @@ const useStyles = makeStyles({
     border: 0,
     borderRadius: 3,
     boxShadow: '0 3px 5px 2px rgba(255, 255, 255, 0.06)',
-    color: 'white',
+    color: '#bc2e1e',
     height: 70,
     padding: '0 30px',
+    textShadow: '0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 1px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15)',
   },
 });
 
 
 
-const ResponsiveAppBar = () => {
+const ResponsiveAppBar = (props) => {
   const classes = useStyles();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  // Van Lleyton homepage nav
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const [auth, setAuth] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const [logOutStatus, setLogoutStatus] = React.useState("");
+  // ...
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -58,34 +68,94 @@ const ResponsiveAppBar = () => {
     setAnchorElNav(null);
   };
 
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-  // TODO: Logout request fixen
-  const handleLogout = () => {
-    LogoutRequest();
+  const handleLogOut = () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: {}
+  };
+  fetch("/api/logout", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+          setLogoutStatus(result)
+      })
+
   };
 
+  const Items = ['About', 'Scientist', 'Volunteer'];
 
-  const makeLink = (page, link) => {
+
+  const toggleToElement = (element) => {
+    scroll.scrollToTop()
+}
+
+  // TODO: Lleyton fix scroll
+  const makeLink = (page, link, element) => {
     return (
-      <>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <Link to={link}>
+        <Box >
+      <MenuItem key={page} disablePadding sx={{ flexGrow: 1, mr: 1, display: { xs: 'none', md: 'flex' } }} >
+        <Link to={link} style={{ textDecoration: 'none' }}>
             <Button
               // key={page}
               // onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ color: 'white', textAlign: 'left' }}
             >
               {page}
+              {toggleToElement(element)}
             </Button>
           </Link>
+          </MenuItem>
         </Box >
+    )
+  };
+
+  const AccountNotLoggedIn = () => {
+    return (
+      <>
+      <MenuItem key={'Login'} onClick={handleCloseUserMenu}>
+        <Link to="/login" style={{ textDecoration: 'none' }}>
+          <Typography textAlign="center">{'Login'}</Typography>
+        </Link>
+      </MenuItem>
+      <Box>
+        <MenuItem key={'Signup'} onClick={handleCloseUserMenu}>
+        <Link to="/signup" style={{ textDecoration: 'none' }}>
+          <Typography textAlign="center">{'Sign up'}</Typography>
+        </Link>
+        </MenuItem>
+      </Box>
+    </>
+    )
+};
+
+  const AccountLoggedIn = () => {
+    return (
+      <>
+        <MenuItem key={'Dashboard'} onClick={handleCloseUserMenu}>
+          <Link to="/dashboard" style={{ textDecoration: 'none' }}>
+            <Typography textAlign="center">{'Dashboard'}</Typography>
+          </Link>
+        </MenuItem>
+        <MenuItem key={'Account'} onClick={handleCloseUserMenu}>
+          <Link to="/account" style={{ textDecoration: 'none' }}>
+            <Typography textAlign="center">{'Account'}</Typography>
+          </Link>
+        </MenuItem>
+        <Box>
+          <MenuItem key={'Logout'} onClick={handleLogOut}>
+            <Link to="/redirect" style={{ textDecoration: 'none ' }}>
+              <Typography textAlign="center">{'Logout'}</Typography>
+            </Link>
+          </MenuItem>
+        </Box>
       </>
     )
-  }
+  };
+
+
 
 
   return (
@@ -105,7 +175,11 @@ const ResponsiveAppBar = () => {
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'white',
+                ':hover': {
+                  color: '#00315c',
+                },
               textDecoration: 'none',
+
             }}
           >
             CompuTeam
@@ -140,12 +214,6 @@ const ResponsiveAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page}
-                  onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -165,15 +233,18 @@ const ResponsiveAppBar = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
           </Typography>
 
-          {/* {makeLink("Home", "/")} */}
+          {makeLink("About", "/", 'About')}
+          {makeLink("Volunteer", "/", 'Volunteer')}
+          {makeLink("Scientist", "/", 'Scientist')}
 
-          <Box sx={{ flexGrow: 0 }}>
+
+          <Box sx={{ flexGrow: 0, marginLeft: "auto" }} >
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar sx={{ bgcolor: '#f44336' }}
+                  src="/broken-image.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -192,16 +263,12 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem key={'Account'} onClick={handleCloseUserMenu}>
-                <Link to="/account">
-                  <Typography textAlign="center">{'Account'}</Typography>
-                </Link>
-              </MenuItem>
               <Box>
                 {/* <MenuItem key={'Logout'} onClick={handleLogout}>
                   <Typography textAlign="center">{'Logout'}</Typography>
                 </MenuItem> */}
-                <LogoutRequest/>
+                {/* TODO: wat doet logout request hier? */}
+                {Cookies.get("user_id") ? AccountLoggedIn() : AccountNotLoggedIn()}
               </Box>
             </Menu>
           </Box>

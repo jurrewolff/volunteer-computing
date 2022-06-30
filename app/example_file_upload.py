@@ -50,14 +50,14 @@ ALLOWED_EXTENSIONS = {"c"}
 
 
 def allowed_file(filename):
-    """
+    """/
     Description:
     Check or file has the correct extensions.
     """
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-#SEEMS NOT USED
+# SEEMS NOT USED
 @app.route("/api/output/<proj_id>")
 @login_required
 def send_output(proj_id):
@@ -80,17 +80,19 @@ def dl_output(proj_id):
     Send final results to website. Download file.
     """
     base_dir = os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")
-    to_check = base_dir+ "/download"
+    to_check = base_dir + "/download"
     path = Path(to_check)
     if path.is_file() == False:
         f = open(base_dir + "/download", "w+")
-        test = subprocess.run(['sort','-k1','-n', base_dir + "/output"], capture_output=True, text=True)
+        test = subprocess.run(
+            ["sort", "-k1", "-n", base_dir + "/output"], capture_output=True, text=True
+        )
         r = test.stdout.split("\n")
         for line in r[:-1]:
             s = line.split(" ", 1)
             f.write(s[1] + "\n")
     return send_from_directory(
-        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "download"
+        base_dir, "download", as_attachment=True, cache_timeout=0
     )  # cached for a week
 
 
@@ -276,7 +278,7 @@ def calculate_per(project_id):
     change_prog_percentage(project_id, perc)
 
 
-#NOT USED???????
+# NOT USED???????
 @app.route("/api/taskstatus/<task_id>")
 @login_required
 def taskstatus(task_id):
@@ -296,7 +298,6 @@ def taskstatus(task_id):
     else:
         response = {"queue_state": task.state, "result": task.wait()}
     return jsonify(response)
-
 
 
 def get_user_time_from_scretch(user_id):
@@ -323,7 +324,6 @@ def update_user_time(user_id, time=-1):
     query = f"UPDATE User SET runtime = '{time}' WHERE user_id = '{user_id}';"
     db.cur.execute(query)
     db.con.commit()
-
 
 
 def update_total_time_contributed(new_contribution_time, user_id):
@@ -382,9 +382,10 @@ def request_job(project_id):
         data = get_line_from_file(
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
-        insert_timer((return_val, user_id))
+        insert_timer((return_val, user_id, project_id))
         return jsonify({"job_id":return_val, "data": data})
     return return_val
+
 
 @app.route("/api/post_result/<project_id>", methods=["POST"])
 @login_required
@@ -392,9 +393,12 @@ def handle_result(project_id):
     user_id = session["user_id"]
     data = request.form.get("data")
     job_id = request.form.get("job_id")
-    addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id))
+    addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time(
+        (job_id, user_id, project_id)
+    )
     allready_contributed_time = get_contributed_time((user_id, project_id))
     new_contribution_time = allready_contributed_time + addition_time_contributed
+
     update_contribution((new_contribution_time, user_id, project_id))
     update_total_time_contributed(addition_time_contributed, user_id)
     succes, return_val = receive_work(project_id, job_id, user_id, data)
@@ -406,21 +410,23 @@ def handle_result(project_id):
 
 @app.route("/api/get_template/template.js")
 def jstemplate():
-    with open('app/templates/template.js', 'r') as content_file:
+    with open("app/templates/template.js", "r") as content_file:
         content = content_file.read()
         return Response(content, mimetype="text/javascript")
     # return render_template("template.js", name=proj_id)
 
 
-
 @app.route("/api/get_worker/worker.js")
 def serve_worker():
-    with open('app/templates/worker.js', 'r') as content_file:
+    with open("app/templates/worker.js", "r") as content_file:
         content = content_file.read()
         return Response(content, mimetype="text/javascript")
 
+
 @app.route("/api/get_worker/get_wasm/<proj_id>.wasm")
 def serve_wasm(proj_id):
-    with open(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.wasm"), 'rb') as content_file:
+    with open(
+        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.wasm"), "rb"
+    ) as content_file:
         content = content_file.read()
         return Response(content, mimetype="application/wasm")

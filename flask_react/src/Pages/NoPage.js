@@ -1,8 +1,8 @@
-import React from 'react'; // niet per se nodig nu, toekomst wss wel
-import './NoPage.css';
-
-import ResponsiveAppBar from '../Components/Navbar';
-import PermanentDrawerLeft from '../Components/SideMenu';
+/*
+ * NOPAGE PAGE.
+ * This page is displayed to the user when the user tries to go to a page which
+ * does not exist on our website.
+ */
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -10,8 +10,6 @@ import Container from '@mui/material/Container';
 const NoPage = () => {
   return (
     <Box>
-      <ResponsiveAppBar />
-      <PermanentDrawerLeft />
       <Box
         border="dashed"
         component="main"

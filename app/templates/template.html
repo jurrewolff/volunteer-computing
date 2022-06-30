@@ -6,54 +6,77 @@
     <title>proof of concept - quite good considering</title>
   </head>
   <body>
-    Running project #{{name}}!
-    <div>
-      <span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
-    </div>
-
+    <span id="txt">Running project #{{name}}! While this tab exists you are donating your compute power. Close the tab to stop execution.</span>
+    <div id="clock_container">
+    </div>>  
 
     <script>
-      let hour = 0;
-      let minute = 0;
-      let second = 0;
-      let milliseconds = 0;
-      let cron;
-      
-
-      function returnData(input) {
+      class Clock {
+        constructor() {
+          this.hours = 0;
+          this.minutes = 0;
+          this.seconds = 0;
+          this.cron = false;
+        }
+        draw() {
+          for ( var [id, val] of [["hour", this.hours], ["minute", this.minutes], ["second", this.seconds]]) {
+            document.getElementById(id).innerText = this.returnData(val);
+          }
+        }
+        stop() {
+          this.cron = false
+          this.hours, this.minutes, this.seconds = 0, 0, 0;
+          this.draw();
+        }
+        start() {
+          document.getElementById("clock_container").innerHTML = '<span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>';
+          this.draw(); 
+          this.cron = setInterval(() => {this.update(); }, 1000);
+        }
+        update() {
+          return
+        }
+        returnData(input) {
         return input > 10 ? input : `0${input}`
       }
-
-      function start() {
-        console.log("now start function starts.")
-        cron = setInterval(() => { timer(); }, 10);
       }
 
-      function timer() {
-        console.log("timer wordt uitgevoerd.")
-        if((milliseconds += 10) == 1000) {
-          milliseconds = 0;
-          second++;
+      class Stopwatch extends Clock {
+        update() {
+          if (this.cron) {
+            this.seconds ++;
+            if (this.seconds == 60) {
+              this.seconds = 0;
+              this.minutes++;
+            }
+            if (this.minutes == 60) {
+              this.minutes = 0;
+              this.hours++;
+            }
+            this.draw();
+          }
         }
-        if (second == 60) {
-          second = 0;
-          minute++;
-        }
-        if (minute == 60) {
-          minute = 0;
-          hour++;
-        }
-
-        document.getElementById('hour').innerText = returnData(hour);
-        document.getElementById('minute').innerText = returnData(minute);
-        document.getElementById('second').innerText = returnData(second);
-        document.getElementById('millisecond').innerText = returnData(milliseconds);
       }
 
-      start();
+      class Timer extends Clock {
+        constructor() {
+          super();
+          this.seconds = 30;
+        }
+        update() {
+          if (this.cron) {
+            this.seconds --;
+            if (this.seconds == 0) {
+              window.close();
+            }
+            this.draw();
+          }
+        }
+      }
 
+      stopwatch = new Stopwatch();
+      stopwatch.start()
     </script>
-    <!-- <script type="text/javascript" src="/api/{{name}}.js"></script> -->
 
 <script type='text/javascript'>
       if (window.Worker) {
@@ -66,7 +89,11 @@
         if (result != "No jobs") {
           myWorker.postMessage('{{name}}');
         } else {
-          console.log('no more jobs, stopping exec.')
+          console.log('no more jobs, exec stopped')
+          stopwatch.stop();
+          document.getElementById('txt').innerText = "There are no more jobs. This tab will close when the timer runs out.";
+          timer = new Timer()
+          timer.start()
         }
       }
        } else {
