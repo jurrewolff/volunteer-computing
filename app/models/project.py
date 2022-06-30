@@ -4,6 +4,7 @@ from main import app
 
 from app.models.database import *
 import app.models.user as user
+import math
 
 # Returns True if project exists, returns False otherwise.
 
@@ -79,19 +80,26 @@ def update_project_time(project_id, time=-1):
 
 
 
-def get_projects_researchers(user_id):
-    projects = []
-    sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
-    db.cur.execute(sql)
-    res = db.cur.fetchall()
-    for x in res:
-        project = {
-            "project_id": x[0],
-            "name": x[1],
-            "description": x[2],
-        }
-        projects.append(project)
-    return projects
+def get_projects_researcher(user_id):
+    if user.account_id_exists(user_id):
+        sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
+        db.cur.execute(sql)
+        projects = []
+        res = db.cur.fetchall()
+        for x in res:
+            project = {
+                "project_id": x[0],
+                "name": x[1],
+                "description": x[2],
+                "runtime": math.floor(x[7] / 1000),
+                "done": x[9],
+                "progress": x[10],
+            }
+            update_project_time(x[0])
+            projects.append(project)
+        return projects
+    else:
+        return False
 
 
 def get_project(project_id):
@@ -143,7 +151,13 @@ def possible_jobs(project_id, user_id):
 
 def get_projects_from_user(user_id):
     if user.account_id_exists(user_id):
-        sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
+        sql = f"""
+            SELECT p.project_id, p.name, p.description, p.done, p.progress, Volunteer.contributed_time
+            FROM Project AS p
+            INNER JOIN Volunteer on p.project_id = Volunteer.project_id
+            WHERE Volunteer.user_id = '{user_id}';
+            
+            """
         db.cur.execute(sql)
         projects = []
         res = db.cur.fetchall()
@@ -152,8 +166,9 @@ def get_projects_from_user(user_id):
                 "project_id": x[0],
                 "name": x[1],
                 "description": x[2],
-                "done": x[9],
-                "progress": x[10],
+                "done": x[3],
+                "progress": x[4],
+                "contributed_time": math.floor(x[5] / 1000)
             }
             update_project_time(x[0])
             projects.append(project)

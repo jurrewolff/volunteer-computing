@@ -36,14 +36,15 @@ const useStyles = makeStyles({
     root: {
         background: 'linear-gradient(45deg, #00315c 20%, #4987b9 90%)',
         border: 0,
-        borderRadius: 3,
+        borderRadius: 0,
         boxShadow: '0 3px 5px 2px rgba(255, 255, 255, 0.06)',
         position: "relative",
         zIndex: 1,
         width: drawerWidth,
         height: '100%',
         flexDirection: 'column',
-        style: 'yellow',
+        textShadow: '0 1px 0 rgba(255, 255, 255, 0.4)',
+        // textShadow: '0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15)',
 
         flexShrink: 10,
         '& .MuiDrawer-paper': {
@@ -54,14 +55,13 @@ const useStyles = makeStyles({
     child: {
         background: '#00315c',
         border: 0,
-        borderRadius: 3,
+        borderRadius: 0,
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
         position: "relative",
         zIndex: 1,
         width: drawerWidth,
         height: '40%',
         flexDirection: 'column',
-        style: 'yellow',
 
         flexShrink: 10,
         '& .MuiDrawer-paper': {
@@ -69,6 +69,9 @@ const useStyles = makeStyles({
             boxSizing: 'border-box',
 
         }
+    },
+    iconStyle: {
+      shadow: '0 1px 0 rgba(255, 255, 255, 0.4)',
     }
 });
 
@@ -96,12 +99,12 @@ export default function PermanentDrawerLeft() {
         var icon = icons[index];
 
         return (
-            <Link to={path}>
+            <Link to={path} style={{ textDecoration: 'none' }}>
                 <ListItemButton>
-                    <ListItemIcon>
-                        {icon}
+                    <ListItemIcon className={classes.iconStyle}>
+                        {icon} 
                     </ListItemIcon>
-                    <ListItemText primary={page} sx={{ my: 2, color: 'black', display: 'block' }} />
+                    <ListItemText primary={page} sx={{ my: 2, color: 'white', display: 'block'}} />
                 </ListItemButton>
             </Link >
         )
@@ -127,12 +130,12 @@ export default function PermanentDrawerLeft() {
                 <Divider />
                 <List className={classes.child}>
                     <ListItem key={'User Info'} disablePadding>
-                        <Link to={"/userinfo"}>
+                        <Link to={"/usage"} style={{ textDecoration: 'none' }}>
                             <ListItemButton>
                                 <ListItemIcon>
                                     <QuestionMarkIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={'User Info'} sx={{ my: 2, color: 'black', display: 'block' }} />
+                                <ListItemText primary={'User Info'} sx={{ my: 2, color: 'white', display: 'block' }} />
                             </ListItemButton>
                         </Link>
                     </ListItem>

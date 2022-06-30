@@ -1,16 +1,25 @@
+/* MORE INFO PAGE
+ * Gets the information of the chosen project. The chosen project_id is read
+ * from the url. The projectname and discription of the project will be shown.
+ * There is also a button to go back and a button to start computing
+ * the project.
+ */
+
+
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Button, Card } from "react-bootstrap";
+import { Container, Button, Card } from '@mui/material';
 import { useNavigate } from "react-router-dom"
 import { Row, Col } from "react-bootstrap";
+import PermanentDrawerLeft from '../Components/SideMenu';
+
 
 export default function MoreInfo() {
-
     const [project, setProject] = useState({});
     const linkVars = window.location.pathname.split("/").slice(2);
     const navigate = useNavigate();
 
-    // Retrieves and updates data.
+    // Retrieves the data of the project with the given project_id.
     useEffect(() => {
         const requestOptions = {
             method: 'GET',
@@ -18,6 +27,7 @@ export default function MoreInfo() {
                 'project_id': linkVars[0]
             }
         };
+
         fetch("/api/project", requestOptions)
             .then((res) => res.json())
             .then((data) => {
@@ -25,7 +35,7 @@ export default function MoreInfo() {
             })
     }, []);
 
-    // Return one page previous.
+    // Returns one page previous.
     function goBack() {
         navigate(-1)
     }
@@ -38,20 +48,18 @@ export default function MoreInfo() {
     }
 
     return (
+        <>
+        <PermanentDrawerLeft />
         <Container key={"more" + linkVars[0]} className="text-center" style={{ marginLeft: "5%", marginRight: "5%", marginTop: "5%" }}>
-
             <Card style={{ margin: "5%" }} >
                 <h1 style={{ margin: "2%" }}>{project.name}</h1>
                 <div>
-
                     <p>{project.description}</p>
-
                 </div>
-
             </Card>
 
-            {/* The text and color of the button and the link are dependent on the url of the page */}
-
+            {/* Depending on whether the project is done, there will be either
+                a start computing button or text. */}
             <Row>
                 {project.done == "0" ?
                     <div>
@@ -75,7 +83,7 @@ export default function MoreInfo() {
 
                 </div>
             </Row>
-
         </Container>
+        </>
     );
 };

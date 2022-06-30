@@ -53,12 +53,12 @@ def job_done(project_id, job_id, correct_result):
 
     # write majority agreed result to fs
     proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{project_id}")
-
+    # app.logger.warning(f"correct_result: {correct_result}")
     with open(os.path.join(proj_dir, "output"), "a+") as file:
         file.write(f'{job_id} ' + correct_result)
 
     # Check if this was the last open job for this project
-    print("open jibs:", get_n_open_jobs(project_id))
+
     if get_n_open_jobs(project_id) == 0:
         db.cur.execute(
             f"UPDATE Project SET done = 1 WHERE project_id = '{project_id}';")
@@ -74,13 +74,14 @@ def single_result_query(query):
 def majority_agrees(project_id, job_id):
     db.cur.execute(
         f"Select result FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
-    all_results = [x for (x,) in db.cur.fetchall()]
+    all_results = [x[0] for x in db.cur.fetchall()]
     c = Counter(all_results)
     try:
         most_common, second_most_common = c.most_common(2)
     except ValueError:
-        most_common = c.most_common(1)
+        most_common = c.most_common(1)[0]
         # No second_most_common, i.e. only one result
+        # app.logger.warning(f"most_common: {most_common}")
         return most_common[0]
     if most_common[1] > second_most_common[1]:
         return most_common[0]
@@ -105,7 +106,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
     quorum_size = single_result_query(
         f"SELECT quorum_size FROM Jobs WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
 
-    if random_replication == 0:
+    if random_replication == 1:
         trust = decide_if_work_is_trusted(job_id, project_id)
         if not trust:
             increment_quorum_size(project_id, job_id)
@@ -115,9 +116,9 @@ def receive_work(project_id, job_id, volunteer_id, result):
         if quorum_size == 1:
             job_done(project_id, job_id, result)
             return True, None
-        else:
-            # quorum not yet reached, we wait for someone to replicate the result.
-            return True, None
+        # else:
+        #     # quorum not yet reached, we wait for someone to replicate the result.
+        #     return True, None
     if n_results == quorum_size:
         majority_result = majority_agrees(project_id, job_id)
         if majority_result != False:
@@ -149,17 +150,23 @@ def fill_db():
     execute("INSERT INTO User (user_id, trust_level) VALUES (3, 0.01);")
     execute("INSERT INTO Project (project_id, owner, random_validation, quorum_size, trust_level, done) VALUES (1,1, 0, 2, 1, 0);")
     execute(
-        "INSERT INTO Jobs (job_id, project_id, quorum_size, done) VALUES (1,1,3, 0);")
+        "INSERT INTO Jobs (job_id, project_id, quorum_size, done) VALUES (1,1,2, 0);")
 
     print("database filled")
 
 
 def test():
-    try:
-        fill_db()
-    except Exception as e:
-        pass
-    receive_work(1, 1, 1, "1")
-    receive_work(1, 1, 2, "2")
-    receive_work(1, 1, 3, "1")
-# test()
+    # try:
+    fill_db()
+    # except Exception as e:
+        # pass
+    print("************")
+    print("j1: ", receive_work(1, 1, 1, "1"))
+    print("j1: ", receive_work(1, 1, 3, "1"))
+    print("open jobs:,         ", get_n_open_jobs(1))
+    print("************")
+
+# try:
+#     test()
+# except:
+#     pass

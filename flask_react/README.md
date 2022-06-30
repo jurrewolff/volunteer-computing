@@ -4,32 +4,37 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Packages
 
-### Overzicht van alle packages staat ook in package.json
+### Overview packages
+Each package is also displayed in the package.json file
 
 (page navigation)
-npm install i react-router-dom
+Available on: https://reactrouter.com/docs/en/v6
+npm install react-router-dom@6
+
+(Scroll functionality)
+Available on: https://www.npmjs.com/package/react-scroll
+npm install react-scroll
 
 (Mui core packages)
+Available on: https://mui.com
 npm install @mui/material @emotion/react @emotion/styled
 npm install @mui/material @mui/styled-engine-sc styled-components
 npm install @mui/icons-material
 
 (react-bootstrap)
+Available on: https://react-bootstrap.github.io
 npm install react-bootstrap
 
 ## Backend
+In package.json staat een proxy statement wat lokaal de frontend connect met de
+backend. Deze functionaliteit maakt het mogelijk om met een mockup database te
+werken. Dit kan echer errors opleveren en indien backend fucntionaliteit niet
+nodig is, wordt er aangeraden dit uit te zetten.
 
-In package.json staat een proxy statement wat de front end connect met de backend.
-Mocht het errors opleveren en backend niet nodig is kan dit uitgezet worden.
-
-### Oplossingen
-
-(opt1) Voornamelijke vermoede is de UVA wifi (eduroam) -> switch van wifi
-(opt2) Node_modules -> verwijder node_modules in de app folder en vervolgens npm install
-(opt3) Docker fout -> vraag Jurre
-(opt4) ...
-
-runnen van docker/back-end: zsh start.sh
+### Solution
+A possible problem can be the wifi on which the device is on. After some
+experiments, our problem was found to be the UVA wifi (eduroam).
+After switching to an other network the functionality works again.
 
 ## Available Scripts
 
