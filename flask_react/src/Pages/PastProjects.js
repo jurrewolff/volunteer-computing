@@ -4,15 +4,28 @@
  * shown. It will also show whether the data computed by the user was correct.
  */
 
+// import { useState, useEffect } from 'react'
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import { Container, Row, Col, Card } from "react-bootstrap";
+// import Cookies from "js-cookie";
+// import { Link, useNavigate } from "react-router-dom";
+
+// import PermanentDrawerLeft from '../Components/SideMenu';
+// import ResponsiveAppBar from '../Components/Navbar'
+// import Box from '@mui/material/Box';
+
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
+// import { Container, Card } from "react-bootstrap";
+
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
-
 import PermanentDrawerLeft from '../Components/SideMenu';
-import ResponsiveAppBar from '../Components/Navbar'
-import Box from '@mui/material/Box';
+import { Box, Container } from '@mui/material';
+// import Container from '@mui/material';
+import { ThemeProvider } from '@material-ui/core/styles'
+import { theme } from '../Components/Theme'
 
 
 export default function PastProjects() {
@@ -70,8 +83,32 @@ export default function PastProjects() {
     }
 
     return (
-        <Container className="text-center" style={{ marginLeft: "5%", marginRight: "5%" }}>
-            {ProjectsList(data)}
-        </Container>
+        // <>
+        //     <PermanentDrawerLeft />
+        //     <Container className="text-center" style={{ marginLeft: "250", marginRight: "5%" }}>
+        //         {ProjectsList(data)}
+        //     </Container>
+        // </>
+        <ThemeProvider theme={theme}>
+            <>
+                <PermanentDrawerLeft />
+                <Box>
+                    <Box
+                        border="dashed"
+                        component="main"
+                        sx={{
+                            pl: 30,
+                            flexGrow: 1,
+                            height: '100vh',
+                            overflow: 'auto',
+                        }}
+                    >
+                        <Container className="text-center" style={{ marginLeft: "250", marginRight: "5%" }}>
+                            {ProjectsList(data)}
+                        </Container>
+                    </Box>
+                </Box>
+            </>
+        </ThemeProvider>
     );
 };

@@ -31,7 +31,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 
 //TODO
 const drawerWidth = 240;
-const navItems = ['About', 'Scientist', 'Volunteer', 'Product'];
+const navItems = ['About', 'Scientist', 'Volunteer'];
 
 /*
  * TODO

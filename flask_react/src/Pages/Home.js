@@ -8,7 +8,6 @@ import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../Components/Footer';
-import Nav from '../Components/HomePageNav';
 
 
 import Box from '@mui/material/Box';
@@ -18,11 +17,22 @@ import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Routes, Route, useNavigate } from "react-router-dom"
+import Image from '../Images/back2.jpg';
 
 
 const styles = {
+    base: {
+        backgroundImage: `url(${Image})`,
+        width: '100%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover'
+        
+    },
+    // #dce775
+    // #ffffa6
     paperContainer: {
-        background: 'rgba(0, 0, 0, 0.2)',
+        background: 'linear-gradient(45deg, #FFF 30%, #ffffa6 90%)',
         width: '100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -43,6 +53,23 @@ export default function Home() {
     const navigate = useNavigate();
 
 
+    const NotLoggedIn = () => {
+        return (
+            <Link to="./SignUp" onClick={clickButton}>
+                <Button variant="contained" sx={{ bgcolor: '#f44336', textDecoration: 'none' }}>SIGN UP NOW</Button>
+            </Link>
+        );
+    };
+
+    const LoggedIn = () => {
+        return (
+            <Link to="./dashboard" onClick={clickButton}>
+                <Button variant="contained" sx={{ bgcolor: '#f44336', textDecoration: 'none' }}>GO TO DASHBOARD</Button>
+            </Link>
+        )
+    };
+
+
 
 
     // useEffect(() => {
@@ -52,6 +79,7 @@ export default function Home() {
     //     }
     // }, [true]);
 
+
     // Function for the responsive button.
     // Ik snap niet waarom deze hier moet staan
     function clickButton() {
@@ -59,7 +87,6 @@ export default function Home() {
     }
 
     return (<>
-        <Nav home={true} />
         <Grid
             justifyContent="center"
             alignItems="center"
@@ -72,9 +99,9 @@ export default function Home() {
                 columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 justifyContent="center"
                 alignItems="center"
-                sx={{ pt: 20 }}
+                sx={{ pt: 10 }}
             >
-                <Grid item xs={8} sx={{ pb: 5 }}>
+                <Grid item xs={8} sx={{ pb: 5 }} style={styles.base}>
                     <Box sx={{ pr: 20, pl: 10 }}>
                         <Toolbar />
                         <Typography
@@ -97,26 +124,27 @@ export default function Home() {
                             porta ac consectetur ac, vestibulum at eros. Praesent commodo
                             cursus magna, vel sce
                         </Typography>
-                        <Link
+                        {Cookies.get("user_id") ? LoggedIn() : NotLoggedIn()}
 
+                        {/* <Link
                             to="./SignUp"
                             onClick={clickButton}>
                             <Button variant="contained">Signup now</Button>
-                        </Link>
+                        </Link> */}
                     </Box>
                 </Grid>
                 <Grid item xs={4}>
                     <Box
                         sx={{ pr: 5 }}>
                         <Toolbar />
-                        Connecting scientists with computing resources with
+                        Image...
                     </Box>
                 </Grid>
 
             </Grid>
             <Grid>
                 <Paper style={styles.paperContainer}>
-                    <Box component="main" sx={{ pl: 10, pr: 10, pb: 10 }}>
+                    <Box component="main" sx={{ color: '#000', pl: 10, pr: 10, pb: 10 }}>
                         <Toolbar />
 
                         <Typography id="About" variant="h4" gutterBottom component="div">
@@ -135,44 +163,6 @@ export default function Home() {
                             Cras mattis consectetur purus sit amet fermentum. Cras justo
                             odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
                             risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam.
-                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                            Praesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam. Morbi
-                            leo risus, porta ac consectetur ac, vestibulum at eros. P
-                            raesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus,
-                            porta ac consectetur ac, vestibulum at eros. Praesent commodo
-                            cursus magna, vel scelerisque nisl consectetur et. Cras mattis c
-                            onsectetur purus sit amet fermentum. Cras justo odio, dapibus
-                            ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                            consectetur ac, vestibulum at eros. Praesent commodo cursus
-                            magna, vel scelerisque nisl consectetur et. Cras mattis
-                            consectetur purus sit amet fermentum. Cras justo odio,
-                            dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros.
-                            Praesent commodo cursus magna, vel scelerisque nisl
-                            consectetur et. Cras mattis consectetur purus sit
-                            amet fermentum. Cras justo odio, dapibus ac facilisis
-                            in, egestas eget quam. Morbi leo risus, porta ac consectetur ac,
-                            vestibulum at eros. Praesent commodo cursus magna, vel s
-                            celerisque nisl consectetur et. Cras mattis consectetur puru
-                            s sit amet fermentum. Cras justo odio, dapibus ac facilisis
-                            in, egestas eget quam. Morbi leo risus, porta ac consectetur
-                            ac, vestibulum at eros. Praesent commodo cursus magna, vel
-                            scelerisque nisl consectetur et. Cras mattis consectetur pu
-                            rus sit amet fermentum. Cras justo odio, dapibus ac facilisis
-                            in, egestas eget quam. Morbi leo risus, porta ac consectetur ac,
-                            vestibulum at eros. Praesent commodo cursus magna, vel
-                            scelerisque nisl consectetur et. Cras mattis consectetur purus
-                            sit amet fermentum. Cras justo odio, dapibus ac facilisis in,
-                            egestas eget quam. Morbi leo risus, porta ac consectetur ac,
-                            vestibulum at eros. Praesent commodo cursus magna, vel
-                            scelerisque nisl consectetur et.
 
                         </Typography>
                     </Box>

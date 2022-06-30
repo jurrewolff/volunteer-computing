@@ -9,6 +9,9 @@ import Button from '@mui/material/Button';
 import { Routes, Route, useNavigate } from "react-router-dom"
 import DashBoard from "../Pages/Dashboard"
 import { LoginRequest } from '../Actions/loginRequest';
+import Cookies from 'js-cookie';
+
+
 
 
 // TODO werkend maken
@@ -70,7 +73,7 @@ export const SignupRequest = (props) => {
                 }
             }
             )
-            navigate("/");
+            navigate("/redirect");
 
             setClicked(false)
         }

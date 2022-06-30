@@ -11,11 +11,26 @@ import { Row, Col, Badge } from "react-bootstrap";
 import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
 import {DropdownButton, Dropdown } from 'react-bootstrap';
-import { ThemeProvider } from '@material-ui/core/styles'
-import { theme } from '../Components/Theme';
-import PermanentDrawerLeft from '../Components/SideMenu';
-import ResponsiveAppBar from '../Components/Navbar';
 
+
+// TODO FIXEN!!!
+// import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+import Footer from '../Components/Footer'
+import JumpPage from "../Actions/jumpPage"
+import Iconify from '../Components/iconify';
+import ResponsiveAppBar from '../Components/Navbar'
+import PermanentDrawerLeft from '../Components/SideMenu';
+import { theme } from '../Components/Theme'
+
+import { ThemeProvider } from '@material-ui/core/styles'
+import { createTheme, useTheme } from '@mui/material/styles'
+
+
+
+const MyComponent = () => {
+  const theme = useTheme();
+  return <JumpPage bgcolor={theme.palette.background.default} width={100} height={100} />;
+};
 
 const Dashboard = () => {
 
@@ -79,8 +94,9 @@ const renderSwitch = (best_user, param) => {
 
     <ThemeProvider theme={theme}>
       <>
-        <ResponsiveAppBar />
         <PermanentDrawerLeft />
+        {/* <MyComponent /> */}
+        {/* Andere features */}
         <Box>
             <Box
                 // border="dashed"
