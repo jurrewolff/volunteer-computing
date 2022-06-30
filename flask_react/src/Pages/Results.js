@@ -86,12 +86,8 @@ export default function Results() {
                                 <Link to={"/moreInfo/" + project.project_id}>More info</Link>
                             </Col>
                             <Col style={{ margin: "3%" }}>
-                                Time run: 12:10:59
+                                <h3>{project.runtime}</h3>
                             </Col>
-                            <Col style={{ margin: "3%" }}>
-                                Correct
-                            </Col>
-
                         </Row>
                     </Card>
                 </Col>

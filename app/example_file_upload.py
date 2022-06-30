@@ -382,7 +382,7 @@ def request_job(project_id):
         data = get_line_from_file(
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
-        insert_timer((return_val, user_id))
+        insert_timer((return_val, user_id, project_id))
         return jsonify({"job_id":return_val, "data": data})
     return return_val
 
@@ -392,9 +392,12 @@ def handle_result(project_id):
     user_id = session["user_id"]
     data = request.form.get("data")
     job_id = request.form.get("job_id")
-    addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id))
+    start_time = retrieve_time((job_id, user_id, project_id))
+    end_time = math.floor(time.time_ns() / 1000000)
+    addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id, project_id))
     allready_contributed_time = get_contributed_time((user_id, project_id))
     new_contribution_time = allready_contributed_time + addition_time_contributed
+
     update_contribution((new_contribution_time, user_id, project_id))
     update_total_time_contributed(addition_time_contributed, user_id)
     succes, return_val = receive_work(project_id, job_id, user_id, data)

@@ -72,10 +72,7 @@ export default function PastProjects() {
                         <Card.Text style={{ margin: "5%" }}>{project.description}</Card.Text>
                     </Col>
                     <Col>
-                        <Card.Text style={{ margin: "5%" }}>12:10:59</Card.Text>
-                    </Col>
-                    <Col>
-                        <Card.Text style={{ margin: "5%" }}>Correct</Card.Text>
+                        <Card.Text style={{ margin: "5%" }}>{project.contributed_time} seconds contributed to project</Card.Text>
                     </Col>
                 </Row>
             </Card>
