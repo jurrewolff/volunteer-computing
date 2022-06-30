@@ -1,7 +1,10 @@
-/* LOGIN PAGE
- * Renders the login page. Utilizes the fetch api which is implemented in
- * the loginRequest file. After the user input is valuated this function is
- * called. The response is handled depending on the status.
+/*
+ * LOGIN PAGE.
+ * Utilizes the fetch api which is implemented in
+ * the loginRequest file. First the user input is evaluated then the login
+ * request function is called
+ * Depending on the return status, the response is handled accordingly.
+ * The navbar functionality is called from the homepagenav page.
  */
 
 // Package and functionality imports
@@ -10,8 +13,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { LoginRequest } from '../Actions/loginRequest';
 
-
-// Material ui imports https://mui.com
+// Material ui imports
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -21,21 +23,108 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 export default function Login() {
-    const navigate = useNavigate();
-    const paperStyle = { padding: 20, width: '75%' } // styling
 
-    const [uname, setUname] = useState("");
+    const paperStyle = { padding: 20, width: '75%' }
+
+    const navigate = useNavigate();
+
+    // State variables for user and textfield
     const [pass, setPass] = useState("");
+    const [uname, setUname] = useState("");
     const [msgUser, setMsgUser] = useState("");
     const [msgPass, setMsgPass] = useState("");
     const [userError, setUserError] = useState(false);
     const [passError, setPassError] = useState(false);
-
-    const [check1, setCheck1] = useState(false)
-    const [check2, setCheck2] = useState(false)
     const [authenticated, setAuthenticated] = useState(false)
 
-    // Executes only if there are no errors
+    // Checks for first page rendering
+    const [check1, setCheck1] = useState(false)
+    const [check2, setCheck2] = useState(false)
+
+    const handleLogin = () => {
+        if (uname === "") {
+            setMsgUser("Need to fill this in")
+            setUserError(true)
+        } else {
+            setUserError(false)
+            setCheck1(true)
+        }
+
+        if (pass === "") {
+            setMsgPass("Password is required")
+            setPassError(true)
+        } else {
+            setPassError(false)
+            setCheck2(true)
+        }
+    }
+
+    // Normal textfield
+    const normalPass = () => {
+        return (
+            <TextField
+                required
+                fullWidth
+                margin="normal"
+                id="password-normal"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                defaultValue=""
+                onChange={(e) => setPass(e.target.value)}
+            />
+        )
+    }
+
+    const normalName = () => {
+        return (
+            <TextField
+                required
+                margin="normal"
+                fullWidth
+                id="uname-normal"
+                label="Username"
+                variant="outlined"
+                defaultValue=""
+                onChange={(e) => setUname(e.target.value)}
+            />
+        )
+    }
+
+    // Error textfields
+    const errorName = (msg) => {
+        return (
+            <TextField
+                error
+                required
+                fullWidth
+                id="user-error"
+                label="Username"
+                defaultValue={uname}
+                helperText={msg}
+                onChange={(e) => setUname(e.target.value)}
+            />
+        )
+    }
+
+    const errorPass = (msg) => {
+        return (
+            <TextField
+                error
+                required
+                fullWidth
+                margin="normal"
+                id="password-error"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                helperText={msg}
+                onChange={(e) => setPass(e.target.value)}
+            />
+        )
+    }
+
+    // Login request
     useEffect(() => {
         if (!userError && !passError && check1 && check2) {
             LoginRequest(uname, pass).then(response => {
@@ -60,87 +149,6 @@ export default function Login() {
             );
         }
     }, [userError, passError, check1, check2]);
-
-    const handleLogin = () => {
-        if (uname === "") {
-            setMsgUser("Need to fill this in")
-            setUserError(true)
-        } else {
-            setUserError(false)
-            setCheck1(true)
-        }
-
-        if (pass === "") {
-            setMsgPass("Password is required")
-            setPassError(true)
-        } else {
-            setPassError(false)
-            setCheck2(true)
-        }
-    }
-
-    const normalPass = () => {
-        return (
-            <TextField
-                required
-                fullWidth
-                margin="normal"
-                id="password-normal"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                defaultValue=""
-                onChange={(e) => setPass(e.target.value)}
-            />
-        )
-    }
-
-    const errorPass = (msg) => {
-        return (
-            <TextField
-                error
-                required
-                fullWidth
-                margin="normal"
-                id="password-error"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-                helperText={msg}
-                onChange={(e) => setPass(e.target.value)}
-            />
-        )
-    }
-
-    const normalName = () => {
-        return (
-            <TextField
-                required
-                margin="normal"
-                fullWidth
-                id="uname-normal"
-                label="Username"
-                variant="outlined"
-                defaultValue=""
-                onChange={(e) => setUname(e.target.value)}
-            />
-        )
-    }
-
-    const errorName = (msg) => {
-        return (
-            <TextField
-                error
-                required
-                fullWidth
-                id="user-error"
-                label="Username"
-                defaultValue={uname}
-                helperText={msg}
-                onChange={(e) => setUname(e.target.value)}
-            />
-        )
-    }
 
     return (
         <>
@@ -169,6 +177,7 @@ export default function Login() {
                         </Typography>
                         <Grid item xs={6}>
                             <Grid>
+                                {/* Render specific texfield based on errorstatus  */}
                                 {userError ? errorName(msgUser) : normalName()}
                             </Grid>
                             <Grid >

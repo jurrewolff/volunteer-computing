@@ -1,19 +1,26 @@
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+/*
+ * ACCOUNT PAGE.
+ * Displays the account information of the user.
+ * If the roll of the user is volunteer, the user is provided the choice to
+ * apply for the scientist roll.
+ */
 
-import { useEffect, useState } from 'react'
+// Package and functionality imports
+import Cookies from 'js-cookie';
+import { theme } from '../Components/Theme';
+import { useEffect, useState } from 'react';
 import PermanentDrawerLeft from '../Components/SideMenu';
 import { ThemeProvider } from '@material-ui/core/styles'
-import { theme } from '../Components/Theme'
 
-import Cookies from 'js-cookie'
-
+// Material ui imports
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 export default function Account() {
     const paperStyle = { padding: 20, width: '80%' }
@@ -86,8 +93,6 @@ export default function Account() {
                 <Divider />
                 <Grid item>
                     <Box
-                        // border="dashed"
-                        // component="main"
                         alignItems="center"
                         justifyContent="center"
                         sx={{
@@ -100,8 +105,13 @@ export default function Account() {
                         <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                             <Paper elevation={10} style={paperStyle}
                                 sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                                <Typography variant="h5" gutterBottom
-                                    sx={{ textAlign: 'center' }}>Update information</Typography>
+                                <Typography
+                                    variant="h5"
+                                    gutterBottom
+                                    sx={{ textAlign: 'center' }}
+                                >
+                                    Update information
+                                </Typography>
                                 <Grid
                                     container
                                     direction="column"
@@ -159,7 +169,6 @@ export default function Account() {
                                     <Button
                                         variant="contained"
                                         sx={{ mt: 3, ml: 1 }}
-                                    // onclick={(e) => handleSave}
                                     >
                                         Save
                                     </Button>
@@ -205,7 +214,6 @@ export default function Account() {
                                             />
                                         }
                                     </Grid>
-
                                     <Grid >
                                         {
                                             <TextField
@@ -234,7 +242,6 @@ export default function Account() {
                                         <Button
                                             variant="contained"
                                             sx={{ mt: 3, ml: 1 }}
-                                        // onclick={(e) => handleSave}
                                         >
                                             Apply
                                         </Button>
