@@ -2,14 +2,13 @@
  *
  *
  */
-import Nav from '../Components/HomePageNav';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { SignupRequest } from '../Actions/signupRequest';
 
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
+import Radio from '@mui/material/Radio';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -253,17 +252,17 @@ export default function Signup() {
                                 maxWidth="sm">
                                 <Grid>
                                     <Paper style={paperStyle}>
-                                        <Box><Typography variant="h4">Scientist </Typography></Box>
+                                        <Box><Typography variant="h4">Researchers </Typography></Box>
                                         <Typography>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            In congue massa eu metus mattis pellentesque. Proin ac porta eros.
+                                            A Researchers is any person linked to an institution wishing to
+                                            make use of the computational power our site provides.
                                         </Typography>
                                         <Box
                                             sx={{
                                                 display: 'flex',
                                                 flexDirection: 'row-reverse',
                                             }}>
-                                            <Checkbox {...label} checked={clicked}
+                                            <Radio {...label} checked={clicked} shape="round"
                                                 onChange={
                                                     (e) => {
                                                         setIsScientist(e.target.value)
@@ -281,15 +280,14 @@ export default function Signup() {
                                     <Paper style={paperStyle}>
                                         <Box><Typography variant="h4">Volunteer </Typography></Box>
                                         <Typography>
-                                            Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing elit. In congue massa eu metus mattis pellentesque.
-                                            Proin ac porta eros.
+                                            A Volunteer is any person with adequate computing power
+                                            wanting to help Researchers process their data.
                                         </Typography>
                                         <Box sx={{
                                             display: 'flex',
                                             flexDirection: 'row-reverse',
                                         }}>
-                                            <Checkbox {...label} checked={!clicked}
+                                            <Radio {...label} checked={!clicked} shape="round"
                                                 onChange={
                                                     (e) => {
                                                         setIsScientist(e.target.value)
