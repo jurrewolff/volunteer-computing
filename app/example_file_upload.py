@@ -352,6 +352,10 @@ def start_running_project(project_id):
 @app.route("/api/get_job/<project_id>", methods=["GET"])
 @login_required
 def request_job(project_id):
+    """
+    Description:
+    Job request function uses schedule.py to get results.
+    """
     user_id = session["user_id"]
     succes, return_val = give_work(project_id, user_id)
     if succes:
@@ -363,9 +367,23 @@ def request_job(project_id):
     return return_val
 
 
+def score_plus(user_id):
+    """
+    Description:
+    Score is added to user. Every job is valued 1 point.
+    """
+    query = f"UPDATE User SET score = score + 1 WHERE user_id = {user_id}"
+    db.cur.execute(query)
+    db.con.commit()
+
+
 @app.route("/api/post_result/<project_id>", methods=["POST"])
 @login_required
 def handle_result(project_id):
+    """
+    Description:
+    When a post message from the post_result is received it will be handle here.
+    """
     user_id = session["user_id"]
     data = request.form.get("data")
     job_id = request.form.get("job_id")
@@ -377,6 +395,7 @@ def handle_result(project_id):
 
     update_contribution((new_contribution_time, user_id, project_id))
     update_total_time_contributed(addition_time_contributed, user_id)
+    score_plus(user_id)
     succes, return_val = receive_work(project_id, job_id, user_id, data)
     if not succes:
         return return_val
@@ -386,6 +405,10 @@ def handle_result(project_id):
 
 @app.route("/api/get_template/template.js")
 def jstemplate():
+    """
+    Description:
+    Sends the JS template in it needed form.
+    """
     with open("app/templates/template.js", "r") as content_file:
         content = content_file.read()
         return Response(content, mimetype="text/javascript")
@@ -394,6 +417,10 @@ def jstemplate():
 
 @app.route("/api/get_worker/worker.js")
 def serve_worker():
+    """
+    Description:
+    Sends the worker in it needed form.
+    """
     with open("app/templates/worker.js", "r") as content_file:
         content = content_file.read()
         return Response(content, mimetype="text/javascript")
@@ -401,6 +428,10 @@ def serve_worker():
 
 @app.route("/api/get_worker/get_wasm/<proj_id>.wasm")
 def serve_wasm(proj_id):
+    """
+    Description:
+    Sends the wasm file in its needed form.
+    """
     with open(
         os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.wasm"), "rb"
     ) as content_file:
