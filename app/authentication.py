@@ -93,7 +93,7 @@ def signup():
     new_user.update({"firstname": request.headers.get("firstname")})
     new_user.update({"lastname": request.headers.get("lastname")})
     new_user.update({"score": 0})
-    new_user.update({"trust_level": 0})
+    new_user.update({"trust_level": 0.2})
     new_user.update({"is_researcher": request.headers.get("is_researcher")})
     new_user.update({"institution": request.headers.get("institution")})
     new_user.update({"background": request.headers.get("background")})
