@@ -39,9 +39,6 @@ export default function Footer() {
                     <Typography variant="h6" color="common.white">
                         Page items
                     </Typography>
-                    <Typography color="common.white">
-                        {/*TODO footer text page items */}
-                    </Typography>
                 </Grid>
                 {/* Footer text for contact information */}
                 <Grid item xs={2} >
@@ -70,8 +67,3 @@ export default function Footer() {
     );
 
 }
-
-
-
-
-

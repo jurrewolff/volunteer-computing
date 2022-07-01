@@ -2,7 +2,6 @@ import * as React from 'react';
 import Cookies from 'js-cookie'
 import { Link } from "react-router-dom"
 import { Link as scrollLink, animateScroll as scroll } from 'react-scroll';
-import { LogoutRequest } from '../Actions/logoutRequest';
 
 import { makeStyles } from '@mui/styles';
 import { SvgIcon } from '@mui/material';
@@ -22,9 +21,6 @@ import AdbIcon from '@mui/icons-material/Adb';
 import Ava from '../Images/icon.svg';
 
 
-
-// TODO cleanup
-// TODO: Account page maken!
 
 const useStyles = makeStyles({
   root: {

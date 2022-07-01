@@ -94,7 +94,6 @@ export default function Home() {
         <Grid
             justifyContent="center"
             alignItems="center"
-        // sx={{ pl: 10, pr: 10 }}
         >
             <Grid
                 container
@@ -128,11 +127,6 @@ export default function Home() {
                         </Typography>
                         {Cookies.get("user_id") ? LoggedIn() : NotLoggedIn()}
 
-                        {/* <Link
-                            to="./SignUp"
-                            onClick={clickButton}>
-                            <Button variant="contained">Signup now</Button>
-                        </Link> */}
                     </Box>
                 </Grid>
                 <Grid item xs={4} style={styles.top} >

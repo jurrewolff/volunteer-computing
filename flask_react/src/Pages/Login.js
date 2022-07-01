@@ -8,7 +8,6 @@
  */
 
 // Package and functionality imports
-import Nav from '../Components/HomePageNav';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { LoginRequest } from '../Actions/loginRequest';
