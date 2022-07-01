@@ -38,5 +38,6 @@ app.config["CELERY_BROKER_URL"] = "redis://redis:6379/0"
 app.config["CELERY_TIMEZONE"] = "UTC"
 
 from app import authentication, routes
-from app import example_file_upload
+from app import api_endpoint
 from app import schedule
+from app import celeryworker

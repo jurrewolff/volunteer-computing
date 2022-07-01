@@ -1,3 +1,4 @@
+// This file contains the js worker which gets data from the server, executes it and posts the result.
 importScripts('/api/get_template/template.js');
 
 function do_post(job_id, data, project_id) {

@@ -1,4 +1,12 @@
-import mysql.connector as connector
+"""
+Date:               01-07-2022
+Contributers:       PSE Group G
+
+File description:
+This file contains all functions to insert and update information in the project table. It also
+contains all functions to retrieve information from that table.
+"""
+
 from itertools import count, filterfalse
 from main import app
 
@@ -6,10 +14,12 @@ from app.models.database import *
 import app.models.user as user
 import math
 
-# Returns True if project exists, returns False otherwise.
-
 
 def project_exists(project_id):
+    """
+    Ouput:
+    True if project exists. False otherwise.
+    """
     sql = f"SELECT 1 FROM Project WHERE project_id = '{project_id}'"
     db.cur.execute(sql)
     if db.cur.fetchone() == None:
@@ -17,11 +27,15 @@ def project_exists(project_id):
     return True
 
 
-# Inserts a project into the 'project' table.
-# val should be of format: (id, name, description, block_size, owner, random_validation, runtime).
-
-
 def insert_project(dic):
+    """
+    Input: 
+    dictionary should contain the key: project_id, name, description, block_size, trust_level,
+    owner, random_validation, runtime, quorum.
+
+    Output:
+    True if project is inserted. False if project wasn't inserted because it allready existed.
+    """
     if not project_exists(dic["project_id"]):
         sql = "INSERT INTO Project VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         val = (
@@ -43,25 +57,34 @@ def insert_project(dic):
     return False
 
 
-# Returns the first not in use id in the project table.
 def get_new_project_id():
+    """
+    Output:
+    The first not in use id in the project table.
+    """
     sql = f"SELECT project_id FROM Project"
     db.cur.execute(sql)
     ids_taken = [x[0] for x in db.cur.fetchall()]
     return next(filterfalse(set(ids_taken).__contains__, count(1)))
 
 
-# Returns a list of all project. 1 tuple per project.
 def get_all_projects():
+    """
+    Output:
+    All projects stored in a list in which each project is represented as a dictionary with the following keys:
+    project_id, name, description.
+    """
     sql = f"SELECT * FROM Project WHERE done = 0"
     db.cur.execute(sql)
     res = db.cur.fetchall()
     return [{"project_id": x[0], "name": x[1], "description": x[2]} for x in res]
 
 
-# Returns a list of all project. 1 tuple per project.
-
 def get_project_time(project_id):
+    """
+    Output:
+    The total time that has been contributed to the given project by all participating volunteers.
+    """
     sql = f"SELECT contributed_time FROM Volunteer WHERE project_id = '{project_id}'"
     db.cur.execute(sql)
     res = db.cur.fetchall()
@@ -72,6 +95,9 @@ def get_project_time(project_id):
 
 
 def update_project_time(project_id, time=-1):
+    """
+    TODO write documentation
+    """
     if time == -1:
         time = get_project_time(project_id)
     query = f"UPDATE Project SET runtime = '{time}' WHERE project_id = '{project_id}';"
@@ -79,8 +105,12 @@ def update_project_time(project_id, time=-1):
     db.con.commit()
 
 
-
 def get_projects_researcher(user_id):
+    """
+    Output:
+    A list with all projects of a researcher. A dictionary per list is stored in the list. The dictionary has the keys:
+    project_id, name, description, runtime (seconds), done, progress (percentage integer).
+    """
     if user.account_id_exists(user_id):
         sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
         db.cur.execute(sql)
@@ -103,6 +133,12 @@ def get_projects_researcher(user_id):
 
 
 def get_project(project_id):
+    """
+    Output:
+    The project with the given project_id. The project is returned as a dictionary with the following keys:
+    project_id, name, description, block_size, owner, random_validation, runtime, quorum_size, done, progress.
+    False is returned if the project doesn't exist.
+    """
     if project_exists(project_id):
         sql = f"SELECT * FROM Project WHERE project_id = '{project_id}'"
         db.cur.execute(sql)
@@ -125,6 +161,10 @@ def get_project(project_id):
 
 
 def get_n_open_jobs(project_id):
+    """
+    Output:
+    the number of a project not yet done.
+    """
     query = f"""
     SELECT COUNT(*)
     FROM Jobs
@@ -135,6 +175,10 @@ def get_n_open_jobs(project_id):
 
 
 def possible_jobs(project_id, user_id):
+    """
+    Output:
+    TODO write documentation
+    """
     query = f"""
     SELECT job_id, project_id
     FROM Jobs
@@ -150,6 +194,12 @@ def possible_jobs(project_id, user_id):
 
 
 def get_projects_from_user(user_id):
+    """
+    Output:
+    Returns a list with all projects a user has participated in. The projects are stored in the list as a dictionary with
+    the following keys: project_id, name, description, done, progress, contributed_time.
+    False is returned if the user doesn't exist.
+    """
     if user.account_id_exists(user_id):
         sql = f"""
             SELECT p.project_id, p.name, p.description, p.done, p.progress, Volunteer.contributed_time

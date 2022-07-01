@@ -1,21 +1,28 @@
+"""
+Date:               01-07-2022
+Contributers:       PSE Group G
+
+File description:
+This file contains all functions to insert and update information of the results table. It also
+contains all functions to retrieve information from that table.
+"""
+
 from itertools import count, filterfalse
 
 from app.models.database import *
-from app.models.results import get_volunteer
 
-
-def print_users():  # For testing purpuses.
-    db.cur.execute("SELECT * FROM User")
-    res = db.cur.fetchall()
-    for x in res:
-        print(x)
-
-
-# Adds a user to the User table.
-# dictionary should have values: id, username, password, email,
-# first_name, last_name, score, institution, is_researcher, background.
-# Returns false if user_id or username allready exists.
 def insert_user(dic):
+    """
+    Input:
+    dic should have values: id, username, password, email,
+    first_name, last_name, score, institution, is_researcher, background.
+
+    Output:
+    False if user_id or username allready exists, True otherwise
+
+    Description:
+    Adds a user to the User table.
+    """
     if not account_id_exists(dic["user_id"]) and not username_exists(dic["username"]):
         sql = "INSERT INTO User VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         val = (
@@ -39,8 +46,11 @@ def insert_user(dic):
     return False
 
 
-# Returns true if account_id exists, returns false otherwise.
 def account_id_exists(user_id):
+    """
+    Output:
+    True if account_id exists, False otherwise.
+    """
     sql = f"SELECT 1 FROM User WHERE user_id = '{user_id}'"
     db.cur.execute(sql)
     res = db.cur.fetchone()
@@ -50,8 +60,11 @@ def account_id_exists(user_id):
         return True
 
 
-# Returns true if account_username exists, returns false otherwise.
 def username_exists(username):
+    """
+    Output:
+    True if account_username exists, False otherwise.
+    """
     sql = f"SELECT 1 FROM User WHERE username = '{username}'"
     db.cur.execute(sql)
     res = db.cur.fetchone()
@@ -61,8 +74,12 @@ def username_exists(username):
         return True
 
 
-# returns a dictionary container the user info. If the user doesn't exists, False is returned.
 def get_user(username):
+    """
+    Output:
+    a dictionary containing the following keys: user_id, username, password, email, first_name, 
+    last_name, score, trust_leve, institution, is_researcher, background.
+    """
     if username_exists(username):
         sql = f"SELECT * FROM User WHERE username = '{username}'"
         db.cur.execute(sql)
@@ -82,8 +99,13 @@ def get_user(username):
         }
     return False
 
-# Returns an array of dictionary containers with the user info.
+
 def get_all_users(amount=None, order_by='trust_level'):
+    """
+    Output:
+    A list containing dictionaries with each the following keys:
+    user_id, username, score, trust_level, is_researcher.
+    """
     if amount and order_by != 'trust_level':
         sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT {amount}"
     elif amount and order_by =='trust_level':
@@ -107,17 +129,22 @@ def get_all_users(amount=None, order_by='trust_level'):
     return users
 
 
-
-# Returns the lowest id that has not yet been taken.
 def get_new_user_id():
+    """
+    Output:
+    The lowest user_id that has not yet been taken.
+    """
     sql = f"SELECT user_id FROM User"
     db.cur.execute(sql)
     ids_taken = [x[0] for x in db.cur.fetchall()]
     return next(filterfalse(set(ids_taken).__contains__, count(1)))
 
 
-def get_trust_level(job_id, project_id):
-    user_id = get_volunteer(job_id, project_id)[0]
+def get_trust_levels(job_id, project_id, user_id):
+    """
+    Description:
+    Retrieve trust_level of user an project.
+    """
     query = f"SELECT (SELECT trust_level FROM User WHERE  user_id = '{user_id}'),(SELECT trust_level FROM Project WHERE  project_id = '{project_id}') FROM DUAL"
     db.cur.execute(query)
     res = db.cur.fetchone()
@@ -125,6 +152,9 @@ def get_trust_level(job_id, project_id):
 
 
 def update_trust_level(user_id, update_rule):
+    """Description:
+    Set the trust_level to update_rule.
+    """
     query = f"UPDATE User SET trust_level = {update_rule} WHERE user_id = '{user_id}';"
     db.cur.execute(query)
     db.con.commit()

@@ -1,11 +1,11 @@
 /*
- * NOPAGE PAGE.
+ * NOPAGE PAGE
  * This page is displayed to the user when the user tries to go to a page which
  * does not exist on our website.
  */
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 
 const NoPage = () => {
   return (
@@ -16,8 +16,8 @@ const NoPage = () => {
         sx={{
           pl: 30,
           flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
+          height: "100vh",
+          overflow: "auto",
         }}
       >
         <Container maxWidth="lg" sx={{}}>
