@@ -9,13 +9,14 @@ import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+
 import { Box } from '@mui/material';
 import { ThemeProvider } from '@material-ui/core/styles'
+
 import { theme } from '../Components/Theme'
-
-
 import PermanentDrawerLeft from '../Components/SideMenu';
 
+// ----------------------------------------------------------------------
 
 export default function Results() {
     const [data, setData] = useState([{}]);

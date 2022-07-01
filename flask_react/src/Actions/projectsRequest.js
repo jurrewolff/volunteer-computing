@@ -1,10 +1,10 @@
 /*
+ * PROJECTS REQUEST
  * Gets the information of all not finished projects. It will show the
  * projectname and discription of each project. Each project will come
  * with a button to learn more about the project and a button to start
  * computing the project.
  */
-
 
 import { useState, useEffect } from 'react'
 import { Row, Col } from "react-bootstrap";
@@ -15,6 +15,8 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+
+// ----------------------------------------------------------------------
 
 export const ProjectsRequest = () => {
     const [data, setData] = useState([{}]);
@@ -27,7 +29,6 @@ export const ProjectsRequest = () => {
                 setData(data)
             })
     }, []);
-
 
     // Returns a card with the given project.
     const getCard = ((project) => {

@@ -7,8 +7,6 @@
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Footer from '../Components/Footer';
-
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -16,9 +14,13 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+
 import Image from '../Images/backgroundpic.png';
+import Footer from '../Components/Footer';
 
+// ----------------------------------------------------------------------
 
+// STYLING
 const styles = {
     title: {
         fontFamily: "Helvetica Neue"
@@ -51,6 +53,7 @@ const styles = {
     },
 };
 
+// HOME PAGE PARTS
 export default function Home() {
     const [clicked, setClicked] = useState(false);
 

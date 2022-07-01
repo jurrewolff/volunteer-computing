@@ -22,10 +22,11 @@ import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
+// ----------------------------------------------------------------------
+
 export default function Account() {
     const paperStyle = { padding: 20, width: '80%' }
 
-    const [pass, setPass] = useState("");
     const [inst, setInst] = useState("");
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
@@ -55,8 +56,6 @@ export default function Account() {
         setUname(Cookies.get("uname"))
         setEmail(Cookies.get("email"))
     }, [])
-
-
 
     useEffect(() => {
         const requestOptions = {

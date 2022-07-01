@@ -4,6 +4,7 @@
 * This is not visible on the website, but is a way of implemenating the 
 * routing functionaility, leading to quiker rendering of the pages.
 */
+
 import { Routes, Route } from "react-router-dom"
 
 // Page imports for defining the routes
@@ -20,6 +21,8 @@ import Results from "../Pages/Results"
 import Account from "../Pages/Account"
 import Usage from "../Pages/Usage"
 import Redirect from "../Pages/Redirect"
+
+// ----------------------------------------------------------------------
 
 /*
  * Routes to each page are defined.
