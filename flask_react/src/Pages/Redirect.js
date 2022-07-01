@@ -1,3 +1,8 @@
+/*
+ * Redirects the user to the home page. A delay is used because it
+ * takes time for the cookies to be send and received.
+ */
+
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
