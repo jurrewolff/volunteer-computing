@@ -37,12 +37,7 @@ The application database can be managed using "phpmyadmin". This service is acce
 `bash start.sh` can be used to start the website.
 
 ## License
-<<<<<<< Updated upstream
-DO WHAT THE F*CK YOU WANT  
-=======
-
-DO WHAT EVER THE FUCK YOU WANT
->>>>>>> Stashed changes
+DO WHAT THE F*CK YOU WANT
 
 ## Overview
 
