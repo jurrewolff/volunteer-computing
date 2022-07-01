@@ -9,6 +9,8 @@ from app.models.database import *
 # Adds an entry to the Result table.
 # Val should be of format: (user_id, project_id, block_count)
 # Returns False if given user or project doesn't exists, returns True otherwise.
+
+
 def insert_result(val):
     if user.account_id_exists(val[0]) and project.check_project_exists(val[1]) and not result_exists((val[0], val[1])):
         sql = "INSERT INTO Result VALUES (%s, %s, %s)"
@@ -19,6 +21,8 @@ def insert_result(val):
 
 # Returns True if result is in table, returns False otherwise.
 # Val should be of format: (user_id, project_id).
+
+
 def result_exists(val):
     sql = f"SELECT 1 FROM Result WHERE user_id = '{val[0]}' AND project_id = '{val[1]}'"
     db.cur.execute(sql)
@@ -48,21 +52,15 @@ def get_projects_of_user(user_id):
 
 
 def save_result(project_id, job_id, volunteer_id, result):
-    # save to db
+    """Insert a result into the db."""
     query = f"INSERT INTO Result (job_id, project_id, volunteer, result) VALUES ('{job_id}','{project_id}','{volunteer_id}', '{result}')"
     db.cur.execute(query)
     db.con.commit()
 
 
-def get_volunteer(job_id, project_id):
-    query = f"SELECT volunteer FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
-    db.cur.execute(query)
-    res = db.cur.fetchone()
-    return res
-
-
 def get_number_of_results(job_id, project_id):
+    """Retrieve the number of results for a project."""
     query = f"SELECT COUNT(*) FROM Result WHERE job_id ='{job_id}' AND project_id = '{project_id}';"
     db.cur.execute(query)
     res = db.cur.fetchone()
-    return res    
+    return res
