@@ -1,35 +1,32 @@
 /*
  * SIGNUP PAGE.
- * The login page. Utilizes the fetch api which is implemented in
- * the loginRequest file. First the user input is evaluated then the login
- * request function is called
- * Depending on the return status, the response is handled accordingly.
- * The navbar functionality is called from the homepagenav page.
+ * The signup page. Utilizes the fetch api which is implemented in
+ * the signupRequest file. First the user input is evaluated then the
+ * signUprequest function is called. If sign up is succesful, user is
+ * logged in automatically.
  */
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { SignupRequest } from '../Actions/signupRequest';
-
-// Material ui imports
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import Divider from '@mui/material/Divider';
-import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 
 export default function Signup() {
-    // Styling
+    {/* Styling of input field.*/}
     const paperStyle = { padding: 20, margin: "20px auto" }
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
+    {/* Navigation function.*/}
     const navigate = useNavigate();
 
-    // State variables for user and textfield
+    {/* State variables for user and textfield.*/}
     const [pass, setPass] = useState("");
     const [inst, setInst] = useState("");
     const [fname, setFname] = useState("");
@@ -39,75 +36,23 @@ export default function Signup() {
     const [background, setBackground] = useState("");
     const [isScientist, setIsScientist] = useState('1');
     const [authenticated, setAuthenticated] = useState(false)
-
-    // State variables for error handling and error messaging
-    const [msgPass, setMsgPass] = useState("")
-    const [passError, setPassError] = useState(false);
-    const [fnameError, setFnameError] = useState(false);
-    const [lnameError, setLnameError] = useState(false);
-    const [unameError, setUnameError] = useState(false);
-    const [emailError, setEmailError] = useState(false);
-
-    // Checks for first page rendering
-    const [check1, setCheck1] = useState(false)
-    const [check2, setCheck2] = useState(false)
-    const [check3, setCheck3] = useState(false)
-    const [check4, setCheck4] = useState(false)
-    const [check5, setCheck5] = useState(false)
-
     const [clicked, setClicked] = useState(true)
 
-    // 'XOR' toggle switch for selecting scientist or volunteer
+    {/* 'XOR' toggle switch for selecting Scientist or Volunteer.*/}
     function clickIsScientist() {
         setClicked(true)
         setIsScientist('1')
     }
-
     function clickIsVolunteer() {
         setClicked(false)
         setIsScientist('0')
     }
 
-    // Lost functionaility for correct error checking and error messaging
-    const handleSignup = () => {
-        if (fname === "" && isScientist) {
-            setFnameError(true)
-        } else {
-            setFnameError(false)
-            setCheck1(true)
-        }
-
-        if (lname === "" && isScientist) {
-            setLnameError(true)
-        } else {
-            setLnameError(false)
-            setCheck2(true)
-        }
-
-        if (uname === "") {
-            setUnameError(true)
-        } else {
-            setUnameError(false)
-            setCheck3(true)
-        }
-
-        if (email === "") {
-            setEmailError(true)
-        } else {
-            setEmailError(false)
-            setCheck4(true)
-        }
-
-        if (pass === "") {
-            setPassError(true)
-            setMsgPass("Password is required")
-        } else {
-            setPassError(false)
-            setCheck5(true)
-        }
-    }
-
-    // Lost functionality for correctly handling signup request
+    {/*
+    Tracks the state of latter variables to update the status of input
+    information. If user has filled in correct information, authenticated
+    variable is set to true, and form can be submitted.
+    */}
     useEffect(() => {
         if (uname !== "" && email !== "" && pass !== "" && fname !== ""
             && lname !== "" && inst !== "" && isScientist === '1') {
@@ -138,59 +83,47 @@ export default function Signup() {
                         <Grid container spacing={3}>
                             <Grid item xs={6}>
                                 <Grid >
-                                    {
-                                        <TextField
-                                            required={isScientist}
-                                            disabled={isScientist == '0'}
-                                            margin="normal"
-                                            variant="outlined"
-                                            label={"First name"}
-                                            error={fnameError}
-                                            helperText={fnameError ? 'First name is required' : ' '}
-                                            onChange={(e) => setFname(e.target.value)}
-                                            sx={{ mb: -1.5 }}
-                                        />
-                                    }
+                                    <TextField
+                                        required={isScientist}
+                                        disabled={isScientist == '0'}
+                                        margin="normal"
+                                        variant="outlined"
+                                        label={"First name"}
+                                        onChange={(e) => setFname(e.target.value)}
+                                        sx={{ mb: -1.5 }}
+                                    />
                                 </Grid>
                                 <Grid >
-                                    {
-                                        <TextField
-                                            required={isScientist}
-                                            disabled={isScientist == '0'}
-                                            margin="normal"
-                                            variant="outlined"
-                                            label="Last name"
-                                            error={lnameError}
-                                            helperText={lnameError ? 'Last name is required' : ' '}
-                                            onChange={(e) => setLname(e.target.value)}
-                                            sx={{ mb: -1.5 }}
-                                        />
-                                    }
+                                    <TextField
+                                        required={isScientist}
+                                        disabled={isScientist == '0'}
+                                        margin="normal"
+                                        variant="outlined"
+                                        label="Last name"
+                                        onChange={(e) => setLname(e.target.value)}
+                                        sx={{ mb: -1.5 }}
+                                    />
                                 </Grid>
 
                                 <Grid >
-                                    {
-                                        <TextField
-                                            margin="normal"
-                                            disabled={isScientist == '0'}
-                                            variant="outlined"
-                                            label="Institution"
-                                            onChange={(e) => setInst(e.target.value)}
-                                            sx={{ mb: 1 }}
-                                        />
-                                    }
+                                    <TextField
+                                        margin="normal"
+                                        disabled={isScientist == '0'}
+                                        variant="outlined"
+                                        label="Institution"
+                                        onChange={(e) => setInst(e.target.value)}
+                                        sx={{ mb: 1 }}
+                                    />
                                 </Grid>
                                 <Grid >
-                                    {
-                                        <TextField
-                                            margin="normal"
-                                            disabled={isScientist == '0'}
-                                            variant="outlined"
-                                            label="Background"
-                                            onChange={(e) => setBackground(e.target.value)}
-                                            sx={{ mb: 1 }}
-                                        />
-                                    }
+                                    <TextField
+                                        margin="normal"
+                                        disabled={isScientist == '0'}
+                                        variant="outlined"
+                                        label="Background"
+                                        onChange={(e) => setBackground(e.target.value)}
+                                        sx={{ mb: 1 }}
+                                    />
                                 </Grid>
                                 <Grid >
                                     <TextField
@@ -198,8 +131,6 @@ export default function Signup() {
                                         margin="normal"
                                         variant="outlined"
                                         label="Username"
-                                        error={unameError}
-                                        helperText={unameError ? 'Username is required' : ' '}
                                         onChange={(e) => setUname(e.target.value)}
                                         sx={{ mb: -1.5 }}
                                     />
@@ -211,8 +142,6 @@ export default function Signup() {
                                         id="password"
                                         margin="normal"
                                         variant="outlined"
-                                        error={passError}
-                                        helperText={passError ? msgPass : ' '}
                                         label="Password"
                                         onChange={(e) => setPass(e.target.value)}
                                         sx={{ mb: -1.5 }}
@@ -223,8 +152,6 @@ export default function Signup() {
                                         required
                                         margin="normal"
                                         variant="outlined"
-                                        error={emailError}
-                                        helperText={!emailError ? 'E-mail is required' : ' '}
                                         label="E-mail"
                                         onChange={(e) => setEmail(e.target.value)}
                                         sx={{ mb: -1.5 }}
@@ -232,7 +159,10 @@ export default function Signup() {
                                 </Grid>
                                 <Grid>
                                     <Grid>
-                                        {/* Extensive way of signup and login request */}
+                                        {/*
+                                            Import of SignupRequest, sends relevant information
+                                            to that component.
+                                        */}
                                         <SignupRequest
                                         username={uname}
                                         pass={pass}
@@ -264,12 +194,11 @@ export default function Signup() {
                             <Grid container direction={'column'} item xs={6}
                                 justifyContent="center"
                                 maxWidth="sm">
-                                {/* Box for the scientist roll with information */}
                                 <Grid>
                                     <Paper style={paperStyle}>
-                                        <Box><Typography variant="h4">Researchers </Typography></Box>
+                                        <Box><Typography variant="h4">Researcher</Typography></Box>
                                         <Typography>
-                                            A Researchers is any person linked to an institution wishing to
+                                            A Researcher is any person linked to an institution wishing to
                                             make use of the computational power our site provides.
                                         </Typography>
                                         <Box
@@ -290,7 +219,6 @@ export default function Signup() {
                                 </Grid>
                                 <Divider orientation="horizontal" />
                                 <Grid >
-                                    {/* Box for the volunteer roll with information */}
                                     <Paper style={paperStyle}>
                                         <Box><Typography variant="h4">Volunteer </Typography></Box>
                                         <Typography>

@@ -1,3 +1,8 @@
+"""
+Module providing the scheduling of jobs.
+The give_work and receive_work functions provide the main functionality.
+Work is given randomly from  the open jobs. When work is received a job is marked done if a majority agrees on a result.
+"""
 import math
 import os
 import random
