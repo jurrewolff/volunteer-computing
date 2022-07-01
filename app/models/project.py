@@ -78,7 +78,6 @@ def update_project_time(project_id, time=-1):
     db.con.commit()
 
 
-
 def get_projects_researchers(user_id):
     projects = []
     sql = f"SELECT * FROM Project WHERE owner = '{user_id}'"
@@ -117,6 +116,7 @@ def get_project(project_id):
 
 
 def get_n_open_jobs(project_id):
+    """Helper function to get the number of jobs not marked done."""
     query = f"""
     SELECT COUNT(*)
     FROM Jobs
@@ -124,21 +124,6 @@ def get_n_open_jobs(project_id):
     """
     db.cur.execute(query)
     return db.cur.fetchone()[0]
-
-
-def possible_jobs(project_id, user_id):
-    query = f"""
-    SELECT job_id, project_id
-    FROM Jobs
-    WHERE  project_id = '{project_id}' AND Jobs.done = 0 AND '{user_id}' NOT IN (
-        SELECT volunteer
-        FROM Result
-        WHERE Result.job_id = Jobs.job_id AND project_id = '{project_id}'
-    )
-    """
-    db.cur.execute(query)
-    res = db.cur.fetchall()
-    return res
 
 
 def get_projects_from_user(user_id):
