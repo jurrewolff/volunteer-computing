@@ -10,17 +10,17 @@ from http import HTTPStatus
 from app.models.database import db
 from app.models.jobs import increment_quorum_size, possible_jobs, job_marked_done, submitted_already_for_job
 from app.models.results import save_result, get_number_of_results
-from app.models.user import get_trust_level, update_trust_level
+from app.models.user import get_trust_levels, update_trust_level
 from app.models.project import get_n_open_jobs
 
 
-def decide_if_work_is_trusted(job_id, project_id):
+def decide_if_work_is_trusted(job_id, project_id, user_id):
     """
     Decides if work is trusted based on the submitting users estimated error rate. 
     If a user has an error rate that is too high they will not be trused. Otherwise there result will be trusted with probability 1-sqrt(user_error_rate / project_allowed_error_rate).
     :returns: Bool indicating whether the result is trusted
     """
-    user_error_rate, project_allowed_error_rate = get_trust_level(job_id, project_id)
+    user_error_rate, project_allowed_error_rate = get_trust_levels(job_id, project_id, user_id)
     if user_error_rate > project_allowed_error_rate:
         # dont trust host
         return False
@@ -113,7 +113,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
         f"SELECT quorum_size FROM Jobs WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
 
     if random_replication == 1:
-        trust = decide_if_work_is_trusted(job_id, project_id)
+        trust = decide_if_work_is_trusted(job_id, project_id, volunteer_id)
         if not trust:
             increment_quorum_size(project_id, job_id)
             # the quorum size has been increased by one, so we wait for someone to replicate it.
