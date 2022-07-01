@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { SignupRequest } from '../Actions/signupRequest';
 
-// Material ui imports
+{/* Material ui imports. */}
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -92,8 +92,6 @@ export default function Signup() {
                                         margin="normal"
                                         variant="outlined"
                                         label={"First name"}
-                                        error={fnameError}
-                                        helperText={fnameError ? 'First name is required' : ' '}
                                         onChange={(e) => setFname(e.target.value)}
                                         sx={{ mb: -1.5 }}
                                     />
@@ -105,8 +103,6 @@ export default function Signup() {
                                         margin="normal"
                                         variant="outlined"
                                         label="Last name"
-                                        error={lnameError}
-                                        helperText={lnameError ? 'Last name is required' : ' '}
                                         onChange={(e) => setLname(e.target.value)}
                                         sx={{ mb: -1.5 }}
                                     />
@@ -138,8 +134,6 @@ export default function Signup() {
                                         margin="normal"
                                         variant="outlined"
                                         label="Username"
-                                        error={unameError}
-                                        helperText={unameError ? 'Username is required' : ' '}
                                         onChange={(e) => setUname(e.target.value)}
                                         sx={{ mb: -1.5 }}
                                     />
@@ -151,8 +145,6 @@ export default function Signup() {
                                         id="password"
                                         margin="normal"
                                         variant="outlined"
-                                        error={passError}
-                                        helperText={passError ? msgPass : ' '}
                                         label="Password"
                                         onChange={(e) => setPass(e.target.value)}
                                         sx={{ mb: -1.5 }}
@@ -163,8 +155,6 @@ export default function Signup() {
                                         required
                                         margin="normal"
                                         variant="outlined"
-                                        error={emailError}
-                                        helperText={!emailError ? 'E-mail is required' : ' '}
                                         label="E-mail"
                                         onChange={(e) => setEmail(e.target.value)}
                                         sx={{ mb: -1.5 }}
@@ -172,6 +162,10 @@ export default function Signup() {
                                 </Grid>
                                 <Grid>
                                     <Grid>
+                                        {/*
+                                            Import of SignupRequest, sends relevant information
+                                            to that component.
+                                        */}
                                         <SignupRequest
                                         username={uname}
                                         pass={pass}

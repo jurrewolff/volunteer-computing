@@ -4,10 +4,9 @@ import { UploadRequest } from '../Actions/uploadFile';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-
 import PermanentDrawerLeft from '../Components/SideMenu';
 
-
+{/* Material ui imports. */}
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
@@ -17,13 +16,13 @@ import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
 import ToggleButton from '@mui/material/ToggleButton';
 import CheckIcon from '@mui/icons-material/Check';
-import { stepClasses } from '@mui/material';
-
 
 
 export default function Upload() {
+    {/* Styling of input field.*/}
     const paperStyle = { padding: 20, margin: "20px auto" }
 
+    {/* State variables for user and textfield.*/}
     const [selected, setSelected] = useState();
     const [name, setName] = useState();
     const [description, setDescription] = useState();
@@ -33,15 +32,18 @@ export default function Upload() {
     const [C, setC] = useState(false);
     const [file, setFile] = useState(false);
 
+    {/* Navigation function.*/}
+    const navigate = useNavigate();
+
+    {/* Helper functions for changing Quorum and Trust level.*/}
     const changeTrust = e => {
-        console.log(e.target.value);
         setTrustlevel(e.target.value);
     }
-
     const changeQuorum = e => {
         setQuorum(e.target.value);
     }
 
+    {/* Slider markers the trust and quorum input.*/}
     const markers_slider_trust = [
         {
         value: 0.1,
@@ -52,7 +54,6 @@ export default function Upload() {
         label: 'high',
         },
     ];
-
     const markers_slider_quorum = [
         {
         value: 1,
@@ -64,25 +65,28 @@ export default function Upload() {
         },
     ];
 
+    {/* Cookies to check if a user exists, and if the user is a researcher.*/}
     let user_cookie = Cookies.get("user_id")
     let research_cookie = Cookies.get("is_researcher")
 
-    const navigate = useNavigate();
 
+    {/* Helper functions for updating the C and file variables.*/}
     function changeC() {
         setC(true)
     }
-
     function changeFile() {
         setFile(true)
     }
 
+    {/*
+        Checks if visitor is a user and a researcher.
+        Also check for correct file upload.
+    */}
     useEffect(() => {
         if (!user_cookie) {
             console.log("User not logged in, redirecting to login page")
             return navigate('/login')
         }
-
         if (research_cookie == 0) {
             console.log("User unauthorized, redirecting to dashboard")
             return navigate('/dashboard')
@@ -94,7 +98,7 @@ export default function Upload() {
 
     return (
         <>
-                <PermanentDrawerLeft />
+            <PermanentDrawerLeft />
             <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
                 <Paper elevation={10} style={paperStyle}
                     sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -171,6 +175,10 @@ export default function Upload() {
                                 </div>
                             </Grid>
                             <Grid container justifyContent="center">
+                                {/*
+                                    Import of UploadRequest, sends relevant information
+                                    to that component.
+                                */}
                                 < UploadRequest
                                     name={name}
                                     description={description}
