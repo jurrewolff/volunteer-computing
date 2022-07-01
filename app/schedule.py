@@ -16,25 +16,27 @@ from app.models.project import get_n_open_jobs
 
 def decide_if_work_is_trusted(job_id, project_id):
     """
-    Decides if work is trusted based on the submitting users trustlevel
+    Decides if work is trusted based on the submitting users estimated error rate. 
+    If a user has an error rate that is too high they will not be trused. Otherwise there result will be trusted with probability 1-sqrt(user_error_rate / project_allowed_error_rate).
+    :returns: Bool indicating whether the result is trusted
     """
-    user_trust_level, project_trust_level = get_trust_level(job_id, project_id)
-    if user_trust_level > project_trust_level:
+    user_error_rate, project_allowed_error_rate = get_trust_level(job_id, project_id)
+    if user_error_rate > project_allowed_error_rate:
         # dont trust host
         return False
     else:
         # host is trused
         probabilty_of_duplication = math.sqrt(
-            user_trust_level / project_trust_level)
+            user_error_rate / project_allowed_error_rate)
+        # randomly mark the result as untrusted with probabilty_of_duplication
         if random.uniform(0, 1) <= probabilty_of_duplication:
-            # Do a check
             return False
         return True
 
 
 def job_done(project_id, job_id, correct_result):
     """
-    Updates the database an filesystem when a job is done.
+    Updates the database and filesystem when a job is done.
     """
     query = f"UPDATE Jobs SET done = 1 WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
     db.cur.execute(query)
@@ -63,15 +65,19 @@ def job_done(project_id, job_id, correct_result):
         db.cur.execute(
             f"UPDATE Project SET done = 1 WHERE project_id = '{project_id}';")
         db.con.commit()
-        # TODO put reseult file in correct order
+        # TODO put result file in correct order
 
-
+# helper function
 def single_result_query(query):
     db.cur.execute(query)
     return db.cur.fetchone()[0]
 
 
 def majority_agrees(project_id, job_id):
+    """
+    Determines whether a majority of the results agree 
+    :returns: the majority result if there is a majority otherwise return False.
+    """
     db.cur.execute(
         f"Select result FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
     all_results = [x[0] for x in db.cur.fetchall()]
@@ -90,7 +96,7 @@ def majority_agrees(project_id, job_id):
 
 def receive_work(project_id, job_id, volunteer_id, result):
     """
-    Receives a result. When enough results have been collected for a job it will be marked as done.
+    Receives a result. When enough results have been collected for a job it will be marked as done. 
     :returns: a bool indicating the succes and possibly an associated error.
     """
     if job_marked_done(project_id, job_id):
@@ -112,13 +118,11 @@ def receive_work(project_id, job_id, volunteer_id, result):
             increment_quorum_size(project_id, job_id)
             # the quorum size has been increased by one, so we wait for someone to replicate it.
             return True, None
-        # quorum_size 1 and we trust the result so we are done
         if quorum_size == 1:
+             # quorum_size 1 and we trust the result so we are done
+
             job_done(project_id, job_id, result)
             return True, None
-        # else:
-        #     # quorum not yet reached, we wait for someone to replicate the result.
-        #     return True, None
     if n_results == quorum_size:
         majority_result = majority_agrees(project_id, job_id)
         if majority_result != False:
@@ -140,7 +144,7 @@ def give_work(project_id, user_id):
     job_id, _ = random.choice(possible)
     return True, job_id
 
-
+# Helper function used for testing
 def fill_db():
     def execute(s):
         db.cur.execute(s)
@@ -154,7 +158,7 @@ def fill_db():
 
     print("database filled")
 
-
+# Test function
 def test():
     # try:
     fill_db()
@@ -165,8 +169,3 @@ def test():
     print("j1: ", receive_work(1, 1, 3, "1"))
     print("open jobs:,         ", get_n_open_jobs(1))
     print("************")
-
-# try:
-#     test()
-# except:
-#     pass
