@@ -21,13 +21,14 @@ A project is made up of a c program and an input file. Uploaded c files are comp
 ## Installation
 
 1. Install the required dependencies: `docker, docker-compose, npm`
-2. Start the application: `bash start_dev.sh`
+2. Create a ".env" file (based of the example file):
+```bash
+mv example_env .env 
+```
+3. Fill out the blank values in the ".env" file. (SERVER_IP, SERVER_PORT, MYSQL_ROOT_PASSWORD)
+4. Start the application: `bash start_dev.sh`
 
-Before starting the application, the "docker-compose.yaml" file should be edited. At least the database root password
-("MYSQL_ROOT_PASSWORD") must be updated to a sufficiently secure string.
-
-Furthermore, the application port (under services->flask->port) can be updated from 3601 to 80, so that the website is 
-accessible by default.
+Note that for the ".env" file, a sufficiently strong password string is provided.
 
 ## Usage
 The application database can be managed using "phpmyadmin". This service is accessible through a web-interface at port
@@ -37,12 +38,7 @@ The application database can be managed using "phpmyadmin". This service is acce
 `bash start.sh` can be used to start the website.
 
 ## License
-<<<<<<< Updated upstream
 DO WHAT THE F*CK YOU WANT
-=======
-
-DO WHAT EVER THE FUCK YOU WANT
->>>>>>> Stashed changes
 
 ## Overview
 
