@@ -84,8 +84,10 @@ def get_user(username):
 
 # Returns an array of dictionary containers with the user info.
 def get_all_users(amount=None, order_by='trust_level'):
-    if amount:
+    if amount and order_by != 'trust_level':
         sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT {amount}"
+    elif amount and order_by =='trust_level':
+        sql = f"SELECT * FROM User ORDER BY {order_by} ASC LIMIT {amount}"
     else:
         sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT 10"
 
