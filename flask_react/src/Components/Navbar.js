@@ -5,6 +5,7 @@ import { Link as scrollLink, animateScroll as scroll } from 'react-scroll';
 import { LogoutRequest } from '../Actions/logoutRequest';
 
 import { makeStyles } from '@mui/styles';
+import { SvgIcon } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,12 +19,12 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import Ava from '../Images/icon.svg';
+
 
 
 // TODO cleanup
 // TODO: Account page maken!
-
-// style={{ backgroundColor: 'yellow' }}
 
 const useStyles = makeStyles({
   root: {
@@ -155,14 +156,21 @@ const ResponsiveAppBar = (props) => {
     )
   };
 
-
+  function HomeIcon(props) {
+    return (
+      <SvgIcon {...props}>
+        <path d="0 0 474.91 518.56" />
+      </SvgIcon>
+    );
+  }
 
 
   return (
     <AppBar position="sticky" className={classes.root}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters >
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          {/* <SvgIcon component={OwnIcon} inheritViewBox sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
+          <HomeIcon />
           <Typography
             variant="h6"
             noWrap
@@ -182,7 +190,7 @@ const ResponsiveAppBar = (props) => {
 
             }}
           >
-            CompuTeam
+            Compunity
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -216,7 +224,8 @@ const ResponsiveAppBar = (props) => {
             >
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <SvgIcon component={OwnIcon} inheritViewBox sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
+          <HomeIcon />
           <Typography
             variant="h5"
             noWrap
@@ -243,8 +252,8 @@ const ResponsiveAppBar = (props) => {
           <Box sx={{ flexGrow: 0, marginLeft: "auto" }} >
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar sx={{ bgcolor: '#f44336' }}
-                  src="/broken-image.jpg" />
+                <Avatar sx={{ bgcolor: '#727dff' }}
+                  src={Ava} />
               </IconButton>
             </Tooltip>
             <Menu
