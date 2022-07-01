@@ -20,7 +20,7 @@ The application database can be managed using "phpmyadmin". This service is acce
 
 ## License
 
-...................
+DO WHAT EVER THE FUCK YOU WANT
 
 ## Overview
 
