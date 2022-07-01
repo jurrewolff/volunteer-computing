@@ -16,7 +16,9 @@ import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import Image from "../Images/backgroundpic.png";
+import Image1 from "../Images/backgroundpic.png";
+import Image2 from "../Images/pic2.png";
+import Image3 from "../Images/pic4.png";
 import Footer from "../Components/Footer";
 
 // ----------------------------------------------------------------------
@@ -43,12 +45,30 @@ const styles = {
   },
 
   top: {
-    backgroundImage: `url(${Image})`,
-    width: "100%",
-    height: "300px",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
+    one: {
+        backgroundImage: `url(${Image1})`,
+        width: "100%",
+        height: "400px",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+    },
+    two: {
+        backgroundImage: `url(${Image2})`,
+        width: "100%",
+        height: "400px",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+    },
+    three: {
+        backgroundImage: `url(${Image3})`,
+        width: "100%",
+        height: "400px",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+    },
   },
 };
 
@@ -126,7 +146,7 @@ export default function Home() {
               {Cookies.get("user_id") ? LoggedIn() : NotLoggedIn()}
             </Box>
           </Grid>
-          <Grid item xs={4} style={styles.top}>
+          <Grid item xs={4} style={styles.top.one}>
             <Box sx={{ pr: 8 }}></Box>
           </Grid>
         </Grid>
@@ -137,7 +157,7 @@ export default function Home() {
               sx={{ color: "#000", pl: 10, pr: 10, pb: 10 }}
             >
               <Toolbar />
-              <Typography id="About" variant="h4" gutterBottom component="div">
+              <Typography id="About" variant="h4" gutterBottom component="div" align="center">
                 About
               </Typography>
 
@@ -163,7 +183,7 @@ export default function Home() {
           alignItems="center"
           sx={{ pt: 5, pb: 5 }}
         >
-          <Grid item xs={8} sx={{}}>
+          <Grid item xs={8}>
             <Box sx={{ pr: 5, pl: 10 }}>
               <Typography
                 id="Scientist"
@@ -190,8 +210,8 @@ export default function Home() {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={4} sx={{ pb: 5 }}>
-            <Box sx={{}}>image</Box>
+          <Grid item xs={4} sx={{ pb: 5 }} style={styles.top.two}>
+            <Box sx={{}}></Box>
           </Grid>
         </Grid>
         <Grid
@@ -203,8 +223,8 @@ export default function Home() {
           alignItems="center"
           sx={{ pt: 5, pb: 5 }}
         >
-          <Grid item xs={4} sx={{ pb: 5 }}>
-            <Box sx={{ pl: 10 }}>image</Box>
+          <Grid item xs={4} sx={{ pb: 5 }} style={styles.top.three}>
+            <Box sx={{ pl: 10 }}></Box>
           </Grid>
           <Grid item xs={8} sx={{}}>
             <Box sx={{ pl: 5, pr: 10 }}>
