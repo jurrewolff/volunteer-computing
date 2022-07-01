@@ -12,7 +12,7 @@ import subprocess
 
 def get_line_from_file(filename, line=0):
     '''
-    Functie die een dict returned in de vorm van:
+    Function returns:
     {'arguments': [......], size: int, lines: range(....)}
     '''
     args = ls.getline(filename, line+1)
@@ -20,6 +20,9 @@ def get_line_from_file(filename, line=0):
 
 
 def sort_file(filename):
+    """
+    Sort output fil einto download file.
+    """
     f = open("download", "w+")
     # f = open(filename, "w+")
     test = subprocess.run(['sort','-k1','-n', filename], capture_output=True, text=True)

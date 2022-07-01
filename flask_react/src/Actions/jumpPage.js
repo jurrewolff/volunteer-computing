@@ -15,7 +15,6 @@ import DashBoard from "../Pages/Dashboard"
 import Projects from "../Pages/Projects"
 import MoreInfo from "../Pages/MoreInfo"
 import PastProjects from "../Pages/PastProjects"
-import Logout from "../Pages/Logout"
 import Results from "../Pages/Results"
 import Account from "../Pages/Account"
 import Usage from "../Pages/Usage"
@@ -35,7 +34,6 @@ function JumpPage() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login/*" element={<Login />} />
                 <Route path="/upload/*" element={<Upload />} />
-                <Route path="/logout/*" element={<Logout />} />
                 <Route path="/signup/*" element={<SignUp />} />
                 <Route path="/dashBoard/*" element={<DashBoard />} />
                 <Route path="/projects" element={<Projects />} />

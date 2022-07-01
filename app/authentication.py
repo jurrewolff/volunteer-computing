@@ -1,4 +1,8 @@
 """
+Date:               01-07-2022
+Contributers:       PSE Group G
+
+File description:
 Module providing API with authentication; Signup, login and logout
 functionalities.
 

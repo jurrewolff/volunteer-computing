@@ -1,8 +1,8 @@
 /*
- * uploadFile Action component.
- * Handles the file upload and sends an api call to the back-end
- * via a http POST request.
+ * Sends the given information to the database if the button is clicked.
+ * The user will then be send to the dashboard.
  */
+
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import React from "react";
