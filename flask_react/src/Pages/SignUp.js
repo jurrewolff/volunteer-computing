@@ -1,27 +1,35 @@
 /*
- *
- *
+ * SIGNUP PAGE.
+ * The login page. Utilizes the fetch api which is implemented in
+ * the loginRequest file. First the user input is evaluated then the login
+ * request function is called
+ * Depending on the return status, the response is handled accordingly.
+ * The navbar functionality is called from the homepagenav page.
  */
-import Nav from '../Components/HomePageNav';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { SignupRequest } from '../Actions/signupRequest';
 
-import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+// Material ui imports
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Radio from '@mui/material/Radio';
+import Divider from '@mui/material/Divider';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 export default function Signup() {
-    const navigate = useNavigate();
+    // Styling
     const paperStyle = { padding: 20, margin: "20px auto" }
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
+    const navigate = useNavigate();
+
+    // State variables for user and textfield
     const [pass, setPass] = useState("");
     const [inst, setInst] = useState("");
     const [fname, setFname] = useState("");
@@ -29,15 +37,18 @@ export default function Signup() {
     const [uname, setUname] = useState("");
     const [email, setEmail] = useState("");
     const [background, setBackground] = useState("");
+    const [isScientist, setIsScientist] = useState('1');
+    const [authenticated, setAuthenticated] = useState(false)
 
+    // State variables for error handling and error messaging
     const [msgPass, setMsgPass] = useState("")
-
     const [passError, setPassError] = useState(false);
     const [fnameError, setFnameError] = useState(false);
     const [lnameError, setLnameError] = useState(false);
     const [unameError, setUnameError] = useState(false);
     const [emailError, setEmailError] = useState(false);
 
+    // Checks for first page rendering
     const [check1, setCheck1] = useState(false)
     const [check2, setCheck2] = useState(false)
     const [check3, setCheck3] = useState(false)
@@ -45,9 +56,8 @@ export default function Signup() {
     const [check5, setCheck5] = useState(false)
 
     const [clicked, setClicked] = useState(true)
-    const [isScientist, setIsScientist] = useState('1');
-    const [authenticated, setAuthenticated] = useState(false)
 
+    // 'XOR' toggle switch for selecting scientist or volunteer
     function clickIsScientist() {
         setClicked(true)
         setIsScientist('1')
@@ -58,6 +68,7 @@ export default function Signup() {
         setIsScientist('0')
     }
 
+    // Lost functionaility for correct error checking and error messaging
     const handleSignup = () => {
         if (fname === "" && isScientist) {
             setFnameError(true)
@@ -96,32 +107,16 @@ export default function Signup() {
         }
     }
 
+    // Lost functionality for correctly handling signup request
     useEffect(() => {
-        if (!fnameError && !unameError && !emailError && !lnameError &&
-            !passError && check1 && check2 && check3 && check4 && check5) {
-            SignupRequest(email, pass, uname, lname, fname, inst,
-                background, isScientist).then(response => {
-                    switch (response.code) {
-                        case 201:
-                            setAuthenticated(true)
-                            break;
-                        case 400:
-                        case 401:
-                        case 409:
-                        case 500:
-                            setMsgPass(response.description)
-                            setPassError(true)
-                            break;
-                        default:
-                            setMsgPass("Something went wrong, not your fault")
-                            setPassError(true)
-                            break;
-                    }
-                }
-                );
+        if (uname !== "" && email !== "" && pass !== "" && fname !== ""
+            && lname !== "" && inst !== "" && isScientist === '1') {
+            setAuthenticated(true)
         }
-    }, [fnameError, unameError, emailError, passError, lnameError, check1,
-        check2, check3, check4, check5]);
+        if (uname !== "" && email !== "" && pass !== "" && isScientist === '0') {
+            setAuthenticated(true)
+        }}, [uname, email, fname, pass, lname, inst, isScientist]);
+
 
     return (
         <>
@@ -229,7 +224,7 @@ export default function Signup() {
                                         margin="normal"
                                         variant="outlined"
                                         error={emailError}
-                                        helperText={emailError ? 'E-mail is required' : ' '}
+                                        helperText={!emailError ? 'E-mail is required' : ' '}
                                         label="E-mail"
                                         onChange={(e) => setEmail(e.target.value)}
                                         sx={{ mb: -1.5 }}
@@ -237,8 +232,8 @@ export default function Signup() {
                                 </Grid>
                                 <Grid>
                                     <Grid>
+                                        {/* Extensive way of signup and login request */}
                                         <SignupRequest
-                                        // onClick={() => handleSignup()}          //// Nog checks op signup zetten!
                                         username={uname}
                                         pass={pass}
                                         eMail={email}
@@ -247,13 +242,8 @@ export default function Signup() {
                                         inst={inst}
                                         isResearcher={isScientist}
                                         background={background}
+                                        authenticated={authenticated}
                                         />
-
-                                            {/* variant="contained"
-                                            onClick={() => handleSignup()}
-                                            sx={{ mt: 3, mb: 2, ml: 1 }}>
-                                            Sign up
-                                        </Button> */}
                                         <Button
                                             variant="contained"
                                             onClick={() => navigate(-1)}
@@ -274,19 +264,20 @@ export default function Signup() {
                             <Grid container direction={'column'} item xs={6}
                                 justifyContent="center"
                                 maxWidth="sm">
+                                {/* Box for the scientist roll with information */}
                                 <Grid>
                                     <Paper style={paperStyle}>
-                                        <Box><Typography variant="h4">Scientist </Typography></Box>
+                                        <Box><Typography variant="h4">Researchers </Typography></Box>
                                         <Typography>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            In congue massa eu metus mattis pellentesque. Proin ac porta eros.
+                                            A Researchers is any person linked to an institution wishing to
+                                            make use of the computational power our site provides.
                                         </Typography>
                                         <Box
                                             sx={{
                                                 display: 'flex',
                                                 flexDirection: 'row-reverse',
                                             }}>
-                                            <Checkbox {...label} checked={clicked}
+                                            <Radio {...label} checked={clicked} shape="round"
                                                 onChange={
                                                     (e) => {
                                                         setIsScientist(e.target.value)
@@ -297,22 +288,20 @@ export default function Signup() {
                                         </Box>
                                     </Paper>
                                 </Grid>
-
                                 <Divider orientation="horizontal" />
-
                                 <Grid >
+                                    {/* Box for the volunteer roll with information */}
                                     <Paper style={paperStyle}>
                                         <Box><Typography variant="h4">Volunteer </Typography></Box>
                                         <Typography>
-                                            Lorem ipsum dolor sit amet, consectetur
-                                            adipiscing elit. In congue massa eu metus mattis pellentesque.
-                                            Proin ac porta eros.
+                                            A Volunteer is any person with adequate computing power
+                                            wanting to help Researchers process their data.
                                         </Typography>
                                         <Box sx={{
                                             display: 'flex',
                                             flexDirection: 'row-reverse',
                                         }}>
-                                            <Checkbox {...label} checked={!clicked}
+                                            <Radio {...label} checked={!clicked} shape="round"
                                                 onChange={
                                                     (e) => {
                                                         setIsScientist(e.target.value)
@@ -326,7 +315,6 @@ export default function Signup() {
                             </Grid>
                         </Grid>
                     </Paper>
-                    {authenticated && navigate("/dashboard")}
                 </Container>
             </Box>
         </>

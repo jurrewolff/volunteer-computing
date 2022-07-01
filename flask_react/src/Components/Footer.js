@@ -1,24 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom"
+/*
+ * FOOTER PAGE.
+ * Renders the footer of the homepage.
+ */
 
-import AppBar from '@mui/material/AppBar';
+// Material ui imports
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-
-// TODO netter maken
-// UPDATE styling
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 
 export default function Footer() {
     return (
@@ -29,44 +18,32 @@ export default function Footer() {
                 container
                 direction="row"
                 justifyContent="space-evenly"
-
-                // alignItems="center"
-                // container
-                // justifyContent="space-between"
                 display="flex"
                 rowSpacing={1}
-                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 alignItems="flex-start"
+                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 sx={{ pb: 4 }}
             >
-
                 <Grid item xs={2}>
+                    {/* Footer text for account information */}
                     <Typography variant="h6" color="common.white">
                         Account
                     </Typography>
                     <Typography color="common.white">
-                        {/* <ul>
-                            <li><Link to="/Login"><i>Link 1</i></Link></li>
-                            <li><Link to="/Signup"><i></i>Link 2</Link></li>
-                        </ul> */}
+                        {/* Footer text account information */}
                     </Typography>
-
                 </Grid>
                 <Divider orientation="vertical" flexItem />
+                {/* Footer text for page items */}
                 <Grid item xs={2}>
                     <Typography variant="h6" color="common.white">
                         Page items
                     </Typography>
                     <Typography color="common.white">
-                        {/* <ul>
-                            <li><Link to="/About"><i>Link 1</i></Link></li>
-                            <li><Link to="/Scientist"><i></i>Link 2</Link></li>
-                            <li><Link to="/Volunteer"><i></i>Link 2</Link></li>
-                            <li><Link to="/....."><i></i>Link 2</Link></li>
-                        </ul> */}
+                        {/*TODO footer text page items */}
                     </Typography>
-
                 </Grid>
+                {/* Footer text for contact information */}
                 <Grid item xs={2} >
                     <Typography variant="h6" color="common.white">
                         Contact
@@ -77,12 +54,17 @@ export default function Footer() {
                     </Typography>
                 </Grid>
             </Grid>
+            {/* Copyricht text */}
             <Grid
                 container
                 justifyContent="center"
                 alignItems="center">
-                <Typography variant="caption" color="common.white">Copyright © Groep G</Typography>
-
+                <Typography
+                    variant="caption"
+                    color="common.white"
+                >
+                    Copyright © Groep G
+                </Typography>
             </Grid>
         </Box >
     );

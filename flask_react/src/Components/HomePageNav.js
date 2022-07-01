@@ -1,83 +1,83 @@
 /*
- * TODO
- *
- *
+ * NAVIGATIONBAR HOMEPAGE.
+ * One out of two navigationbars in the website.
+ * This navigation balk is for the landingpage, loginpage and the signup page.
+ * Each page has its own variant of this navigation bar. Furthermore, based on
+ * the login status, there are different items that are rendered.
  */
 
-import { useState } from 'react'
-import { Link, useNavigate } from "react-router-dom"
+// Package and functionality imports
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
-import { LogoutRequest } from '../Actions/logoutRequest';
-import Cookies from 'js-cookie'
 
-
+// Material ui imports
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
-import ListItem from '@mui/material/ListItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import FormControlLabel from '@mui/material/FormControlLabel';
 
+// Material ui icon import
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
-//TODO
+// Predefined constants
 const drawerWidth = 240;
 const navItems = ['About', 'Scientist', 'Volunteer'];
 
-/*
- * TODO
- */
-
-const handleLogout = () => {
-    LogoutRequest();
-};
-
 
 export default function Nav(props) {
+    // Conststant for a esponsive website
     const { window } = props;
-    const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = useState(false);
+    const container = window !== undefined ? () => window().document.body : undefined;
 
-    // if (Cookies.get("user_id") != "")
+    // User state functionality
+    let cookie = Cookies.get("user_id")
+    const [auth, setAuth] = useState(false);
+    const [user_cookie, setUser_cookie] = useState();
 
-    // const [auth, setAuth] = useState(true);
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const [logOutStatus, setLogoutStatus] = useState("");
-
+    // Function for drawing functionality if the website i opened on mobile
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
+    // Anchorpoints
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
 
     const handleLogOut = () => {
+        console.log("request!")
+
         const requestOptions = {
             method: 'GET',
-            headers: {}
+            headers: {
+                'user_id': user_cookie
+            }
         };
-        fetch("/api/logout", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                setLogoutStatus(result)
+
+        fetch("/api/results", requestOptions)
+            .then(res => res.json())
+            .then(data => {
+                // setData(data)
+                console.log(data)
             })
     }
 
+    // Logo functionality depending on which page the navbar is rendered
     const handleToggle = () => {
         if (props.home) {
             scroll.scrollToTop()
@@ -87,9 +87,17 @@ export default function Nav(props) {
         }
     }
 
-    const container = window !== undefined ? () => window().document.body : undefined;
+    useEffect(() => {
+        if (cookie === "") {
+            setAuth(false)
+        }
+        else {
+            setAuth(true)
+        }
 
+    }, [])
 
+    // Show different menu items depending on the login status
     const AccountNotLoggedIn = () => {
         return (
             <Box sx={{ p: 0, pl: 2 }}>
@@ -173,9 +181,7 @@ export default function Nav(props) {
 
     return (
         <>
-            <Box
-                sx={{ display: 'flex' }}
-            >
+            <Box sx={{ display: 'flex' }}>
                 <AppBar component="nav">
                     <Toolbar>
                         <IconButton
@@ -192,7 +198,6 @@ export default function Nav(props) {
                             component="div"
                             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                             onClick={handleToggle}
-                        // onClick={console.log(props.home)}
                         >
                             MUI
                         </Typography>
@@ -216,8 +221,9 @@ export default function Nav(props) {
                             ))}
                         </Box>
                         <Box>
-                            {Cookies.get("user_id") != "" ?
-                                AccountNotLoggedIn() : AccountLoggedIn()}
+                            {/* Render menu item according to login status */}
+                            {auth ?
+                                AccountLoggedIn() : AccountNotLoggedIn()}
                         </Box>
                     </Toolbar >
                 </AppBar >
@@ -228,11 +234,15 @@ export default function Nav(props) {
                         open={mobileOpen}
                         onClose={handleDrawerToggle}
                         ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
+                            // Better open performance on mobile.
+                            keepMounted: true,
                         }}
                         sx={{
                             display: { xs: 'block', sm: 'none' },
-                            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                            '& .MuiDrawer-paper': {
+                                boxSizing: 'border-box',
+                                width: drawerWidth
+                            },
                         }}
                     >
                     </Drawer>

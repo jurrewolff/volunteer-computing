@@ -50,26 +50,11 @@ ALLOWED_EXTENSIONS = {"c"}
 
 
 def allowed_file(filename):
-    """
+    """/
     Description:
     Check or file has the correct extensions.
     """
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-#SEEMS NOT USED
-@app.route("/api/output/<proj_id>")
-@login_required
-def send_output(proj_id):
-    """
-    Description:
-    Send file output file to client. Directly linked with db.
-    """
-    with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output") as f:
-        return render_template("content.html", text=f.read(), proj_id=proj_id)
-    return send_from_directory(
-        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "output"
-    )  # cached for a week
 
 
 @app.route("/api/download/<proj_id>")
@@ -80,17 +65,19 @@ def dl_output(proj_id):
     Send final results to website. Download file.
     """
     base_dir = os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}")
-    to_check = base_dir+ "/download"
+    to_check = base_dir + "/download"
     path = Path(to_check)
     if path.is_file() == False:
         f = open(base_dir + "/download", "w+")
-        test = subprocess.run(['sort','-k1','-n', base_dir + "/output"], capture_output=True, text=True)
+        test = subprocess.run(
+            ["sort", "-k1", "-n", base_dir + "/output"], capture_output=True, text=True
+        )
         r = test.stdout.split("\n")
         for line in r[:-1]:
             s = line.split(" ", 1)
             f.write(s[1] + "\n")
     return send_from_directory(
-        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "download"
+        base_dir, "download", as_attachment=True, cache_timeout=0
     )  # cached for a week
 
 
@@ -213,10 +200,6 @@ def make_celery(app):
     return celery
 
 
-# WAS DEZE DAN FF KIJKEN HIERO TODO
-celery = make_celery(app)
-
-# @celery.task(name="create_jobs")
 def create_jobs(project_id, quorum=1):
     """
     Description:
@@ -231,22 +214,6 @@ def create_jobs(project_id, quorum=1):
         for i, line in enumerate(f):
             # TODO decide if we want to store the input in the db
             insert_job((i, project_id, quorum, False), project_id)
-
-
-@celery.task(name="compile")
-def compile(proj_id):
-    """
-    Description:
-    Compilation of C-file to .Wasm file. Done by EMCC.
-    """
-    os.system(
-        f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -s EXIT_RUNTIME -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js"
-    )
-    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.js')}")
-    # we don't need to store .c files
-    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
-    # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
-    return "done"
 
 
 def change_prog_percentage(project_id, per):
@@ -276,29 +243,6 @@ def calculate_per(project_id):
     change_prog_percentage(project_id, perc)
 
 
-#NOT USED???????
-@app.route("/api/taskstatus/<task_id>")
-@login_required
-def taskstatus(task_id):
-    """
-    Description:
-    To see taskstatus, debug function.
-    """
-    task = compile.AsyncResult(task_id)
-    if task.state == "PENDING":
-        time.sleep(1)
-        # time.sleep(config.SERVER_SLEEP)
-        response = {
-            "queue_state": task.state,
-            "status": "Process is ongoing...",
-            "status_update": url_for("taskstatus", task_id=task.id),
-        }
-    else:
-        response = {"queue_state": task.state, "result": task.wait()}
-    return jsonify(response)
-
-
-
 def get_user_time_from_scretch(user_id):
     """
     Description:
@@ -325,7 +269,6 @@ def update_user_time(user_id, time=-1):
     db.con.commit()
 
 
-
 def update_total_time_contributed(new_contribution_time, user_id):
     """
     Description:
@@ -337,30 +280,6 @@ def update_total_time_contributed(new_contribution_time, user_id):
     time = res[0]
     new_time = int(new_contribution_time) + int(time)
     update_user_time(user_id, new_time)
-
-
-# @app.route("/api/runproject/<project_id>", methods=("GET", "POST"))
-# @login_required
-# def datatest(project_id):
-#     """
-#     Description:
-#     Function which send the jobs to....
-#     """
-#     user_id = session["user_id"]
-#     if request.method == "POST":
-#         data = request.form.get("data")
-#         job_id = request.form.get("job_id")
-#         # new_contribution_time = request.form.get("time")
-#         # update_contribution((new_contribution_time, user_id, project_id))
-#         # update_total_time_contributed(new_contribution_time, user_id)
-#         succes, return_val = receive_work(project_id, job_id, user_id, data)
-#         if not succes:
-#             return return_val
-#         calculate_per(project_id)
-#         # return redirect(f"/output/{proj_id}")
-
-#     # arguments from scheduler
-#     current_contributed_time = get_contributed_time((user_id, project_id))
 
 
 @app.route("/api/runproject/<project_id>", methods=["GET"])
@@ -376,27 +295,50 @@ def start_running_project(project_id):
 @app.route("/api/get_job/<project_id>", methods=["GET"])
 @login_required
 def request_job(project_id):
+    """
+    Description:
+    Job request function uses schedule.py to get results.
+    """
     user_id = session["user_id"]
     succes, return_val = give_work(project_id, user_id)
     if succes:
         data = get_line_from_file(
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
-        insert_timer((return_val, user_id))
+        insert_timer((return_val, user_id, project_id))
         return jsonify({"job_id":return_val, "data": data})
     return return_val
+
+
+def score_plus(user_id):
+    """
+    Description:
+    Score is added to user. Every job is valued 1 point.
+    """
+    query = f"UPDATE User SET score = score + 1 WHERE user_id = {user_id}"
+    db.cur.execute(query)
+    db.con.commit()
+
 
 @app.route("/api/post_result/<project_id>", methods=["POST"])
 @login_required
 def handle_result(project_id):
+    """
+    Description:
+    When a post message from the post_result is received it will be handle here.
+    """
     user_id = session["user_id"]
     data = request.form.get("data")
     job_id = request.form.get("job_id")
-    addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time((job_id, user_id))
+    addition_time_contributed = math.floor(time.time_ns() / 1000000) - retrieve_time(
+        (job_id, user_id, project_id)
+    )
     allready_contributed_time = get_contributed_time((user_id, project_id))
     new_contribution_time = allready_contributed_time + addition_time_contributed
+
     update_contribution((new_contribution_time, user_id, project_id))
     update_total_time_contributed(addition_time_contributed, user_id)
+    score_plus(user_id)
     succes, return_val = receive_work(project_id, job_id, user_id, data)
     if not succes:
         return return_val
@@ -406,21 +348,93 @@ def handle_result(project_id):
 
 @app.route("/api/get_template/template.js")
 def jstemplate():
-    with open('app/templates/template.js', 'r') as content_file:
+    """
+    Description:
+    Sends the JS template in it needed form.
+    """
+    with open("app/templates/template.js", "r") as content_file:
         content = content_file.read()
         return Response(content, mimetype="text/javascript")
     # return render_template("template.js", name=proj_id)
 
 
-
 @app.route("/api/get_worker/worker.js")
 def serve_worker():
-    with open('app/templates/worker.js', 'r') as content_file:
+    """
+    Description:
+    Sends the worker in it needed form.
+    """
+    with open("app/templates/worker.js", "r") as content_file:
         content = content_file.read()
         return Response(content, mimetype="text/javascript")
 
+
 @app.route("/api/get_worker/get_wasm/<proj_id>.wasm")
 def serve_wasm(proj_id):
-    with open(os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.wasm"), 'rb') as content_file:
+    """
+    Description:
+    Sends the wasm file in its needed form.
+    """
+    with open(
+        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}/main.wasm"), "rb"
+    ) as content_file:
         content = content_file.read()
         return Response(content, mimetype="application/wasm")
+
+
+# Setup celery
+celery = make_celery(app)
+
+
+@celery.task(name="compile")
+def compile(proj_id):
+    """
+    Description:
+    Compilation of C-file to .Wasm file. Done by EMCC.
+    """
+    os.system(
+        f"emcc {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')} -s EXIT_RUNTIME -o {os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main')}.js"
+    )
+    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.js')}")
+    # we don't need to store .c files
+    os.remove(f"{os.path.join(app.config['PROJECTS_DIR'], f'{proj_id}/main.c')}")
+    # subprocess.run(["emcc", f"{os.path.join(app.config['UPLOAD_FOLDER'], filename)}",f" -o {os.path.join(app.config['COMPILED_FILES_FOLDER'], filename_without_extension)}.js"])
+    return "done"
+
+
+# Debug Function
+# @app.route("/api/taskstatus/<task_id>")
+# @login_required
+def taskstatus(task_id):
+    """
+    Description:
+    To see taskstatus, debug function.
+    """
+    task = compile.AsyncResult(task_id)
+    if task.state == "PENDING":
+        time.sleep(1)
+        # time.sleep(config.SERVER_SLEEP)
+        response = {
+            "queue_state": task.state,
+            "status": "Process is ongoing...",
+            "status_update": url_for("taskstatus", task_id=task.id),
+        }
+    else:
+        response = {"queue_state": task.state, "result": task.wait()}
+    return jsonify(response)
+
+
+# Debug Function
+# @app.route("/api/output/<proj_id>")
+# @login_required
+def send_output(proj_id):
+    """
+    Description:
+    Send file output file to client. Directly linked with db.
+    """
+    with open(f"{app.config['PROJECTS_DIR']}/{proj_id}/output") as f:
+        return render_template("content.html", text=f.read(), proj_id=proj_id)
+    return send_from_directory(
+        os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "output"
+    )  # cached for a week
+

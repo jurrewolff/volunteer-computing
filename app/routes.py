@@ -59,7 +59,7 @@ def get_results():
             )
 
         # Returns a list with a dictionary per project.
-        projects = project.get_projects_from_user(user_id)
+        projects = project.get_projects_researcher(user_id)
         return json.dumps(projects)
 
     elif request.method == "PATCH":
@@ -86,7 +86,7 @@ def get_project():
 @login_required
 def get_past_projects():
     user_id = request.headers.get("user_id")
-    result = results.get_projects_of_user(user_id)
+    result = project.get_projects_from_user(user_id)
     return json.dumps(result)
 
 
