@@ -137,6 +137,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
 def give_work(project_id, user_id):
     """
     Gives work. Picks a random job from all open jobs where this user has not yet submitted a result.
+    :return: Bool indicating succes and either a job_id or an error message.
     """
     possible = possible_jobs(project_id, user_id)
     if len(possible) == 0:
