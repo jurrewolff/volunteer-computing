@@ -3,17 +3,20 @@
  * Renders the footer of the homepage.
  */
 
-// Material ui imports
+// Material-UI imports
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
+// ----------------------------------------------------------------------
+
+// FOOTER
 export default function Footer() {
     return (
         <Box
             backgroundColor={'black'}
-            sx={{ p: 10 }}>
+            sx={{ p: 5 }}>
             <Grid
                 container
                 direction="row"
@@ -26,19 +29,12 @@ export default function Footer() {
             >
                 <Grid item xs={2}>
                     {/* Footer text for account information */}
-                    <Typography variant="h6" color="common.white">
-                        Account
-                    </Typography>
                     <Typography color="common.white">
                         {/* Footer text account information */}
                     </Typography>
                 </Grid>
                 <Divider orientation="vertical" flexItem />
-                {/* Footer text for page items */}
                 <Grid item xs={2}>
-                    <Typography variant="h6" color="common.white">
-                        Page items
-                    </Typography>
                 </Grid>
                 {/* Footer text for contact information */}
                 <Grid item xs={2} >
@@ -51,7 +47,7 @@ export default function Footer() {
                     </Typography>
                 </Grid>
             </Grid>
-            {/* Copyricht text */}
+            {/* Copyright text */}
             <Grid
                 container
                 justifyContent="center"
@@ -65,5 +61,4 @@ export default function Footer() {
             </Grid>
         </Box >
     );
-
 }

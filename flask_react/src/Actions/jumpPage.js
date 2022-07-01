@@ -1,11 +1,12 @@
-/* NAVBAR FUNCTIONALITY PAGE.
+/* 
+* NAVBAR FUNCTIONALITY PAGE
 * Functionality that enables other functions to 'jump' to other pages.
-* This is not visible on the website.This way of implemenating the jump
-* functionaility, leads to quiker rendering of the pages.
+* This is not visible on the website, but is a way of implemenating the 
+* routing functionaility, leading to quiker rendering of the pages.
 */
+import { Routes, Route } from "react-router-dom"
 
 // Page imports for defining the routes
-import { Routes, Route } from "react-router-dom"
 import Home from "../Pages/Home"
 import Upload from "../Pages/Upload"
 import Login from "../Pages/Login"

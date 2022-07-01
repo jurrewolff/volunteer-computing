@@ -9,12 +9,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col, Card } from "react-bootstrap";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import PermanentDrawerLeft from '../Components/SideMenu';
+
 import { Box, Container } from '@mui/material';
 import { ThemeProvider } from '@material-ui/core/styles'
+
+import PermanentDrawerLeft from '../Components/SideMenu';
 import { theme } from '../Components/Theme'
 
+// ----------------------------------------------------------------------
 
+// SHOW PAST PROJECTS
 export default function PastProjects() {
     const [data, setData] = useState([{}]);
     let user_cookie = Cookies.get("user_id")
@@ -40,7 +44,6 @@ export default function PastProjects() {
                 setData(data)
             })
     }, []);
-
 
     const ProjectsList = (data) => {
         // If no projects exist, this is returned.

@@ -16,7 +16,6 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Routes, Route, useNavigate } from "react-router-dom"
 import Image from '../Images/backgroundpic.png';
 
 
@@ -27,7 +26,6 @@ const styles = {
     },
     
     base: {
-        // backgroundImage: `url(${Image})`,
         width: '100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

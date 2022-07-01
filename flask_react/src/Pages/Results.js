@@ -43,7 +43,7 @@ export default function Results() {
             }
         };
 
-        // Retrieves all projects that the user has uploaden.
+        // Retrieves all projects the user has uploaded
         fetch("/api/results", requestOptions)
             .then(res => res.json())
             .then(data => {
@@ -53,7 +53,7 @@ export default function Results() {
     }, [true]);
 
 
-    // Downloads the results of the given project.
+    // Downloads the results of the given project
     const downloadResultFile = (event, value) => {
         console.log(event)
         console.log(value)
@@ -70,9 +70,9 @@ export default function Results() {
     }
 
 
-    // Returns all projects displayed in a card per project.
+    // Returns all projects displayed in a card per project
     const readResults = ({ data }) => {
-        // If no projects exist, this is returned.
+        // If no projects exist, this is returned
         if (data.length === 0) {
             return <h1>You have not yet uploaded any projects.</h1>
         }
@@ -92,7 +92,7 @@ export default function Results() {
                 <Col></Col>
             </Row>
 
-            {/* Creates a card for every project in data. */}
+            {/* Creates a card for every project in data */}
             {data.map((project) =>
                 <Row key={"result" + project.project_id} className="mb-3" style={{ width: "80%", height: "100px", marginTop: "5%", marginBottom: "3%", marginLeft: "100px" }}>
                     <Col>
@@ -111,7 +111,7 @@ export default function Results() {
                         </Card>
                     </Col>
                     <Col xs={1} sm={1} md={1} lg={1} style={{ marginTop: "3%" }}>
-                        {/* A downloadbutton is shown if the project is done, otherwise the progress is shown. */}
+                        {/* A downloadbutton is shown if the project is done, otherwise the progress is shown */}
                         {project.done === 1 ?
                             <Button onClick={event => downloadResultFile(event, project.project_id)}>Download</Button>
                             : <p>Progress: {project.progress}%</p>

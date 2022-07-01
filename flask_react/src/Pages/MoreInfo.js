@@ -5,21 +5,22 @@
  * the project.
  */
 
-
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Button, Card } from '@mui/material';
 import { useNavigate } from "react-router-dom"
 import { Row, Col } from "react-bootstrap";
+import { Container, Button, Card } from '@mui/material';
+
 import PermanentDrawerLeft from '../Components/SideMenu';
 
+// ----------------------------------------------------------------------
 
 export default function MoreInfo() {
     const [project, setProject] = useState({});
     const linkVars = window.location.pathname.split("/").slice(2);
     const navigate = useNavigate();
 
-    // Retrieves the data of the project with the given project_id.
+    // Retrieves the data of the project with the given project_id
     useEffect(() => {
         const requestOptions = {
             method: 'GET',
@@ -35,13 +36,13 @@ export default function MoreInfo() {
             })
     }, []);
 
-    // Returns one page previous.
+    // Returns one page previous
     function goBack() {
         navigate(-1)
     }
 
 
-    // Function for the responsive button.
+    // Function for the responsive button
     function clickButton() {
         var url = 'http://localhost:3601/api/runproject/' + linkVars[0];
         window.open(url, '_tab');
@@ -59,7 +60,7 @@ export default function MoreInfo() {
             </Card>
 
             {/* Depending on whether the project is done, there will be either
-                a start computing button or text. */}
+                a start computing button or text */}
             <Row>
                 {project.done == "0" ?
                     <div>

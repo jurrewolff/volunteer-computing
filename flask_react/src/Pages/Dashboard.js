@@ -3,92 +3,84 @@
  * The leaderboard can be ordered by time contributed, score or trust level.
  */
 
- import React from 'react';
+import React from 'react';
 import './Dashboard.css';
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Row, Col, Badge } from "react-bootstrap";
+import { DropdownButton, Dropdown } from 'react-bootstrap';
+import Cookies from "js-cookie";
+
 import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
-import {DropdownButton, Dropdown } from 'react-bootstrap';
+import { ThemeProvider } from '@material-ui/core/styles';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 
-
-// TODO FIXEN!!!
-// import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import Footer from '../Components/Footer'
-import JumpPage from "../Actions/jumpPage"
-import Iconify from '../Components/iconify';
-import ResponsiveAppBar from '../Components/Navbar'
 import PermanentDrawerLeft from '../Components/SideMenu';
 import { theme } from '../Components/Theme'
 
-import { ThemeProvider } from '@material-ui/core/styles'
-import { createTheme, useTheme } from '@mui/material/styles'
+// ----------------------------------------------------------------------
 
-
-
-const MyComponent = () => {
-  const theme = useTheme();
-  return <JumpPage bgcolor={theme.palette.background.default} width={100} height={100} />;
-};
-
+// DASHBOARD FEATURES
 const Dashboard = () => {
 
-  let user_cookie = Cookies.get("user_id")
-  const navigate = useNavigate();
-  const [data, setData] = useState([{}]);
-  const [amount, setAmount] = useState(10);
-  const [order_by, setOrderBy] = useState("trust_level");
+    // Render dashboard depending on user-type
+    let user_cookie = Cookies.get("user_id")
+    const navigate = useNavigate();
+    const [data, setData] = useState([{}]);
+    const [amount, setAmount] = useState(10);
+    const [order_by, setOrderBy] = useState("trust_level");
 
-  const changeAmount = e => {
-    setAmount(e.target.value);
-};
+    const changeAmount = e => {
+        setAmount(e.target.value);
+    };
 
-// Depending on the given param, either the trust level, score
-// or runtime will be given of best_user.
-const renderSwitch = (best_user, param) => {
-    switch(param) {
-        case 'trust_level':
-            return (best_user.trust_level);
-        case 'score':
-            return (best_user.score);
-        case 'runtime':
-            return (best_user.runtime);
-        default:
-            return (best_user.trust_level);
-    }
-  };
+    /* 
+    Depending on the given param, either the trust level, score
+    or runtime will be given of best_user.
+    */
+    const renderSwitch = (best_user, param) => {
+        switch (param) {
+            case 'trust_level':
+                return (best_user.trust_level);
+            case 'score':
+                return (best_user.score);
+            case 'runtime':
+                return (best_user.runtime);
+            default:
+                return (best_user.trust_level);
+        }
+    };
 
-  const renderOrdering = (param) => {
-    switch(param) {
-        case 'trust_level':
-            return ('Trust level');
-        case 'score':
-            return ('Score');
-        case 'runtime':
-            return ('Runtime');
-        default:
-            return ('Trust level');
-    }
-  };
+    const renderOrdering = (param) => {
+        switch (param) {
+            case 'trust_level':
+                return ('Trust level');
+            case 'score':
+                return ('Score');
+            case 'runtime':
+                return ('Runtime');
+            default:
+                return ('Trust level');
+        }
+    };
 
-  const markers_slider_dashboard = [
+    const markers_slider_dashboard = [
         {
-        value: 5,
-        label: '5',
+            value: 5,
+            label: '5',
         },
         {
-        value: 50,
-        label: '50',
+            value: 50,
+            label: '50',
         },
     ];
 
-  useEffect(() => {
+    useEffect(() => {
         if (!user_cookie) {
             console.log("User not logged in, redirecting to login page")
             return navigate('/login')
@@ -102,87 +94,86 @@ const renderSwitch = (best_user, param) => {
             }
         };
 
-        // Gets the top n users in the chosen category. The n is given
-        // by "amount" and the category by "order_by" in requestOptions.
+        /* 
+        Gets the top n users in the chosen category. The n is given
+        by "amount" and the category by "order_by" in requestOptions.
+        */
         fetch("/api/dashboard", requestOptions)
             .then(res => res.json())
             .then(data => {
                 setData(data)
-        })
-  }, [amount, order_by]);
+            })
+    }, [amount, order_by]);
 
-  return (
+    return (
 
-    <ThemeProvider theme={theme}>
-      <>
-        <PermanentDrawerLeft />
-        {/* <MyComponent /> */}
-        {/* Andere features */}
-        <Box>
-            <Box
-                // border="dashed"
-                component="main"
-                sx={{
-                pl: 30,
-                flexGrow: 1,
-                height: '100vh',
-                overflow: 'auto',
-                }}
-            >
-                <Grid
-                    justify="center"
-                    style={{
-                            width: "50vw",
-                            marginLeft: "15vw"
+        <ThemeProvider theme={theme}>
+            <>
+                <PermanentDrawerLeft />
+                <Box>
+                    <Box
+                        component="main"
+                        sx={{
+                            pl: 30,
+                            flexGrow: 1,
+                            height: '100vh',
+                            overflow: 'auto',
+                        }}
+                    >
+                        <Grid
+                            justify="center"
+                            style={{
+                                width: "50vw",
+                                marginLeft: "15vw"
                             }}>
-                <Grid >
-                <Container maxWidth="lg" sx={{}}>
-                    <h1>Top researchers and volunteers</h1>
-                </Container>
-                Amount of users shown:
-                <Slider
-                    defaultValue={10}
-                    step={5}
-                    min={5}
-                    max={50}
-                    marks={markers_slider_dashboard}
-                    valueLabelDisplay="auto"
-                    onChange={changeAmount}
-                />
-                </Grid>
-                <Grid direction='row' container spacing={1}>
-                    <Grid container item sm={6}>
-                        {/* The dropdown menu where the ordering can be chosen. */}
-                        <DropdownButton id='id' title='Order by:'>
-                            <Dropdown.Item ><div onClick={() => setOrderBy('trust_level')}>Trust level</div></Dropdown.Item>
-                            <Dropdown.Item ><div onClick={() => setOrderBy('score')}>Score</div></Dropdown.Item>
-                            <Dropdown.Item ><div onClick={() => setOrderBy('runtime')}>Runtime</div></Dropdown.Item>
-                        </DropdownButton>
-                    </Grid>
-                    <Grid container item sm={6}>
-                        {renderOrdering(order_by)}
-                    </Grid>
-                </Grid>
-                <Row>
-                    <Col>
-                        {/* The leaderboard. */}
-                        <ListGroup as="ol" numbered>
-                            {data.map((best_user) =>
-                                <ListGroup.Item key={best_user.user_id} as="li">{best_user.username}
-                                <Badge bg="primary" style={{margin: "10px"}} pill>{renderSwitch(best_user, order_by)}</Badge>
-                                </ListGroup.Item>
+                            <Grid >
+                                <Container maxWidth="lg" sx={{}}>
+                                    <h1>Top researchers and volunteers</h1>
+                                </Container>
+                                Amount of users shown:
+                                <Slider
+                                    defaultValue={10}
+                                    step={5}
+                                    min={5}
+                                    max={50}
+                                    marks={markers_slider_dashboard}
+                                    valueLabelDisplay="auto"
+                                    onChange={changeAmount}
+                                />
+                            </Grid>
+                            <Grid direction='row' container spacing={1}>
+                                <Grid container item sm={6}>
+                                    {/* The dropdown menu where the ordering can be chosen. */}
+                                    <DropdownButton id='id' title='Order by:'>
+                                        <Dropdown.Item ><div onClick={() => setOrderBy('trust_level')}>Trust level</div></Dropdown.Item>
+                                        <Dropdown.Item ><div onClick={() => setOrderBy('score')}>Score</div></Dropdown.Item>
+                                        <Dropdown.Item ><div onClick={() => setOrderBy('runtime')}>Runtime</div></Dropdown.Item>
+                                    </DropdownButton>
+                                </Grid>
+                                <Grid container item sm={6}>
+                                    {renderOrdering(order_by)}
+                                </Grid>
+                            </Grid>
+                            <Row>
+                                <Col>
+                                    {/* The leaderboard. */}
+                                    <ListGroup as="ol" numbered>
+                                        {data.map((best_user) =>
+                                            <ListGroup.Item key={best_user.user_id} as="li">{best_user.username}
+                                                <Badge bg="primary" style={{ margin: "10px" }} pill>{renderSwitch(best_user, order_by)}</Badge>
+                                            </ListGroup.Item>
 
-                            )}
-                        </ListGroup>
-                    </Col>
-                </Row>
-                </Grid>
-            </Box>
-        </Box>
-      </>
-    </ThemeProvider>
+                                        )}
+                                    </ListGroup>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </Box>
+                </Box>
+            </>
+        </ThemeProvider>
 
-  );
+    );
 };
 
 export default Dashboard;

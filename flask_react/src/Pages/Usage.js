@@ -1,5 +1,5 @@
-import React from 'react'; // niet per se nodig nu, toekomst wss wel
 
+import React from 'react'; // niet per se nodig nu, toekomst wss wel
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -7,8 +7,10 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+
 import PermanentDrawerLeft from '../Components/SideMenu';
 
+// ----------------------------------------------------------------------
 
 const Usage = () => {
   return (

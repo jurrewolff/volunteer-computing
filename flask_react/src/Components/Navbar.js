@@ -1,8 +1,19 @@
+/*
+ * NAVIGATION BAR
+ * The general use navigation bar is visible throughout the whole page as header.
+ * The app-bar contains buttons to the homepage, in the logo as well as in the about
+ * button. On the right there is a toggle menu containing redirects that are rendered
+ * depending on user-status. Whenever a user is not logged in, options for signup and 
+ * login, and when logged in, options for dashboard, account information and logout.
+ * The navigation bar is visible throughout the whole page as header.
+ */
+
 import * as React from 'react';
 import Cookies from 'js-cookie'
 import { Link } from "react-router-dom"
-import { Link as scrollLink, animateScroll as scroll } from 'react-scroll';
+import { animateScroll as scroll } from 'react-scroll';
 
+// Material-UI imports
 import { makeStyles } from '@mui/styles';
 import { SvgIcon } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
@@ -17,11 +28,11 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import Ava from '../Images/icon.svg';
 
+// ----------------------------------------------------------------------
 
-
+// STYLING
 const useStyles = makeStyles({
   root: {
     background: 'linear-gradient(45deg, #4987b9 30%, #dce775 90%)',
@@ -35,25 +46,21 @@ const useStyles = makeStyles({
   },
 });
 
+// ----------------------------------------------------------------------
 
-
+// NAVIGATION APP BAR
 const ResponsiveAppBar = (props) => {
   const classes = useStyles();
+  const Items = ['About', 'Scientist', 'Volunteer'];
 
+  // Constants for handling appbar-features
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  // Van Lleyton homepage nav
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
   const [logOutStatus, setLogoutStatus] = React.useState("");
-  // ...
 
-
+  // Handles appbar-features
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -69,35 +76,40 @@ const ResponsiveAppBar = (props) => {
     setAnchorElUser(null);
   };
 
+  const toggleToElement = (element) => {
+    scroll.scrollToTop()
+  };
+
+  function HomeIcon(props) {
+    return (
+      <SvgIcon {...props}>
+        <path d="0 0 474.91 518.56" />
+      </SvgIcon>
+    );
+  };
+
+  // USER-LOG STATUS
+  // Handles the user-account logout request
   const handleLogOut = () => {
     const requestOptions = {
       method: 'GET',
       headers: {}
-  };
-  fetch("/api/logout", requestOptions)
+    };
+    fetch("/api/logout", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-          setLogoutStatus(result)
+        setLogoutStatus(result)
       })
-
   };
 
-  const Items = ['About', 'Scientist', 'Volunteer'];
 
-
-  const toggleToElement = (element) => {
-    scroll.scrollToTop()
-}
-
-  // TODO: Lleyton fix scroll
+  // Redirects to a page
   const makeLink = (page, link, element) => {
     return (
         <Box >
       <MenuItem key={page} disablePadding sx={{ flexGrow: 1, mr: 1, display: { xs: 'none', md: 'flex' } }} >
         <Link to={link} style={{ textDecoration: 'none' }}>
             <Button
-              // key={page}
-              // onClick={handleCloseNavMenu}
               sx={{ color: 'white', textAlign: 'left' }}
             >
               {page}
@@ -109,6 +121,7 @@ const ResponsiveAppBar = (props) => {
     )
   };
 
+  // Renders menu-options based on user-status
   const AccountNotLoggedIn = () => {
     return (
       <>
@@ -152,15 +165,6 @@ const ResponsiveAppBar = (props) => {
     )
   };
 
-  function HomeIcon(props) {
-    return (
-      <SvgIcon {...props}>
-        <path d="0 0 474.91 518.56" />
-      </SvgIcon>
-    );
-  }
-
-
   return (
     <AppBar position="sticky" className={classes.root}>
       <Container maxWidth="xl" >
@@ -183,7 +187,6 @@ const ResponsiveAppBar = (props) => {
                   color: '#00315c',
                 },
               textDecoration: 'none',
-
             }}
           >
             Compunity
@@ -239,12 +242,12 @@ const ResponsiveAppBar = (props) => {
             }}
           >
           </Typography>
-
+          {/* Links to the homepage */}
           {makeLink("About", "/", 'About')}
           {makeLink("Volunteer", "/", 'Volunteer')}
           {makeLink("Scientist", "/", 'Scientist')}
 
-
+          {/* The right toggle menu */}
           <Box sx={{ flexGrow: 0, marginLeft: "auto" }} >
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -269,10 +272,6 @@ const ResponsiveAppBar = (props) => {
               onClose={handleCloseUserMenu}
             >
               <Box>
-                {/* <MenuItem key={'Logout'} onClick={handleLogout}>
-                  <Typography textAlign="center">{'Logout'}</Typography>
-                </MenuItem> */}
-                {/* TODO: wat doet logout request hier? */}
                 {Cookies.get("user_id") ? AccountLoggedIn() : AccountNotLoggedIn()}
               </Box>
             </Menu>

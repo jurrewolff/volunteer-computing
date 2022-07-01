@@ -14,6 +14,10 @@ using the Emscripten compiler. Each client worker then executes this Wasm code w
 input file as an argument. When a client is done executing they will post their result and start executing again after
 getting a new input from the web server.
 
+## How it works
+
+A project is made up of a c program and an input file. Uploaded c files are compiled to WebAssembly by the webserver using the Emscripten compiler. Each client worker then executes this Wasm code with a single line from the uploaded input file as an argument. When a client is done executing they will post their result and start executing again after getting a new input from the web server.
+
 ## Installation
 
 1. Install the required dependencies: `docker, docker-compose, npm`
@@ -33,7 +37,12 @@ The application database can be managed using "phpmyadmin". This service is acce
 `bash start.sh` can be used to start the website.
 
 ## License
+<<<<<<< Updated upstream
 DO WHAT THE F*CK YOU WANT
+=======
+
+DO WHAT EVER THE FUCK YOU WANT
+>>>>>>> Stashed changes
 
 ## Overview
 

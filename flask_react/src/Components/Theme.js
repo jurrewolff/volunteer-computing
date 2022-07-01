@@ -1,4 +1,8 @@
-// theme.js
+/*
+ * FOOTER PAGE
+ * Renders parts of the theme throughout the website.
+ */
+
 import { createTheme } from '@material-ui/core/styles'
 
 export const theme = createTheme({
