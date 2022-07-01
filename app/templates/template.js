@@ -1,3 +1,4 @@
+// This template was provided by Emscripten
 function execute_C_file(input, c_out, project_id) {
 
 // The Module object: Our interface to the outside world. We import
