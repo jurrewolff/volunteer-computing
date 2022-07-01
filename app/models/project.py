@@ -29,7 +29,7 @@ def project_exists(project_id):
 
 def insert_project(dic):
     """
-    Input: 
+    Input:
     dictionary should contain the key: project_id, name, description, block_size, trust_level,
     owner, random_validation, runtime, quorum.
 
@@ -218,7 +218,7 @@ def get_projects_from_user(user_id):
                 "description": x[2],
                 "done": x[3],
                 "progress": x[4],
-                "contributed_time": math.floor(x[5] / 1000)
+                "contributed_time": math.floor(x[5] / 1000),
             }
             update_project_time(x[0])
             projects.append(project)

@@ -11,6 +11,7 @@ from main import app
 
 from app.models.database import *
 
+
 def update_contribution(val):
     """
     Input:
@@ -66,7 +67,7 @@ def contribution_exists(val):
     res = db.cur.fetchone()
     if res == None:
         return False
-    else :
+    else:
         return True
 
 
@@ -91,5 +92,3 @@ def get_contributed_time(val):
         db.cur.execute(sql)
         res = db.cur.fetchone()
         return res[0]
-
-

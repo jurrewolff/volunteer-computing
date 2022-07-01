@@ -23,7 +23,11 @@ def insert_result(val):
     Output:
     True if result entry is inserted. Fasle otherwise.
     """
-    if user.account_id_exists(val[0]) and project.check_project_exists(val[1]) and not result_exists((val[0], val[1])):
+    if (
+        user.account_id_exists(val[0])
+        and project.check_project_exists(val[1])
+        and not result_exists((val[0], val[1]))
+    ):
         sql = "INSERT INTO Result VALUES (%s, %s, %s)"
         db.cur.execute(sql, val)
         db.con.commit()

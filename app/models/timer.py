@@ -27,7 +27,7 @@ def insert_timer(val):
     Inserts a timer entry into the Timer table. If the timer allready exists. The
     start_time is updated with the current time.
     """
-    if user.account_id_exists(val[1]) and not timer_exists(val) :
+    if user.account_id_exists(val[1]) and not timer_exists(val):
         sql = "INSERT INTO Timer VALUES (%s, %s, %s, %s)"
         start_time = math.floor(time.time_ns() / 1000000)
         db.cur.execute(sql, val + tuple([start_time]))
@@ -72,5 +72,5 @@ def timer_exists(val):
     res = db.cur.fetchone()
     if res == None:
         return False
-    else :
+    else:
         return True

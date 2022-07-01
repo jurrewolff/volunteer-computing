@@ -13,7 +13,12 @@ from app.util import build_response
 from http import HTTPStatus
 
 from app.models.database import db
-from app.models.jobs import increment_quorum_size, possible_jobs, job_marked_done, submitted_already_for_job
+from app.models.jobs import (
+    increment_quorum_size,
+    possible_jobs,
+    job_marked_done,
+    submitted_already_for_job,
+)
 from app.models.results import save_result, get_number_of_results
 from app.models.user import get_trust_levels, update_trust_level
 from app.models.project import get_n_open_jobs
@@ -21,18 +26,21 @@ from app.models.project import get_n_open_jobs
 
 def decide_if_work_is_trusted(job_id, project_id, user_id):
     """
-    Decides if work is trusted based on the submitting users estimated error rate. 
+    Decides if work is trusted based on the submitting users estimated error rate.
     If a user has an error rate that is too high they will not be trused. Otherwise there result will be trusted with probability 1-sqrt(user_error_rate / project_allowed_error_rate).
     :returns: Bool indicating whether the result is trusted
     """
-    user_error_rate, project_allowed_error_rate = get_trust_levels(job_id, project_id, user_id)
+    user_error_rate, project_allowed_error_rate = get_trust_levels(
+        job_id, project_id, user_id
+    )
     if user_error_rate > project_allowed_error_rate:
         # dont trust host
         return False
     else:
         # host is trused
         probabilty_of_duplication = math.sqrt(
-            user_error_rate / project_allowed_error_rate)
+            user_error_rate / project_allowed_error_rate
+        )
         # randomly mark the result as untrusted with probabilty_of_duplication
         if random.uniform(0, 1) <= probabilty_of_duplication:
             return False
@@ -49,28 +57,31 @@ def job_done(project_id, job_id, correct_result):
 
     # TODO remove cached results form db
     db.cur.execute(
-        f"""SELECT volunteer, result FROM Result WHERE job_id ='{job_id}' AND project_id = '{project_id}' ;""")
+        f"""SELECT volunteer, result FROM Result WHERE job_id ='{job_id}' AND project_id = '{project_id}' ;"""
+    )
     results = db.cur.fetchall()
 
     for user_id, result in results:
         if result == correct_result:
-            update_trust_level(user_id, 'trust_level * 0.95')
+            update_trust_level(user_id, "trust_level * 0.95")
         else:
-            update_trust_level(user_id, 'trust_level + 0.1')
+            update_trust_level(user_id, "trust_level + 0.1")
 
     # write majority agreed result to fs
     proj_dir = os.path.join(app.config["PROJECTS_DIR"], f"{project_id}")
     # app.logger.warning(f"correct_result: {correct_result}")
     with open(os.path.join(proj_dir, "output"), "a+") as file:
-        file.write(f'{job_id} ' + correct_result)
+        file.write(f"{job_id} " + correct_result)
 
     # Check if this was the last open job for this project
 
     if get_n_open_jobs(project_id) == 0:
         db.cur.execute(
-            f"UPDATE Project SET done = 1 WHERE project_id = '{project_id}';")
+            f"UPDATE Project SET done = 1 WHERE project_id = '{project_id}';"
+        )
         db.con.commit()
         # TODO put result file in correct order
+
 
 # helper function
 def single_result_query(query):
@@ -80,11 +91,12 @@ def single_result_query(query):
 
 def majority_agrees(project_id, job_id):
     """
-    Determines whether a majority of the results agree 
+    Determines whether a majority of the results agree
     :returns: the majority result if there is a majority otherwise return False.
     """
     db.cur.execute(
-        f"Select result FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
+        f"Select result FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
+    )
     all_results = [x[0] for x in db.cur.fetchall()]
     c = Counter(all_results)
     try:
@@ -101,21 +113,26 @@ def majority_agrees(project_id, job_id):
 
 def receive_work(project_id, job_id, volunteer_id, result):
     """
-    Receives a result. When enough results have been collected for a job it will be marked as done. 
+    Receives a result. When enough results have been collected for a job it will be marked as done.
     :returns: a bool indicating the succes and possibly an associated error.
     """
     if job_marked_done(project_id, job_id):
-        return False, build_response(HTTPStatus.BAD_REQUEST, "This jobs has already been completed.")
+        return False, build_response(
+            HTTPStatus.BAD_REQUEST, "This jobs has already been completed."
+        )
     if submitted_already_for_job(project_id, job_id, volunteer_id):
-        return False, build_response(HTTPStatus.BAD_REQUEST, "User has already submitted a result for this jobs.")
-
+        return False, build_response(
+            HTTPStatus.BAD_REQUEST, "User has already submitted a result for this jobs."
+        )
 
     save_result(project_id, job_id, volunteer_id, result)
     n_results = get_number_of_results(job_id, project_id)[0]
     random_replication = single_result_query(
-        f"SELECT random_validation FROM Project WHERE  project_id = '{project_id}'")
+        f"SELECT random_validation FROM Project WHERE  project_id = '{project_id}'"
+    )
     quorum_size = single_result_query(
-        f"SELECT quorum_size FROM Jobs WHERE job_id = '{job_id}' AND project_id = '{project_id}'")
+        f"SELECT quorum_size FROM Jobs WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
+    )
 
     if random_replication == 1:
         trust = decide_if_work_is_trusted(job_id, project_id, volunteer_id)
@@ -124,7 +141,7 @@ def receive_work(project_id, job_id, volunteer_id, result):
             # the quorum size has been increased by one, so we wait for someone to replicate it.
             return True, None
         if quorum_size == 1:
-             # quorum_size 1 and we trust the result so we are done
+            # quorum_size 1 and we trust the result so we are done
 
             job_done(project_id, job_id, result)
             return True, None
@@ -146,30 +163,38 @@ def give_work(project_id, user_id):
     """
     possible = possible_jobs(project_id, user_id)
     if len(possible) == 0:
-        return False, build_response(HTTPStatus.IM_A_TEAPOT, "No jobs available for this user.")
+        return False, build_response(
+            HTTPStatus.IM_A_TEAPOT, "No jobs available for this user."
+        )
     job_id, _ = random.choice(possible)
     return True, job_id
+
 
 # Helper function used for testing
 def fill_db():
     def execute(s):
         db.cur.execute(s)
         db.con.commit()
+
     execute("INSERT INTO User (user_id, trust_level) VALUES (1, 0.01);")
     execute("INSERT INTO User (user_id, trust_level) VALUES (2, 0.01);")
     execute("INSERT INTO User (user_id, trust_level) VALUES (3, 0.01);")
-    execute("INSERT INTO Project (project_id, owner, random_validation, quorum_size, trust_level, done) VALUES (1,1, 0, 2, 1, 0);")
     execute(
-        "INSERT INTO Jobs (job_id, project_id, quorum_size, done) VALUES (1,1,2, 0);")
+        "INSERT INTO Project (project_id, owner, random_validation, quorum_size, trust_level, done) VALUES (1,1, 0, 2, 1, 0);"
+    )
+    execute(
+        "INSERT INTO Jobs (job_id, project_id, quorum_size, done) VALUES (1,1,2, 0);"
+    )
 
     print("database filled")
+
 
 # Test function
 def test():
     # try:
     fill_db()
     # except Exception as e:
-        # pass
+    # pass
     print("************")
     print("j1: ", receive_work(1, 1, 1, "1"))
     print("j1: ", receive_work(1, 1, 3, "1"))

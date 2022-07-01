@@ -7,6 +7,7 @@ import app.models.project as pj
 # Inserts a project into the 'project' table.
 # val should be of format: (job_id, project_id, qorum_size, done).
 
+
 def insert_job(val, project):
     """
     Inserts a job into the database.
@@ -24,6 +25,7 @@ def insert_job(val, project):
         return True
     return False
 
+
 # Returns the first not in use id in the project table.
 
 
@@ -38,7 +40,6 @@ def get_new_job_id(project):
     db.cur.execute(sql)
     ids_taken = [x[0] for x in db.cur.fetchall()]
     return next(filterfalse(set(ids_taken).__contains__, count(1)))
-
 
 
 def get_all_jobs_of_project(project):
@@ -114,6 +115,7 @@ def submitted_already_for_job(project_id, job_id, user_id):
     """
     db.cur.execute(query)
     return db.cur.fetchone()[0]
+
 
 def job_marked_done(project_id, job_id):
     """

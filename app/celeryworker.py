@@ -2,6 +2,7 @@ from celery import Celery
 from app import app
 import os
 
+
 def make_celery(app):
     """
     Output: Input for header

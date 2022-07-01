@@ -11,6 +11,7 @@ from itertools import count, filterfalse
 
 from app.models.database import *
 
+
 def insert_user(dic):
     """
     Input:
@@ -37,7 +38,7 @@ def insert_user(dic):
             dic["institution"],
             dic["is_researcher"],
             dic["background"],
-            0
+            0,
         )
 
         db.cur.execute(sql, val)
@@ -77,7 +78,7 @@ def username_exists(username):
 def get_user(username):
     """
     Output:
-    a dictionary containing the following keys: user_id, username, password, email, first_name, 
+    a dictionary containing the following keys: user_id, username, password, email, first_name,
     last_name, score, trust_leve, institution, is_researcher, background.
     """
     if username_exists(username):
@@ -100,15 +101,15 @@ def get_user(username):
     return False
 
 
-def get_all_users(amount=None, order_by='trust_level'):
+def get_all_users(amount=None, order_by="trust_level"):
     """
     Output:
     A list containing dictionaries with each the following keys:
     user_id, username, score, trust_level, is_researcher.
     """
-    if amount and order_by != 'trust_level':
+    if amount and order_by != "trust_level":
         sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT {amount}"
-    elif amount and order_by =='trust_level':
+    elif amount and order_by == "trust_level":
         sql = f"SELECT * FROM User ORDER BY {order_by} ASC LIMIT {amount}"
     else:
         sql = f"SELECT * FROM User ORDER BY {order_by} DESC LIMIT 10"
@@ -123,7 +124,7 @@ def get_all_users(amount=None, order_by='trust_level'):
             "score": x[6],
             "trust_level": x[7],
             "is_researcher": x[9],
-            "runtime": x[11]
+            "runtime": x[11],
         }
         users.append(user)
     return users

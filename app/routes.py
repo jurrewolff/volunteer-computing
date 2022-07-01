@@ -117,7 +117,7 @@ def leaderboard():
     order_by = request.headers.get("order_by")
     if not amount or not order_by:
         amount = 10
-        order_by = 'trust_level'
+        order_by = "trust_level"
 
     best_users = user.get_all_users(amount, order_by)
     return json.dumps(best_users)

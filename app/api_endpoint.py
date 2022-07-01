@@ -278,7 +278,7 @@ def request_job(project_id):
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
         insert_timer((return_val, user_id, project_id))
-        return jsonify({"job_id":return_val, "data": data})
+        return jsonify({"job_id": return_val, "data": data})
     return return_val
 
 

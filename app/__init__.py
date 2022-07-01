@@ -7,8 +7,7 @@ from flask import Flask, render_template
 from secrets import token_hex
 
 app = Flask(
-    __name__, static_url_path="", static_folder="static",
-    template_folder="templates"
+    __name__, static_url_path="", static_folder="static", template_folder="templates"
 )
 
 
