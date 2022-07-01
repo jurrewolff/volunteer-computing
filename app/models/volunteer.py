@@ -1,15 +1,28 @@
-import mysql.connector as connector
-from itertools import count, filterfalse
+"""
+Date:               01-07-2022
+Contributers:       PSE Group G
+
+File description:
+This file contains all functions to insert and update information of the volunteer table. It also
+contains all functions to retrieve information from that table.
+"""
+
 from main import app
 
 from app.models.database import *
-import app.models.user as user
-import app.models.project as project
-import logging
 
-#
-# Val should be of format: (new_contribution, user_id, project_id)
 def update_contribution(val):
+    """
+    Input:
+    val should be a tuple of format: (new_contribution, user_id, project_id).
+
+    Output:
+    True if contribution has been updated. False if new volunteer has been inserted.
+
+    Description:
+    If the contribution doesn't yet exists, a volunteer entry is inserted with the given
+    new_contribution. Otherwise, the existing volunteer is updated with the given new_contribution.
+    """
     if contribution_exists((val[1], val[2])):
         sql = "UPDATE Volunteer SET contributed_time = %s WHERE user_id = %s AND project_id = %s;"
         db.cur.execute(sql, val)
@@ -20,9 +33,18 @@ def update_contribution(val):
 
     return False
 
-# Adds a volunteer, returns True if volunteer didn't yet exist. Returns false otherwise.
-# Val should be of format: (user_id, project_id, contributed_time)
+
 def insert_volunteer(val):
+    """
+    Input:
+    val should be a tuple of format: (user_id, project_id, contributed_time).
+
+    Output:
+    True if the user didn't yet exist and a new entry has been added. False otherwise.
+
+    Description:
+    Inserts a volunteer with the given values.
+    """
     if not contribution_exists((val[0], val[1])):
         sql = "INSERT INTO Volunteer VALUES (%s, %s, %s)"
         db.cur.execute(sql, val)
@@ -30,9 +52,15 @@ def insert_volunteer(val):
         return True
     return False
 
-# Returns True if contribution is in table, returns False otherwise.
-# Val should be of format: (user_id, project_id).
+
 def contribution_exists(val):
+    """
+    Input:
+    val should be a tuple of format: (user_id, project_id).
+
+    Output:
+    True if contribution exists. False otherwise.
+    """
     sql = f"SELECT user_id FROM Volunteer WHERE user_id = '{val[0]}' AND project_id = '{val[1]}'"
     db.cur.execute(sql)
     res = db.cur.fetchone()
@@ -41,8 +69,20 @@ def contribution_exists(val):
     else :
         return True
 
-# Val should be of format: (user_id, project_id).
+
 def get_contributed_time(val):
+    """
+    Input:
+    val should be a tuple of format: (user_id, project_id).
+
+    Output:
+    The time the volunteer has contributed to the given project.
+
+    Description:
+    Returns the time a volunteer has contributed to the given project. If no
+    volunteer entry has been found. A volunteer is inserted into the database with
+    a contributed_time of 0.
+    """
     if not contribution_exists(val):
         insert_volunteer((val[0], val[1], 0))
         return 0
@@ -51,4 +91,15 @@ def get_contributed_time(val):
         db.cur.execute(sql)
         res = db.cur.fetchone()
         return res[0]
-        
+
+
+def get_volunteer(job_id, project_id):
+    """
+    Output:
+    Returns a volunteer as a dictionary. The dictionary has the following keys:
+    user_id, project_id, contributed_time.
+    """
+    query = f"SELECT volunteer FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
+    db.cur.execute(query)
+    res = db.cur.fetchone()
+    return res
