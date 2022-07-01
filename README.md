@@ -9,13 +9,6 @@ easy as that. Our website aims to make executing large projects faster and more 
 
 ## How it works
 
-A project is made up of a c program and an input file. Uploaded c files are compiled to WebAssembly by the webserver
-using the Emscripten compiler. Each client worker then executes this Wasm code with a single line from the uploaded
-input file as an argument. When a client is done executing they will post their result and start executing again after
-getting a new input from the web server.
-
-## How it works
-
 A project is made up of a c program and an input file. Uploaded c files are compiled to WebAssembly by the webserver using the Emscripten compiler. Each client worker then executes this Wasm code with a single line from the uploaded input file as an argument. When a client is done executing they will post their result and start executing again after getting a new input from the web server.
 
 ## Installation
