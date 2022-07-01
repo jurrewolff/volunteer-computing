@@ -1,50 +1,56 @@
-/*
- * HOMEPAGE.
- * This is the landing page of the website.
- * Here the information about the solution out product provides is displayed,
- * aswell as a short 'about us' section, explanation of the scientist and
- * volunteer roll and a broader description of the product.
- * The navbar functionality is called from the homepagenav page.
- * The id's for each element are used in the navbar page for scrolling.
+/* HOMEPAGE
+ *
+ *
+ *
  */
 
-// Package and functionality imports
-import Footer from '../Components/Footer';
 import Cookies from 'js-cookie';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Footer from '../Components/Footer';
 
-// Material ui imports
+
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { useNavigate } from "react-router-dom"
-import Image from '../Images/back2.jpg';
-
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Routes, Route, useNavigate } from "react-router-dom"
+import Image from '../Images/backgroundpic.png';
 
 
-// Defines the used style throughout the homepage
 const styles = {
+    title: {
+        fontFamily: "Helvetica Neue"
+
+    },
+    
     base: {
-        backgroundImage: `url(${Image})`,
+        // backgroundImage: `url(${Image})`,
         width: '100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover'
-
+        
     },
-    // #dce775
-    // #ffffa6
+
     paperContainer: {
         background: 'linear-gradient(45deg, #FFF 30%, #ffffa6 90%)',
         width: '100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover'
-    }
+    },
+
+    top: {
+        backgroundImage: `url(${Image})`,
+        width: '100%',
+        height: '300px',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover'
+    },
 };
 
 export default function Home() {
@@ -52,25 +58,39 @@ export default function Home() {
 
     const NotLoggedIn = () => {
         return (
-            <Link to="./SignUp" onClick={clickButton}>
-                <Button variant="contained" sx={{ bgcolor: '#f44336', textDecoration: 'none' }}>SIGN UP NOW</Button>
+            <Link to="./SignUp" onClick={clickButton} style={{ textDecoration: 'none' }}>
+                <Button variant="contained" sx={{ bgcolor: '#727dff' }}>SIGN UP NOW</Button>
             </Link>
         );
     };
 
     const LoggedIn = () => {
         return (
-            <Link to="./dashboard" onClick={clickButton}>
-                <Button variant="contained" sx={{ bgcolor: '#f44336', textDecoration: 'none' }}>GO TO DASHBOARD</Button>
+            <Link to="./dashboard" onClick={clickButton} style={{ textDecoration: 'none' }}>
+                <Button variant="contained" sx={{ bgcolor: '#727dff' }}>GO TO DASHBOARD</Button>
             </Link>
         )
     };
 
+
+
+
+    // useEffect(() => {
+    //     if (user_cookie) {
+    //     console.log("User logged in, redirecting to dashboard")
+    //     return navigate('/dashboard')
+    //     }
+    // }, [true]);
+
+
+    // Function for the responsive button.
+    // Ik snap niet waarom deze hier moet staan
     function clickButton() {
         setClicked(!clicked)
     }
 
-    return (<>
+    return (
+    <>
         <Grid
             justifyContent="center"
             alignItems="center"
@@ -95,18 +115,16 @@ export default function Home() {
                             volunteer computing
                         </Typography>
                         <Typography sx={{ pb: 3 }} >
-                            s consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam.
-                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                            Praesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam. Morbi
-                            leo risus, porta ac consectetur ac, vestibulum at eros. P
-                            raesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus,
-                            porta ac consectetur ac, vestibulum at eros. Praesent commodo
-                            cursus magna, vel sce
+
+                        Compunity is a distributed computing platform, enabling
+                        multiple people to work on one project at the same time. At the core of our website
+                        we connect researchers to volunteers through a server. Researchers in need of more
+                        computing power are able to upload their computationally expensive C projects, after
+                        which it will be subdivided into jobs. Consequently, signed up volunteers can browse
+                        projects and contribute to a researcher's project bij executing jobs for the chosen project.
+                        After a project all jobs of a project are executed, the results can be downloaded by
+                        the researcher - easy as that. Our website aims to make executing large projects faster
+                        and more efficient.
                         </Typography>
                         {Cookies.get("user_id") ? LoggedIn() : NotLoggedIn()}
 
@@ -117,11 +135,9 @@ export default function Home() {
                         </Link> */}
                     </Box>
                 </Grid>
-                <Grid item xs={4}>
-                    <Box
-                        sx={{ pr: 5 }}>
-                        <Toolbar />
-                        Image...
+                <Grid item xs={4} style={styles.top} >
+                    <Box sx={{ pr: 8 }}>
+                        {/* <Toolbar /> */}
                     </Box>
                 </Grid>
 
@@ -136,17 +152,14 @@ export default function Home() {
                         </Typography>
 
                         <Typography>
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentums. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            isus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
+                            We are a group of students of the University of Amsterdam that wanted
+                            to help scientific research. We thought long and hard how to achieve this
+                            and came to the conclusion that we could help researchers with finding
+                            computing power. Research needs a lot of computing power nowadays, but not
+                            all researchers have access to a super computer to aid in their calculations.
+                            This is what we from Compunity want to solve. We want to provide a platform
+                            for researchers to connect with volunteers who want to help their research. And
+                            in this way, help scientific research.
 
                         </Typography>
                     </Box>
@@ -164,31 +177,23 @@ export default function Home() {
                     <Box sx={{ pr: 5, pl: 10 }}>
 
                         <Typography id="Scientist" variant="h4" gutterBottom component="div">
-                            Scientist
+                            Researcher
                         </Typography>
 
                         <Typography>
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            isus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam.
-                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                            Praesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam. Morbi
-                            leo risus, porta ac consectetur ac, vestibulum at eros. P
-                            raesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras justo
+                            Researchers are able to upload programs that take too much time
+                            to compute them themselfs. Those programs will than be shown on our
+                            website where volunteers can choose to run those programs.
+                            The researchers can see the progress of their programs and download
+                            the results when a program is done. Researchers need to provide additional
+                            information about themselfs and must be verified before uploading
+                            programs. This is done in order to protect our volunteers from running
+                            malicious code. <br></br>
+                            In addition to those extra privileges, researchers also have all the
+                            functionalities of volunteers. Researchers that used this site in the past
+                            can thus help with projects of other researchers as a way to give back to
+                            the community.
+
                         </Typography>
                     </Box>
                 </Grid>
@@ -222,66 +227,15 @@ export default function Home() {
                         </Typography>
 
                         <Typography>
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            isus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam.
-                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                            Praesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam. Morbi
-                            leo risus, porta ac consectetur ac, vestibulum at eros. P
-                            raesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras justo
+                            Volunteers can help scientific research by lending their computing power. They can choose
+                            from a wide scala of projects to pick the one that speak to them the most. They can also
+                            see the projects they worked on in the past and the amount of time they invested in each
+                            project. There is also a leaderboard to show of your contributions to the world!
                         </Typography>
                     </Box>
                 </Grid>
             </Grid>
-            <Grid>
-                <Paper style={styles.paperContainer}>
-                    <Box sx={{ pr: 10, pl: 10, pb: 10, pt: 5 }}>
-
-                        <Typography id="Product" variant="h4" gutterBottom component="div">
-                            Product
-                        </Typography>
-
-                        <Typography>
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            isus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras justo
-                            odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                            risus, porta ac consectetur ac, vestibulum at eros. Praesent
-                            commodo cursus magna, vel scelerisque nisl consectetur et.
-                            Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam.
-                            Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                            Praesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras
-                            justo odio, dapibus ac facilisis in, egestas eget quam. Morbi
-                            leo risus, porta ac consectetur ac, vestibulum at eros. P
-                            raesent commodo cursus magna, vel scelerisque nisl consectetur
-                            et. Cras mattis consectetur purus sit amet fermentum. Cras justo
-                        </Typography>
-                    </Box>
-                </Paper>
-            </Grid>
-            <Grid>
+           <Grid>
                 <Footer />
             </Grid>
         </Grid>
