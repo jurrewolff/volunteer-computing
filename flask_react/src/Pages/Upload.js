@@ -5,8 +5,6 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import PermanentDrawerLeft from '../Components/SideMenu';
-
-{/* Material ui imports. */}
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';

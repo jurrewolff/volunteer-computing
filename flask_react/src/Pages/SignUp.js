@@ -8,8 +8,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { SignupRequest } from '../Actions/signupRequest';
-
-{/* Material ui imports. */}
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -19,7 +17,6 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 
 export default function Signup() {
     {/* Styling of input field.*/}
