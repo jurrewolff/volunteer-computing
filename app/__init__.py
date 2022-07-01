@@ -40,3 +40,4 @@ app.config["CELERY_TIMEZONE"] = "UTC"
 from app import authentication, routes
 from app import example_file_upload
 from app import schedule
+from app import celeryworker
