@@ -39,6 +39,7 @@ def get_all_jobs_of_project(project):
 
 
 def increment_quorum_size(project_id, job_id):
+    """Helper function to increment the quorum_size by 1."""
     query = f"""
     UPDATE Jobs
     SET quorum_size = quorum_size + 1
@@ -49,6 +50,7 @@ def increment_quorum_size(project_id, job_id):
 
 
 def possible_jobs(project_id, user_id):
+    """Helper function the get the possible jobs for a user."""
     query = f"""
     SELECT job_id, project_id
     FROM Jobs
@@ -64,6 +66,7 @@ def possible_jobs(project_id, user_id):
 
 
 def submitted_already_for_job(project_id, job_id, user_id):
+    """Helper function to check whether a user has submitted a result for a job."""
     query = f"""
     SELECT '{user_id}' IN (
         SELECT volunteer
@@ -74,7 +77,9 @@ def submitted_already_for_job(project_id, job_id, user_id):
     db.cur.execute(query)
     return db.cur.fetchone()[0]
 
+
 def job_marked_done(project_id, job_id):
+    """Helper function to get the done status of a job."""
     query = f"""
     SELECT done
     FROM Jobs
