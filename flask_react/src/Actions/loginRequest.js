@@ -6,18 +6,17 @@
  */
 
 export function LoginRequest(uname, pass) {
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'username': uname,
-            'password': pass
-        }
-    };
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      username: uname,
+      password: pass,
+    },
+  };
 
-    return (fetch("/api/login", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-            return result;
-        })
-    )
+  return fetch("/api/login", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      return result;
+    });
 }
