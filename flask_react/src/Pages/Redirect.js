@@ -1,10 +1,12 @@
 /*
- * Redirects the user to the home page. A delay is used because it
- * takes time for the cookies to be send and received.
+ * REDIRECT TO...
+ * Redirects the user to the home page after logging in/out. A delay occurs 
+ * because it takes time for the cookies to be sent and received.
  */
 
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+
 
 export default function Redirect() {
     const navigate = useNavigate();

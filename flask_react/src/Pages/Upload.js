@@ -27,10 +27,10 @@ import PermanentDrawerLeft from '../Components/SideMenu';
 // ----------------------------------------------------------------------
 
 export default function Upload() {
-    {/* Styling of input field.*/}
+    // Styling of input field
     const paperStyle = { padding: 20, margin: "20px auto" }
 
-    {/* State variables for user and textfield.*/}
+    // State variables for user and textfield
     const [selected, setSelected] = useState();
     const [name, setName] = useState();
     const [description, setDescription] = useState();
@@ -40,10 +40,10 @@ export default function Upload() {
     const [C, setC] = useState(false);
     const [file, setFile] = useState(false);
 
-    {/* Navigation function.*/}
+    // Navigate feature
     const navigate = useNavigate();
 
-    {/* Helper functions for changing Quorum and Trust level.*/}
+    // Change Quorum and Trust level
     const changeTrust = e => {
         setTrustlevel(e.target.value);
     }
@@ -51,34 +51,34 @@ export default function Upload() {
         setQuorum(e.target.value);
     }
 
-    {/* Slider markers the trust and quorum input.*/}
+    // Slider markers for trust and quorum input
     const markers_slider_trust = [
         {
-        value: 0.1,
-        label: 'Low',
+            value: 0.1,
+            label: 'Low',
         },
         {
-        value: 1,
-        label: 'high',
+            value: 1,
+            label: 'high',
         },
     ];
     const markers_slider_quorum = [
         {
-        value: 1,
-        label: '1',
+            value: 1,
+            label: '1',
         },
         {
-        value: 5,
-        label: '5',
+            value: 5,
+            label: '5',
         },
     ];
 
-    {/* Cookies to check if a user exists, and if the user is a researcher.*/}
+    // Cookies check if a user exists, and if the user is researcher
     let user_cookie = Cookies.get("user_id")
     let research_cookie = Cookies.get("is_researcher")
 
 
-    {/* Helper functions for updating the C and file variables.*/}
+    // Helper functions for updating the C and file variables
     function changeC() {
         setC(true)
     }
@@ -86,10 +86,10 @@ export default function Upload() {
         setFile(true)
     }
 
-    {/*
-        Checks if visitor is a user and a researcher.
-        Also check for correct file upload.
-    */}
+    /*
+    Checks if visitor is a user and a researcher. Also check for correct 
+    file upload.
+    */
     useEffect(() => {
         if (!user_cookie) {
             console.log("User not logged in, redirecting to login page")
@@ -177,9 +177,9 @@ export default function Upload() {
                             <Grid>
                                 <div>
                                     Upload .c file:
-                                    <input type="file" id="file" accept=".c" onChange={changeC}/>
+                                    <input type="file" id="file" accept=".c" onChange={changeC} />
                                     Upload input file:
-                                    <input type="file" id="input" onChange={changeFile}/>
+                                    <input type="file" id="input" onChange={changeFile} />
                                 </div>
                             </Grid>
                             <Grid container justifyContent="center">

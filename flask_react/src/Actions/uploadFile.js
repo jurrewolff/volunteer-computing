@@ -1,5 +1,5 @@
 /*
-* UPLOAD REQUEST
+ * UPLOAD REQUEST
  * Sends the given information to the database if the button is clicked.
  * The user will then be send to the dashboard.
  */

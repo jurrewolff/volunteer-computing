@@ -1,11 +1,9 @@
 /*
  * SIDE MENU DRAWER
  * The general use side menu is visible on the left whenever a user is logged in.
- * The app-bar contains buttons to the homepage, in the logo as well as in the about
- * button. On the right there is a toggle menu containing redirects that are rendered
- * depending on user-status. Whenever a user is not logged in, options for signup and 
- * login, and when logged in, options for dashboard, account information and logout.
- * The navigation bar is visible throughout the whole page as header.
+ * It contains redirects to navigate to all usage-related pages, such as uploading
+ * or browsing available projects. Redirect options are rendered depending on the 
+ * user-type currently logged in.
  */
 
 import * as React from 'react';
