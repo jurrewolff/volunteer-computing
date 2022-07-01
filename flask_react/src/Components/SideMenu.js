@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import { makeStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
@@ -102,7 +102,7 @@ export default function PermanentDrawerLeft() {
             <Link to={path} style={{ textDecoration: 'none' }}>
                 <ListItemButton>
                     <ListItemIcon className={classes.iconStyle}>
-                        {icon} 
+                        {icon}
                     </ListItemIcon>
                     <ListItemText primary={page} sx={{ my: 2, color: 'white', display: 'block'}} />
                 </ListItemButton>

@@ -1,10 +1,14 @@
+/*
+ * Sends the given information to the database if the button is clicked.
+ * The user will then be send to the dashboard.
+ */
+
 import { useState, useEffect } from 'react'
 import Button from '@mui/material/Button';
 import React from 'react'
 import { useNavigate } from "react-router-dom"
 
 
-// TODO netter maken
 
 export const UploadRequest = (props) => {
     const [clicked, setClicked] = useState(false)

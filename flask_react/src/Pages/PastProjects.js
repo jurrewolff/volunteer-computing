@@ -4,26 +4,13 @@
  * shown. It will also show whether the data computed by the user was correct.
  */
 
-// import { useState, useEffect } from 'react'
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import { Container, Row, Col, Card } from "react-bootstrap";
-// import Cookies from "js-cookie";
-// import { Link, useNavigate } from "react-router-dom";
-
-// import PermanentDrawerLeft from '../Components/SideMenu';
-// import ResponsiveAppBar from '../Components/Navbar'
-// import Box from '@mui/material/Box';
-
 import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col, Card } from "react-bootstrap";
-// import { Container, Card } from "react-bootstrap";
-
 import Cookies from "js-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PermanentDrawerLeft from '../Components/SideMenu';
 import { Box, Container } from '@mui/material';
-// import Container from '@mui/material';
 import { ThemeProvider } from '@material-ui/core/styles'
 import { theme } from '../Components/Theme'
 
