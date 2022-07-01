@@ -1,4 +1,5 @@
-/* MORE-INFO PAGE
+/* 
+ * MORE-INFO PAGE
  * Gets the information of the chosen project. The chosen project_id is read
  * from the url. The projectname and discription of the project will be shown.
  * There is also a button to go back and a button to start computing
