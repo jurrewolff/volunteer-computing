@@ -22,6 +22,8 @@ Before starting the application, the "docker-compose.yaml" file should be edited
 Furthermore, the application port (under services->flask->port) can be updated from 3601 to 80, so that the website is 
 accessible by default.
 
+The first time a file is compiled with EMCC the c-libary's will be compiled. This could take a few minutes. After the first compilation the libary's will be cached. 
+
 ## Usage
 The application database can be managed using "phpmyadmin". This service is accessible through a web-interface at port
 3602 of the server IP-address. The website itself is reached at port 3601. 
