@@ -9,13 +9,6 @@ easy as that. Our website aims to make executing large projects faster and more 
 
 ## How it works
 
-A project is made up of a c program and an input file. Uploaded c files are compiled to WebAssembly by the webserver
-using the Emscripten compiler. Each client worker then executes this Wasm code with a single line from the uploaded
-input file as an argument. When a client is done executing they will post their result and start executing again after
-getting a new input from the web server.
-
-## How it works
-
 A project is made up of a c program and an input file. Uploaded c files are compiled to WebAssembly by the webserver using the Emscripten compiler. Each client worker then executes this Wasm code with a single line from the uploaded input file as an argument. When a client is done executing they will post their result and start executing again after getting a new input from the web server.
 
 ## Installation
@@ -30,6 +23,8 @@ mv example_env .env
 
 Note that for the ".env" file, a sufficiently strong password string is provided.
 
+The first time a file is compiled with EMCC the c-libary's will be compiled. This could take a few minutes. After the first compilation the libary's will be cached. 
+
 ## Usage
 The application database can be managed using "phpmyadmin". This service is accessible through a web-interface at port
 3602 of the server IP-address. The website itself is reached at port 3601. 
@@ -38,7 +33,7 @@ The application database can be managed using "phpmyadmin". This service is acce
 `bash start.sh` can be used to start the website.
 
 ## License
-DO WHAT THE F*CK YOU WANT
+DO WHAT THE F*CK YOU WANT  
 
 ## Overview
 
