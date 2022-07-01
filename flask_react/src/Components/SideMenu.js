@@ -9,7 +9,8 @@
  */
 
 import * as React from 'react';
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 import { makeStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
@@ -27,7 +28,6 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SourceIcon from '@mui/icons-material/Source';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import StorageIcon from '@mui/icons-material/Storage';
-import Cookies from 'js-cookie'
 
 // ----------------------------------------------------------------------
 

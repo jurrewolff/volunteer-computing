@@ -1,5 +1,5 @@
 /*
- * NOPAGE PAGE.
+ * NOPAGE PAGE
  * This page is displayed to the user when the user tries to go to a page which
  * does not exist on our website.
  */

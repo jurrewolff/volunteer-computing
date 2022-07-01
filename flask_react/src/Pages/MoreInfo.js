@@ -1,4 +1,4 @@
-/* MORE INFO PAGE
+/* MORE-INFO PAGE
  * Gets the information of the chosen project. The chosen project_id is read
  * from the url. The projectname and discription of the project will be shown.
  * There is also a button to go back and a button to start computing
@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from "react-router-dom"
 import { Row, Col } from "react-bootstrap";
+
 import { Container, Button, Card } from '@mui/material';
 
 import PermanentDrawerLeft from '../Components/SideMenu';
