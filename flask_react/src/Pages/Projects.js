@@ -1,4 +1,5 @@
-/* PROJECTS PAGE
+/* 
+ * PROJECTS PAGE
  * Creates the page to browse projects. This page is only accessible if the user
  * is logged in.
  */

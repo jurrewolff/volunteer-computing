@@ -1,4 +1,5 @@
-/* PAST PROJECTS PAGE
+/* 
+ * PAST PROJECTS PAGE
  * Shows all the projects that the user has helped computing. For every
  * project the projectname, projectdiscription and time computed will be
  * shown. It will also show whether the data computed by the user was correct.

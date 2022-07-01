@@ -20,6 +20,8 @@ import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
+// ----------------------------------------------------------------------
+
 export default function Account() {
   const paperStyle = { padding: 20, width: "80%" };
   const [user, setUser] = useState({});

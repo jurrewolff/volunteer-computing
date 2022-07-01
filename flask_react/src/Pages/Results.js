@@ -1,4 +1,5 @@
-/* RESULTS PAGE
+/* 
+ * RESULTS PAGE
  * Shows the projects that the user has uploaded. For every project
  * the projectname and the total time that users have spend on the
  * project will be shown. There will also be a downloadbutton if the

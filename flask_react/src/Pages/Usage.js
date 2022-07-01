@@ -3,6 +3,7 @@
  * Information page regarding the website, including the
  * roles and expectations of volunteers and researchers.
  */
+
 import React from "react";
 
 import Box from "@mui/material/Box";
@@ -11,6 +12,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import PermanentDrawerLeft from "../Components/SideMenu";
+
+// ----------------------------------------------------------------------
 
 const Usage = () => {
   return (
