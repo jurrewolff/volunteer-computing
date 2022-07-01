@@ -10,8 +10,6 @@ contains all functions to retrieve information from that table.
 from itertools import count, filterfalse
 
 from app.models.database import *
-from app.models.volunteer import get_volunteer
-
 
 def insert_user(dic):
     """

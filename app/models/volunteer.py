@@ -93,13 +93,3 @@ def get_contributed_time(val):
         return res[0]
 
 
-def get_volunteer(job_id, project_id):
-    """
-    Output:
-    Returns a volunteer as a dictionary. The dictionary has the following keys:
-    user_id, project_id, contributed_time.
-    """
-    query = f"SELECT volunteer FROM Result WHERE job_id = '{job_id}' AND project_id = '{project_id}'"
-    db.cur.execute(query)
-    res = db.cur.fetchone()
-    return res
