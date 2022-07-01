@@ -1,6 +1,4 @@
-import mysql.connector as connector
 from itertools import count, filterfalse
-from main import app
 
 from app.models.database import *
 import app.models.user as user
@@ -61,6 +59,7 @@ def get_all_projects():
 
 # Returns a list of all project. 1 tuple per project.
 
+
 def get_project_time(project_id):
     sql = f"SELECT contributed_time FROM Volunteer WHERE project_id = '{project_id}'"
     db.cur.execute(sql)
@@ -77,7 +76,6 @@ def update_project_time(project_id, time=-1):
     query = f"UPDATE Project SET runtime = '{time}' WHERE project_id = '{project_id}';"
     db.cur.execute(query)
     db.con.commit()
-
 
 
 def get_projects_researcher(user_id):
@@ -168,7 +166,7 @@ def get_projects_from_user(user_id):
                 "description": x[2],
                 "done": x[3],
                 "progress": x[4],
-                "contributed_time": math.floor(x[5] / 1000)
+                "contributed_time": math.floor(x[5] / 1000),
             }
             update_project_time(x[0])
             projects.append(project)

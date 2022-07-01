@@ -2,13 +2,11 @@
 Flask API entry point. Initialize flask application and set configuration.
 """
 
-from secrets import token_hex
-from flask import Flask, render_template
+from flask import Flask
 from secrets import token_hex
 
 app = Flask(
-    __name__, static_url_path="", static_folder="static",
-    template_folder="templates"
+    __name__, static_url_path="", static_folder="static", template_folder="templates"
 )
 
 

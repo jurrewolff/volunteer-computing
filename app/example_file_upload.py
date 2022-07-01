@@ -11,20 +11,14 @@ Celery Function: https://flask.palletsprojects.com/en/2.1.x/patterns/celery/
 (Basic setup for celery)
 
 """
-import os
 import shutil
-from urllib import response
 
-from app import app
 from flask import (
     flash,
-    request,
     redirect,
     url_for,
-    jsonify,
     send_from_directory,
     render_template,
-    session,
     Response,
 )
 import time
@@ -46,6 +40,7 @@ from app.models.database import *
 import numpy as np
 import logging
 
+# Allowed file extensions
 ALLOWED_EXTENSIONS = {"c"}
 
 
@@ -306,7 +301,7 @@ def request_job(project_id):
             f"{app.config['PROJECTS_DIR']}/{project_id}/input", line=return_val
         )
         insert_timer((return_val, user_id, project_id))
-        return jsonify({"job_id":return_val, "data": data})
+        return jsonify({"job_id": return_val, "data": data})
     return return_val
 
 
@@ -437,4 +432,3 @@ def send_output(proj_id):
     return send_from_directory(
         os.path.join(app.config["PROJECTS_DIR"], f"{proj_id}"), "output"
     )  # cached for a week
-

@@ -1,6 +1,8 @@
 import mysql.connector as connector
 import os
 import time
+
+
 class database:
     def __init__(self):
         self.con = self.connection()
@@ -11,10 +13,10 @@ class database:
 
         config = {
             "user": os.environ["MYSQL_USERNAME"],
-            "password": os.environ['MYSQL_ROOT_PASSWORD'],
-            "host": os.environ['MYSQL_HOST'],
-            "port": os.environ['MYSQL_PORT'],
-            "database": os.environ['MYSQL_DB_NAME']
+            "password": os.environ["MYSQL_ROOT_PASSWORD"],
+            "host": os.environ["MYSQL_HOST"],
+            "port": os.environ["MYSQL_PORT"],
+            "database": os.environ["MYSQL_DB_NAME"],
         }
         c = None
         tries = 0
@@ -35,7 +37,8 @@ class database:
             if tries > 1:
                 print("Giving up connecting to the database")
                 break
-            
+
         return c
+
 
 db = database()

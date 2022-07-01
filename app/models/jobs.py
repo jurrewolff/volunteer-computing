@@ -1,4 +1,3 @@
-import mysql.connector as connector
 from itertools import count, filterfalse
 
 from app.models.database import *
@@ -21,6 +20,7 @@ def insert_job(val, project):
         db.con.commit()
         return True
     return False
+
 
 # Returns the first not in use id in the project table.
 
@@ -111,6 +111,7 @@ def submitted_already_for_job(project_id, job_id, user_id):
     """
     db.cur.execute(query)
     return db.cur.fetchone()[0]
+
 
 def job_marked_done(project_id, job_id):
     """
