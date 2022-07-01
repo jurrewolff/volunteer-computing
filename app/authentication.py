@@ -107,12 +107,10 @@ def signup():
         not new_user["username"]
         or not new_user["password"]
         or not new_user["email"]
-        and (
-            new_user["is_researcher"] == "0"
-            or not new_user["firstname"]
-            or not new_user["lastname"]
-            or not new_user["is_researcher"]
-        )
+        and (new_user["is_researcher"] == "0"
+        or not new_user["firstname"]
+        or not new_user["lastname"]
+        or not new_user["is_researcher"])
     ):
         return build_response(
             HTTPStatus.BAD_REQUEST, "request is missing required headers"
@@ -159,17 +157,19 @@ def login(username=None, password=None):
     Handle login request; Check request headers, get user from db,
     authenticate user and send appropriate response.
     """
-    if not request.headers and not username and not password:
+    if (not request.headers and not username and not password):
         return build_response(
             HTTPStatus.BAD_REQUEST, "request is missing request headers"
         )
 
     # get and check required info from headers.
-    if not username or not password:
+    if (not username or not password):
         username = request.headers.get("username")
         password = request.headers.get("password")
 
+
     app.logger.warning(f"user: {username}, pass: {password}")
+
 
     if not username:
         return build_response(HTTPStatus.BAD_REQUEST, "provide a username")
@@ -178,9 +178,7 @@ def login(username=None, password=None):
 
     user_obj = load_user(username)  # username not found erbij doen?
     if not user_obj:
-        return build_response(
-            HTTPStatus.UNAUTHORIZED, "username or password is incorrect"
-        )
+        return build_response(HTTPStatus.UNAUTHORIZED, "username or password is incorrect")
 
     if authenticate_user(username, password):
         if not login_user(user_obj):

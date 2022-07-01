@@ -1,5 +1,8 @@
+import mysql.connector as connector
+from itertools import count, filterfalse
 import app.models.user as user
 import app.models.project as project
+from main import app
 
 from app.models.database import *
 
@@ -7,17 +10,12 @@ from app.models.database import *
 # Val should be of format: (user_id, project_id, block_count)
 # Returns False if given user or project doesn't exists, returns True otherwise.
 def insert_result(val):
-    if (
-        user.account_id_exists(val[0])
-        and project.check_project_exists(val[1])
-        and not result_exists((val[0], val[1]))
-    ):
+    if user.account_id_exists(val[0]) and project.check_project_exists(val[1]) and not result_exists((val[0], val[1])):
         sql = "INSERT INTO Result VALUES (%s, %s, %s)"
         db.cur.execute(sql, val)
         db.con.commit()
         return True
     return False
-
 
 # Returns True if result is in table, returns False otherwise.
 # Val should be of format: (user_id, project_id).
@@ -29,7 +27,6 @@ def result_exists(val):
         return False
     else:
         return True
-
 
 # Returns all projects a user has participated in. The projects are
 # returned in a list of tuples. The tuples are of format (name, description, owner, contribution).
@@ -68,4 +65,4 @@ def get_number_of_results(job_id, project_id):
     query = f"SELECT COUNT(*) FROM Result WHERE job_id ='{job_id}' AND project_id = '{project_id}';"
     db.cur.execute(query)
     res = db.cur.fetchone()
-    return res
+    return res    

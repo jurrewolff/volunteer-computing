@@ -1,4 +1,11 @@
+import mysql.connector as connector
+from itertools import count, filterfalse
+from main import app
+
 from app.models.database import *
+import app.models.user as user
+import app.models.project as project
+import logging
 
 #
 # Val should be of format: (new_contribution, user_id, project_id)
@@ -13,7 +20,6 @@ def update_contribution(val):
 
     return False
 
-
 # Adds a volunteer, returns True if volunteer didn't yet exist. Returns false otherwise.
 # Val should be of format: (user_id, project_id, contributed_time)
 def insert_volunteer(val):
@@ -24,7 +30,6 @@ def insert_volunteer(val):
         return True
     return False
 
-
 # Returns True if contribution is in table, returns False otherwise.
 # Val should be of format: (user_id, project_id).
 def contribution_exists(val):
@@ -33,9 +38,8 @@ def contribution_exists(val):
     res = db.cur.fetchone()
     if res == None:
         return False
-    else:
+    else :
         return True
-
 
 # Val should be of format: (user_id, project_id).
 def get_contributed_time(val):
@@ -47,3 +51,4 @@ def get_contributed_time(val):
         db.cur.execute(sql)
         res = db.cur.fetchone()
         return res[0]
+        
